@@ -49,7 +49,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     .toolbar-content {
-      max-width: 1200px;
+      width: 210mm;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -100,7 +100,7 @@
 
     /* A4 页面容器 */
     .print-pages-container {
-      max-width: 297mm;
+      max-width: 210mm;
       margin: 20px auto;
       display: flex;
       flex-direction: column;
@@ -109,9 +109,9 @@
     }
 
     .print-card-page {
-      width: 297mm;
-      height: 210mm;
-      padding: 10mm 15mm;
+      width: 210mm;
+      height: 297mm;
+      padding: 12mm 16mm;
       box-sizing: border-box;
       background: #ffffff;
       border: 3.5px solid var(--color-purple);
@@ -139,7 +139,7 @@
       margin-bottom: 0.8mm;
     }
     .print-subtitle {
-      font-size: 11.5pt;
+      font-size: 11pt;
       color: #111;
       font-weight: bold;
     }
@@ -156,7 +156,7 @@
       color: #fff;
       font-size: 11pt;
       font-weight: 700;
-      padding: 1.8mm 1.5mm;
+      padding: 2.2mm 1.5mm;
       text-align: center;
       border: 1.8px solid #310a5e;
       -webkit-print-color-adjust: exact;
@@ -164,7 +164,7 @@
     }
     .weekly-table td {
       border: 1.5px solid #111 !important;
-      padding: 1.5mm 2mm;
+      padding: 2mm 2.5mm;
       font-size: 10.5pt;
       color: #000000;
       vertical-align: top;
@@ -176,7 +176,7 @@
       print-color-adjust: exact;
     }
     .weekly-table .day-cell {
-      width: 18mm;
+      width: 16mm;
       text-align: center;
       font-weight: 700;
       font-size: 12pt;
@@ -184,7 +184,7 @@
       vertical-align: middle;
     }
     .weekly-table .theme-cell {
-      width: 36mm;
+      width: 32mm;
       text-align: center;
       font-weight: 700;
       font-size: 11pt;
@@ -196,7 +196,7 @@
       line-height: 1.5;
     }
     .weekly-table .stamp-cell {
-      width: 18mm;
+      width: 16mm;
       text-align: center;
       vertical-align: middle;
     }
@@ -246,12 +246,17 @@
       print-color-adjust: exact;
     }
     .weekly-note-line {
-      margin-top: 2.5mm;
-      border-top: 1.5px solid #111;
-      padding-top: 1.8mm;
+      margin-top: 4mm;
+      border: 1.8px solid var(--color-purple);
+      border-radius: 8px;
+      padding: 3mm 4mm;
       font-size: 11pt;
       color: #000000;
       font-weight: 500;
+      background: #faf8fd;
+      min-height: 22mm;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
     .sunday-row td {
       background: #ffffff !important;
@@ -294,7 +299,7 @@
         print-color-adjust: exact !important;
       }
       @page {
-        size: A4 landscape;
+        size: A4 portrait;
         margin: 0;
       }
     }
@@ -412,7 +417,11 @@
       </table>
 
       <div class="weekly-note-line">
-        📝 守护者本周寄语：_______________________________________________________________
+        <b>📝 守护者本周寄语与成长见证：</b>
+        <div style="margin-top: 2mm; color: #333; font-size: 10pt; line-height: 1.6;">
+          1. 孩子本周最棒的闪光点：________________________________________________________________<br>
+          2. 下周寄语与成长期望：____________________________________________________________________
+        </div>
       </div>
 
       <div class="print-footer-info">
@@ -514,7 +523,11 @@
       </table>
 
       <div class="weekly-note-line">
-        📝 守护者本周寄语：_______________________________________________________________
+        <b>📝 守护者本周寄语与成长见证：</b>
+        <div style="margin-top: 2mm; color: #333; font-size: 10pt; line-height: 1.6;">
+          1. 孩子本周最棒的闪光点：________________________________________________________________<br>
+          2. 下周期望与挑战目标：____________________________________________________________________
+        </div>
       </div>
 
       <div class="print-footer-info">
