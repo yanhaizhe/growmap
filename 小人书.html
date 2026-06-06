@@ -967,6 +967,179 @@ body {
   margin-bottom: 24px;
 }
 
+/* ==========================================
+   WDS Chapter Selection & Checklist Styles
+   ========================================== */
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 30px auto;
+  padding: 0 10px;
+}
+
+.chapter-card {
+  background: var(--kids-card-bg);
+  border: 2px solid rgba(0,0,0,0.06);
+  padding: 18px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: var(--shadow-kids);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 170px;
+}
+
+.chapter-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(140, 122, 107, 0.18);
+  border-color: var(--chapter-color);
+}
+
+.chapter-card .chapter-gem {
+  font-size: 2.2em;
+  margin-bottom: 6px;
+  transition: transform 0.3s;
+}
+
+.chapter-card:hover .chapter-gem {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.chapter-card .chapter-title {
+  font-size: 1.05em;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--kids-text-primary);
+}
+
+.chapter-card .chapter-subtitle {
+  font-size: 0.82em;
+  color: var(--kids-text-muted);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.chapter-card .chapter-status {
+  font-size: 0.75em;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+.chapter-card.completed {
+  border-color: var(--kids-state-success);
+  background: #f4fff4;
+}
+
+.chapter-card.completed .chapter-status {
+  background: rgba(46, 204, 113, 0.15);
+  color: var(--kids-state-success);
+}
+
+.chapter-card.not-completed .chapter-status {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--kids-text-muted);
+}
+
+/* Checklist component */
+.checklist-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.checklist-item-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border: 2px solid rgba(0,0,0,0.06);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  text-align: left;
+}
+
+.checklist-item-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.checklist-item-card.checked {
+  border-color: var(--kids-state-success);
+  background: #f4fff4;
+}
+
+.checklist-checkbox-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+  background: white;
+}
+
+.checklist-item-card.checked .checklist-checkbox-box {
+  background: var(--kids-state-success);
+  border-color: var(--kids-state-success);
+}
+
+.checklist-checkbox-box::after {
+  content: "✓";
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.checklist-item-card.checked .checklist-checkbox-box::after {
+  opacity: 1;
+}
+
+.checklist-text {
+  font-size: 0.95em;
+  line-height: 1.4;
+  color: var(--kids-text-primary);
+  font-weight: 500;
+}
+
+/* Checkin adjustments for 6 chapters */
+.achieve-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px;
+}
+
+.achieve-card {
+  padding: 14px 10px;
+  justify-content: center;
+  font-size: 0.82em;
+  font-weight: bold;
+  text-align: center;
+  flex-direction: column;
+}
+
+.achieve-card.selected {
+  border-color: #ff7675;
+  background: #fff5f2;
+}
+
 /* 响应式适配 */
 @media (max-width: 600px) {
   .checkin-stage {
@@ -1014,14 +1187,31 @@ body {
       适合 6-12 岁小朋友探索性格的奥秘
     </div>
 
-    <button class="btn-primary" id="cover-btn-start" onclick="navigateTo('page-story')">开始冒险 ➔</button>
+    <button class="btn-primary" id="cover-btn-start" onclick="navigateTo('page-chapters')">开始冒险 ➔</button>
+  </div>
+
+  <!-- ==============================
+       01.1.5 CHAPTERS PAGE (章节目录页)
+       ============================== -->
+  <div id="page-chapters" class="page cover-page" style="background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 100%); padding-top: 50px; text-align: center;">
+    <div class="top-status-bar">
+      <div class="badge-counter-badge" id="chapters-badge-display">✨ 已解锁 0 枚徽章</div>
+      <button class="back-btn" onclick="navigateTo('page-cover')" style="position:static;">➔ 返回封面</button>
+    </div>
+
+    <h1 style="font-size: 2.2em; margin-bottom: 8px; text-shadow: 1px 1px 0px rgba(255,255,255,0.6); color: #c0392b;">🔮 魔法成长圈目录</h1>
+    <div class="subtitle" style="font-size: 1.1em; opacity: 0.95; margin-bottom: 25px; color: #c0392b;">选择你想探索的成长魔法，点亮性格宝石！</div>
+
+    <div class="chapters-grid" id="chapters-container">
+      <!-- 动态生成 6 个章节的卡片 -->
+    </div>
   </div>
 
   <!-- ==============================
        01.2 STORY PAGE (故事页)
        ============================== -->
   <div id="page-story" class="page story-page">
-    <button class="back-btn" onclick="navigateTo('page-cover')">➔ 退出</button>
+    <button class="back-btn" onclick="navigateTo('page-chapters')">➔ 返回目录</button>
     <button class="leaf-tip-btn" id="story-btn-tip" onclick="toggleParentDrawer(true)">💡</button>
 
     <!-- 伴读小提示抽屉 -->
@@ -1029,142 +1219,51 @@ body {
       <div class="drawer-close" onclick="toggleParentDrawer(false)">✕</div>
       <h4>爸爸伴读引导锦囊</h4>
       <p><strong>亲爱的家长：</strong></p>
-      <p>当您陪孩子读到下雨踢不成球时，可以引导孩子：“雨天是不能改变的，但做不做别的事情是自己可以做主的，这就是‘积极主动’的魔法哦。”</p>
-      <p>让孩子思考：今天有什么不顺心的事情，可以用这只积极跑鞋来做出改变？</p>
+      <p>正在加载伴读小提示...</p>
     </div>
 
     <div class="story-stage">
       <div class="story-carousel-container">
         <div class="story-carousel" id="carousel-track">
-          
-          <!-- Slide 1 -->
-          <div class="story-slide">
-            <div class="illustration-box" onclick="triggerPuppyAnimation()">
-              <svg viewBox="0 0 400 200" id="slide1-svg">
-                <!-- 背景下雨云 -->
-                <path d="M 60,60 Q 80,40 100,60 Q 120,40 140,60 Q 160,50 170,70 Q 150,90 60,90 Z" fill="#b2bec3" />
-                <line x1="80" y1="95" x2="70" y2="120" stroke="#74b9ff" stroke-width="2" />
-                <line x1="110" y1="95" x2="100" y2="120" stroke="#74b9ff" stroke-width="2" />
-                <line x1="140" y1="95" x2="130" y2="120" stroke="#74b9ff" stroke-width="2" />
-                
-                <!-- 哭泣小狗 (嘟嘟) -->
-                <circle cx="280" cy="140" r="35" fill="#d35400" />
-                <circle cx="265" cy="130" r="5" fill="#2d3436" id="puppy-eye-l" />
-                <circle cx="295" cy="130" r="5" fill="#2d3436" id="puppy-eye-r" />
-                <!-- 哭泣眼泪 -->
-                <path d="M 265,135 Q 260,150 262,152" stroke="#74b9ff" stroke-width="2" fill="none" id="puppy-tear" />
-                <!-- 狗耳朵 -->
-                <ellipse cx="240" cy="130" rx="10" ry="20" fill="#a04000" />
-                <ellipse cx="320" cy="130" rx="10" ry="20" fill="#a04000" />
-                <!-- 伤心嘴巴 -->
-                <path d="M 270,155 Q 280,148 290,155" stroke="#2d3436" stroke-width="2" fill="none" id="puppy-mouth" />
-                <text x="280" y="195" text-anchor="middle" font-size="13" font-weight="bold" fill="#7f8c8d">点击嘟嘟狗听心声</text>
-              </svg>
-              <!-- 狗说内心戏气泡 -->
-              <div style="position:absolute; top:10px; right:40px; background:white; padding:8px 12px; border-radius:12px; font-size:0.85em; border:1px solid #ddd; display:none;" id="puppy-bubble">
-                “雨天真倒霉！我什么都做不成...”
-              </div>
-            </div>
-            <div class="story-text">
-              小狗嘟嘟无精打采地坐在路边叹气：“雨下得这么大，今天没法出去踢足球了，真倒霉！我什么都不想做了。”
-            </div>
-          </div>
-
-          <!-- Slide 2 -->
-          <div class="story-slide">
-            <div class="illustration-box">
-              <svg viewBox="0 0 400 200">
-                <!-- 小圆递鞋 -->
-                <circle cx="150" cy="130" r="30" fill="#ff9a9e" />
-                <circle cx="140" cy="122" r="4" fill="#333" />
-                <circle cx="160" cy="122" r="4" fill="#333" />
-                <path d="M 140,140 Q 150,150 160,140" stroke="#333" stroke-width="2" fill="none" />
-                <!-- 小黄伞 -->
-                <path d="M 110,80 A 40,40 0 0,1 190,80 Z" fill="#ffeaa7" />
-                <line x1="150" y1="80" x2="150" y2="130" stroke="#d35400" stroke-width="2" />
-                
-                <!-- 积极跑鞋 -->
-                <path d="M 270,140 L 310,140 L 320,155 L 265,155 Z" fill="#ff7675" stroke="#fff" stroke-width="1.5" />
-                <ellipse cx="295" cy="140" rx="8" ry="4" fill="#ffeaa7" />
-                <!-- 呼吸发光 -->
-                <circle cx="295" cy="145" r="40" fill="none" stroke="#ffeaa7" stroke-width="1.5" opacity="0.5" />
-              </svg>
-            </div>
-            <div class="story-text">
-              这时候，小圆走了过来，递给嘟嘟一双发光的“积极跑鞋”和一把雨伞。小圆说：“嘟嘟，虽然雨停不下来，但我们可以去地下室练球，或者在家里看书呀！”
-            </div>
-          </div>
-
-          <!-- Slide 3 -->
-          <div class="story-slide">
-            <div class="illustration-box">
-              <svg viewBox="0 0 400 200">
-                <!-- 快乐嘟嘟狗踢球 -->
-                <circle cx="180" cy="120" r="30" fill="#d35400" />
-                <circle cx="170" cy="112" r="4" fill="#333" />
-                <circle cx="190" cy="112" r="4" fill="#333" />
-                <path d="M 170,128 Q 180,138 190,128" stroke="#333" stroke-width="2" fill="none" />
-                <!-- 穿上跑鞋 -->
-                <rect x="160" y="145" width="16" height="10" rx="3" fill="#ff7675" />
-                <rect x="184" y="145" width="16" height="10" rx="3" fill="#ff7675" />
-                <!-- 足球 -->
-                <circle cx="260" cy="135" r="16" fill="#fff" stroke="#333" stroke-width="2" />
-                <line x1="260" y1="119" x2="260" y2="151" stroke="#333" />
-                <line x1="244" y1="135" x2="276" y2="135" stroke="#333" />
-                <!-- 努力宝石闪光 -->
-                <text x="180" y="70" font-size="28" text-anchor="middle">💎</text>
-              </svg>
-            </div>
-            <div class="story-text">
-              嘟嘟明白了！它穿上跑鞋，在地下室努力练习。原来，只要我们“积极主动”地想办法并“努力学习”去行动，雨天也会成为很棒的成长日！
-            </div>
-          </div>
-
+          <!-- 动态加载故事幻灯片 -->
         </div>
       </div>
 
       <div class="carousel-nav">
         <button class="btn-nav" id="carousel-prev" onclick="moveCarousel(-1)" disabled>上一页</button>
         <div class="carousel-dots" id="carousel-dots">
-          <div class="dot active"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+          <!-- 动态加载点 -->
         </div>
         <button class="btn-nav" id="carousel-next" onclick="moveCarousel(1)">下一页</button>
       </div>
 
-      <button class="btn-primary challenge-trigger-btn" id="story-btn-challenge" onclick="openQuizModal()">接受宝石挑战 ➔</button>
+      <button class="btn-primary challenge-trigger-btn" id="story-btn-challenge" onclick="openChecklistModal()">接受宝石挑战 ➔</button>
     </div>
   </div>
 
 </div>
 
 <!-- ==========================================
-     01.3 INTERACTIVE QUIZ MODAL (答题挑战弹窗)
+     01.3 INTERACTIVE CHECKLIST MODAL (魔法行动清单挑战)
      ========================================== -->
-<div class="modal-overlay" id="quiz-modal-overlay">
+<div class="modal-overlay" id="checklist-modal-overlay">
   <div class="quiz-modal">
-    <div class="quiz-modal-close" onclick="closeQuizModal()">✕</div>
-    <div class="quiz-modal-title">✨ 积极宝石挑战 ✨</div>
-    <div class="quiz-question">
-      嘟嘟狗放学回家，突然停电了没办法看最喜欢的动画片。下面哪一个是“积极主动”的成长魔法卡片？
+    <div class="quiz-modal-close" onclick="closeChecklistModal()">✕</div>
+    <div class="quiz-modal-title" id="checklist-modal-title">✨ 积极宝石挑战 ✨</div>
+    <div class="quiz-question" style="font-size:1.05em; font-weight:normal; margin-bottom:18px; line-height:1.5;">
+      小睿，今天你在生活中做到了以下魔法行动吗？<br>勾选它们来点亮宝石吧！
     </div>
 
-    <div class="quiz-options">
-      <div class="quiz-option-card" id="quiz-opt-a" onclick="selectQuizOption(false, 'quiz-opt-a')">
-        ❌ 坐在沙发上生闷气，不停责怪爸爸没把发电机充好电。
-      </div>
-      <div class="quiz-option-card" id="quiz-opt-b" onclick="selectQuizOption(true, 'quiz-opt-b')">
-        🎨 拿出画笔在月光下画画，或者帮妈妈把桌子擦干净。
-      </div>
+    <div class="checklist-options" id="checklist-items-container">
+      <!-- 动态加载 checklist-item-card -->
     </div>
 
     <!-- 粒子爆裂特效容器 -->
     <div class="confetti-container" id="modal-confetti"></div>
 
-    <div class="quiz-feedback-box" id="quiz-feedback"></div>
+    <div class="quiz-feedback-box" id="checklist-feedback" style="min-height:30px;"></div>
 
-    <button class="quiz-cta-btn" id="quiz-btn-next" onclick="finishQuiz()">赢回宝石，前往魔法瓶打卡！➔</button>
+    <button class="quiz-cta-btn" id="checklist-btn-next" onclick="finishChecklist()">点亮宝石，前往自省室！➔</button>
   </div>
 </div>
 
@@ -1173,7 +1272,7 @@ body {
      ========================================== -->
 <div class="app-container">
   <div id="page-checkin" class="page checkin-page">
-    <button class="back-btn" onclick="navigateTo('page-story')">➔ 返回故事</button>
+    <button class="back-btn" onclick="navigateTo('page-chapters')">➔ 返回目录</button>
     
     <div style="text-align:center; margin-bottom:15px;">
       <h1 style="font-size:1.6em;color:#c0392b;">🔮 魔法自省室</h1>
@@ -1200,18 +1299,24 @@ body {
         <!-- 态度/行为勾选 -->
         <div class="checkin-section">
           <div class="checkin-section-title">2. 今天我做到了哪些成长表现？(多选)</div>
-          <div class="achieve-grid">
-            <div class="achieve-card" onclick="toggleAchieve('🚀 积极主动', this)">
-              <span>🚀 积极主动</span>
+          <div class="achieve-grid" id="checkin-achieve-grid">
+            <div class="achieve-card" data-achieve="🚀 积极主动" onclick="toggleAchieve('🚀 积极主动', this)">
+              <span>🚀 积极主动 ➔ 📚 努力学习</span>
             </div>
-            <div class="achieve-card" onclick="toggleAchieve('📚 努力学习', this)">
-              <span>📚 努力学习</span>
+            <div class="achieve-card" data-achieve="🦁 充满自信" onclick="toggleAchieve('🦁 充满自信', this)">
+              <span>🦁 充满自信 ➔ 🎯 发现兴趣</span>
             </div>
-            <div class="achieve-card" onclick="toggleAchieve('🦁 充满自信', this)">
-              <span>🦁 充满自信</span>
+            <div class="achieve-card" data-achieve="🪞 每日自省" onclick="toggleAchieve('🪞 每日自省', this)">
+              <span>🪞 每日自省 ➔ ⚡ 有效执行</span>
             </div>
-            <div class="achieve-card" onclick="toggleAchieve('💛 有同理心', this)">
-              <span>💛 有同理心</span>
+            <div class="achieve-card" data-achieve="🛡️ 勇往直前" onclick="toggleAchieve('🛡️ 勇往直前', this)">
+              <span>🛡️ 勇往直前 ➔ ⭐ 追寻理想</span>
+            </div>
+            <div class="achieve-card" data-achieve="🌍 宽广胸怀" onclick="toggleAchieve('🌍 宽广胸怀', this)">
+              <span>🌍 宽广胸怀 ➔ 🤝 合作沟通</span>
+            </div>
+            <div class="achieve-card" data-achieve="💛 拥有同理" onclick="toggleAchieve('💛 拥有同理', this)">
+              <span>💛 拥有同理 ➔ 💬 人际交流</span>
             </div>
           </div>
         </div>
@@ -1294,6 +1399,371 @@ body {
 
 <script>
 /* ==========================================
+   WDS Chapter Data Structure (同心圆 6 章节数据定义)
+   ========================================== */
+const chaptersData = [
+  {
+    id: 1,
+    title: "积极与学习的魔法",
+    subtitle: "积极主动 ➔ 努力学习",
+    gem: "积极宝石 🚀",
+    color: "#ff7675",
+    parentTip: "当您陪孩子读到下雨踢不成球时，可以引导孩子：“雨天是不能改变的，但做不做别的事情是自己可以做主的，这就是‘积极主动’的魔法哦。”让孩子思考：今天有什么不顺心的事情，可以用这只积极跑鞋来做出改变？",
+    slides: [
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <path d="M 60,60 Q 80,40 100,60 Q 120,40 140,60 Q 160,50 170,70 Q 150,90 60,90 Z" fill="#b2bec3" />
+          <line x1="80" y1="95" x2="70" y2="120" stroke="#74b9ff" stroke-width="2" />
+          <line x1="110" y1="95" x2="100" y2="120" stroke="#74b9ff" stroke-width="2" />
+          <line x1="140" y1="95" x2="130" y2="120" stroke="#74b9ff" stroke-width="2" />
+          <circle cx="280" cy="140" r="35" fill="#d35400" />
+          <circle cx="265" cy="130" r="5" fill="#2d3436" id="puppy-eye-l" />
+          <circle cx="295" cy="130" r="5" fill="#2d3436" id="puppy-eye-r" />
+          <path d="M 265,135 Q 260,150 262,152" stroke="#74b9ff" stroke-width="2" fill="none" id="puppy-tear" />
+          <ellipse cx="240" cy="130" rx="10" ry="20" fill="#a04000" />
+          <ellipse cx="320" cy="130" rx="10" ry="20" fill="#a04000" />
+          <path d="M 270,155 Q 280,148 290,155" stroke="#2d3436" stroke-width="2" fill="none" id="puppy-mouth" />
+          <text x="280" y="195" text-anchor="middle" font-size="11" font-weight="bold" fill="#7f8c8d">点击嘟嘟狗听心声</text>
+        </svg>`,
+        text: "小狗嘟嘟无精打采地坐在路边叹气：“雨下得这么大，今天没法出去踢足球了，真倒霉！我什么都不想做了。”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="150" cy="130" r="30" fill="#ff9a9e" />
+          <circle cx="140" cy="122" r="4" fill="#333" />
+          <circle cx="160" cy="122" r="4" fill="#333" />
+          <path d="M 140,140 Q 150,150 160,140" stroke="#333" stroke-width="2" fill="none" />
+          <path d="M 110,80 A 40,40 0 0,1 190,80 Z" fill="#ffeaa7" />
+          <line x1="150" y1="80" x2="150" y2="130" stroke="#d35400" stroke-width="2" />
+          <path d="M 270,140 L 310,140 L 320,155 L 265,155 Z" fill="#ff7675" stroke="#fff" stroke-width="1.5" />
+          <ellipse cx="295" cy="140" rx="8" ry="4" fill="#ffeaa7" />
+          <circle cx="295" cy="145" r="40" fill="none" stroke="#ffeaa7" stroke-width="1.5" opacity="0.5" />
+        </svg>`,
+        text: "这时候，小圆走了过来，递给嘟嘟一双发光的“积极跑鞋”和一把雨伞。小圆说：“嘟嘟，虽然雨停不下来，但我们可以去地下室练球，或者在家里看书呀！”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="180" cy="120" r="30" fill="#d35400" />
+          <circle cx="170" cy="112" r="4" fill="#333" />
+          <circle cx="190" cy="112" r="4" fill="#333" />
+          <path d="M 170,128 Q 180,138 190,128" stroke="#333" stroke-width="2" fill="none" />
+          <rect x="160" y="145" width="16" height="10" rx="3" fill="#ff7675" />
+          <rect x="184" y="145" width="16" height="10" rx="3" fill="#ff7675" />
+          <circle cx="260" cy="135" r="16" fill="#fff" stroke="#333" stroke-width="2" />
+          <line x1="260" y1="119" x2="260" y2="151" stroke="#333" />
+          <line x1="244" y1="135" x2="276" y2="135" stroke="#333" />
+          <text x="180" y="70" font-size="28" text-anchor="middle">💎</text>
+        </svg>`,
+        text: "嘟嘟明白了！它穿上跑鞋，在地下室努力练习。原来，只要我们“积极主动”地想办法并“努力学习”去行动，雨天也会成为很棒的成长日！"
+      }
+    ],
+    checklist: [
+      "遇到下雨或不顺心的事，我不哭闹抱怨，主动想其他好办法 (积极主动)",
+      "遇到学习上的难题或不会做的题目，我静下心多想多练 (努力学习)",
+      "自己的事情自己做，不依赖爸爸妈妈 (自动自发)"
+    ]
+  },
+  {
+    id: 2,
+    title: "自信与兴趣的翅膀",
+    subtitle: "充满自信 ➔ 发现兴趣",
+    gem: "自信宝石 🦁",
+    color: "#fab1a0",
+    parentTip: "当陪孩子读到兔子眯眯觉得自己没用时，可以引导孩子：“眯眯觉得自己画画好看，这就是她的闪光点。你的闪光点是什么呢？画画、唱歌、还是拼积木？”鼓励孩子树立自信，勇于探索自己的兴趣。",
+    slides: [
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <path d="M 50,55 Q 70,35 90,55 Q 110,35 130,55 Q 150,45 160,65 Q 140,85 50,85 Z" fill="#b2bec3" opacity="0.7"/>
+          <circle cx="280" cy="130" r="30" fill="#f5f6fa" stroke="#dcdde1" stroke-width="2" />
+          <ellipse cx="265" cy="85" rx="8" ry="25" fill="#f5f6fa" stroke="#dcdde1" stroke-width="2" />
+          <ellipse cx="265" cy="85" rx="4" ry="20" fill="#ffecd2" />
+          <ellipse cx="295" cy="85" rx="8" ry="25" fill="#f5f6fa" stroke="#dcdde1" stroke-width="2" />
+          <ellipse cx="295" cy="85" rx="4" ry="20" fill="#ffecd2" />
+          <ellipse cx="270" cy="122" rx="3" ry="5" fill="#2d3436" />
+          <ellipse cx="290" cy="122" rx="3" ry="5" fill="#2d3436" />
+          <path d="M 270,128 Q 266,140 268,142" stroke="#74b9ff" stroke-width="2" fill="none" id="rabbit-tear" />
+          <path d="M 276,138 Q 280,132 284,138" stroke="#2d3436" stroke-width="2" fill="none" id="rabbit-mouth" />
+          <text x="280" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#7f8c8d">点击眯眯兔听心声</text>
+        </svg>`,
+        text: "小兔子眯眯看着别的小动物，伤心地低下了头：“嘟嘟会踢球，小猴会爬树，可我什么都不会，我是个笨兔子...”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="130" cy="130" r="30" fill="#ff9a9e" />
+          <circle cx="120" cy="122" r="4" fill="#333" />
+          <circle cx="140" cy="122" r="4" fill="#333" />
+          <path d="M 120,140 Q 130,150 140,140" stroke="#333" stroke-width="2" fill="none" />
+          <path d="M 250,90 Q 210,120 250,150 Q 270,120 250,90 Z" fill="#fab1a0" opacity="0.8" />
+          <path d="M 260,100 Q 230,125 260,150 Q 275,125 260,100 Z" fill="#ffeaa7" opacity="0.8" />
+          <circle cx="255" cy="120" r="35" fill="none" stroke="#fdcb6e" stroke-dasharray="4" stroke-width="2" />
+        </svg>`,
+        text: "小圆拿出一双七彩的“自信翅膀”给眯眯系上：“眯眯，每个人都有独特的魔力！试试用你的小手去画画，或者去唱歌，一定能找到你的最爱！”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="150" cy="120" r="30" fill="#f5f6fa" stroke="#dcdde1" stroke-width="2" />
+          <ellipse cx="135" cy="75" rx="8" ry="25" fill="#f5f6fa" stroke="#dcdde1" stroke-width="2" />
+          <ellipse cx="135" cy="75" rx="4" ry="20" fill="#ffecd2" />
+          <ellipse cx="165" cy="75" rx="8" ry="25" fill="#f5f6fa" stroke="#dcdde1" stroke-width="2" />
+          <ellipse cx="165" cy="75" rx="4" ry="20" fill="#ffecd2" />
+          <circle cx="140" cy="112" r="4" fill="#333" />
+          <circle cx="160" cy="112" r="4" fill="#333" />
+          <path d="M 140,125 Q 150,135 160,125" stroke="#333" stroke-width="2" fill="none" />
+          <line x1="260" y1="70" x2="240" y2="160" stroke="#8c7a6b" stroke-width="3" />
+          <line x1="260" y1="70" x2="280" y2="160" stroke="#8c7a6b" stroke-width="3" />
+          <line x1="260" y1="70" x2="260" y2="160" stroke="#8c7a6b" stroke-width="1.5" />
+          <rect x="230" y="85" width="60" height="45" fill="#fff" stroke="#8c7a6b" stroke-width="2" />
+          <circle cx="260" cy="108" r="10" fill="#ff7675" />
+          <circle cx="250" cy="108" r="8" fill="#55efc4" />
+          <circle cx="270" cy="108" r="8" fill="#ffeaa7" />
+          <text x="150" y="50" font-size="28" text-anchor="middle">👑</text>
+        </svg>`,
+        text: "眯眯试着拿起画笔。哇！她画出了一片美丽的魔法森林，大家都欢呼起来！眯眯高兴地大喊：“我相信我自己，我能画出最美的画！”"
+      }
+    ],
+    checklist: [
+      "每天对自己大声说一句：“我相信我能行！” (充满自信)",
+      "尝试做一件之前没做过的新奇事情，寻找自己的兴趣点 (发现兴趣)",
+      "勇敢跟爸爸妈妈或老师分享自己的小本领或小爱好 (展示自我)"
+    ]
+  },
+  {
+    id: 3,
+    title: "自省与行动的魔镜",
+    subtitle: "每日自省 ➔ 有效执行",
+    gem: "自省宝石 🪞",
+    color: "#55efc4",
+    parentTip: "孩子做计划容易三分钟热度，当读到小猴子扣扣使用魔法镜子做清单时，您可以引导孩子：“今天我们也画一面自省小魔镜，写下3个小任务（比如整理书桌、按时刷牙、阅读），看我们今天能不能完成打卡？”",
+    slides: [
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <rect x="50" y="150" width="20" height="15" fill="#ffeaa7" stroke="#333" transform="rotate(15, 50, 150)" />
+          <circle cx="90" cy="155" r="10" fill="#ff7675" stroke="#333" />
+          <line x1="120" y1="160" x2="140" y2="150" stroke="#74b9ff" stroke-width="3" />
+          <circle cx="280" cy="130" r="32" fill="#8c7a6b" />
+          <ellipse cx="280" cy="135" rx="22" ry="18" fill="#ffeaa7" />
+          <circle cx="270" cy="122" rx="4" ry="4" fill="#2d3436" />
+          <circle cx="290" cy="122" rx="4" ry="4" fill="#2d3436" />
+          <path d="M 272,142 Q 280,136 288,142" stroke="#2d3436" stroke-width="2" fill="none" id="monkey-mouth" />
+          <circle cx="242" cy="120" r="8" fill="#8c7a6b" />
+          <circle cx="318" cy="120" r="8" fill="#8c7a6b" />
+          <text x="280" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#7f8c8d">点击扣扣猴听心声</text>
+        </svg>`,
+        text: "小猴子扣扣红着脸抓抓头说：“我答应了妈妈今天整理房间、看书，可我玩了一整天，什么都没做，房间也乱七八糟的...”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="130" cy="130" r="30" fill="#ff9a9e" />
+          <circle cx="120" cy="122" r="4" fill="#333" />
+          <circle cx="140" cy="122" r="4" fill="#333" />
+          <path d="M 120,140 Q 130,150 140,140" stroke="#333" stroke-width="2" fill="none" />
+          <ellipse cx="270" cy="110" rx="25" ry="35" fill="#74b9ff" stroke="#ffeaa7" stroke-width="4" />
+          <line x1="270" y1="145" x2="270" y2="175" stroke="#ffeaa7" stroke-width="5" />
+          <rect x="255" y="172" width="30" height="8" rx="3" fill="#ffeaa7" />
+          <circle cx="270" cy="110" r="45" fill="none" stroke="#ffeaa7" stroke-width="1.5" opacity="0.6" />
+        </svg>`,
+        text: "小圆送给扣扣一面闪闪发光的“自省魔镜”：“扣扣，每天看着镜子，诚实地想一想：今天哪些做得很棒，哪些可以改一改？然后把行动写在清单上！”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="130" cy="120" r="32" fill="#8c7a6b" />
+          <ellipse cx="130" cy="125" rx="22" ry="18" fill="#ffeaa7" />
+          <circle cx="120" cy="112" rx="4" ry="4" fill="#333" />
+          <circle cx="140" cy="112" rx="4" ry="4" fill="#333" />
+          <path d="M 120,126 Q 130,136 140,126" stroke="#333" stroke-width="2" fill="none" />
+          <circle cx="98" cy="110" r="8" fill="#8c7a6b" />
+          <circle cx="162" cy="110" r="8" fill="#8c7a6b" />
+          <rect x="230" y="60" width="100" height="110" rx="8" fill="#f5f6fa" stroke="#333" stroke-width="2" />
+          <rect x="265" y="52" width="30" height="12" rx="3" fill="#ff7675" />
+          <rect x="242" y="80" width="12" height="12" fill="#55efc4" />
+          <text x="248" y="90" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">✓</text>
+          <line x1="262" y1="86" x2="310" y2="86" stroke="#2d3436" stroke-width="2" />
+          <rect x="242" y="105" width="12" height="12" fill="#55efc4" />
+          <text x="248" y="115" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">✓</text>
+          <line x1="262" y1="111" x2="310" y2="111" stroke="#2d3436" stroke-width="2" />
+          <rect x="242" y="130" width="12" height="12" fill="#55efc4" />
+          <text x="248" y="140" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">✓</text>
+          <line x1="262" y1="136" x2="310" y2="136" stroke="#2d3436" stroke-width="2" />
+          <text x="130" y="50" font-size="28" text-anchor="middle">🔮</text>
+        </svg>`,
+        text: "扣扣在清单上写下“整理书桌、阅读5页、按时睡觉”。它一步一步执行，每做完一样就打个勾。房间变整洁了，扣扣开心地笑了，感觉心里亮堂堂的！"
+      }
+    ],
+    checklist: [
+      "睡觉前照照心里的小镜子，找出今天哪件事做得很棒 (每日自省)",
+      "写下3个今天需要完成的小计划，并且马上行动做完 (有效执行)",
+      "做错了事情不逃避、不找借口，诚实大方地承认它 (诚实自省)"
+    ]
+  },
+  {
+    id: 4,
+    title: "勇气与理想的飞翔",
+    subtitle: "勇往直前 ➔ 追寻理想",
+    gem: "勇气宝石 🛡️",
+    color: "#74b9ff",
+    parentTip: "孩子在面对困难或未知挑战（如独自睡觉、举手回答问题、面对失败）时常有胆怯。读到小鸟波波的故事，您可以告诉孩子：“理想是头顶闪烁的灯塔，勇气是翅膀上的风。只要踏出第一步，即使摇晃也能飞起来！”",
+    slides: [
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <line x1="30" y1="160" x2="200" y2="160" stroke="#8c7a6b" stroke-width="5" />
+          <path d="M 110,160 Q 150,190 190,160 Z" fill="#ffe0b2" stroke="#d7ccc8" stroke-width="2" />
+          <circle cx="150" cy="135" r="22" fill="#74b9ff" />
+          <circle cx="140" cy="130" r="3.5" fill="#2d3436" />
+          <polygon points="122,132 130,128 130,136" fill="#fbc531" />
+          <path d="M 134,142 Q 142,136 150,142" stroke="#2d3436" stroke-width="1.5" fill="none" id="bird-mouth" />
+          <text x="280" y="130" text-anchor="middle" font-size="11" font-weight="bold" fill="#7f8c8d">点击波波鸟听心声</text>
+        </svg>`,
+        text: "小鸟波波站在高高的树枝上，缩着脖子发抖：“天啊，风好大，天空太高了！我要是掉下去摔疼了怎么办？我不敢飞...”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="100" cy="130" r="30" fill="#ff9a9e" />
+          <circle cx="90" cy="122" r="4" fill="#333" />
+          <circle cx="110" cy="122" r="4" fill="#333" />
+          <path d="M 90,140 Q 100,150 110,140" stroke="#333" stroke-width="2" fill="none" />
+          <path d="M 220,150 A 60,60 0 0,1 340,150" stroke="#ff7675" stroke-width="4" fill="none" />
+          <path d="M 225,150 A 55,55 0 0,1 335,150" stroke="#ffeaa7" stroke-width="4" fill="none" />
+          <path d="M 230,150 A 50,50 0 0,1 330,150" stroke="#55efc4" stroke-width="4" fill="none" />
+          <path d="M 235,150 A 45,45 0 0,1 325,150" stroke="#74b9ff" stroke-width="4" fill="none" />
+        </svg>`,
+        text: "小圆指着远方美丽的彩虹桥，对波波大声鼓劲：“波波，看，那座彩虹桥就是你的梦想！张开翅膀，勇敢地向前跳！就算害怕，也要去试一试！”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="70" cy="60" r="25" fill="#fbc531" opacity="0.8" />
+          <path d="M 180,180 A 100,100 0 0,1 380,180" stroke="#ff7675" stroke-width="3" fill="none" opacity="0.6" />
+          <circle cx="220" cy="100" r="20" fill="#74b9ff" />
+          <path d="M 220,80 Q 200,40 180,85 Z" fill="#409eff" />
+          <path d="M 220,120 Q 200,160 180,115 Z" fill="#409eff" />
+          <circle cx="230" cy="95" r="3.5" fill="#333" />
+          <polygon points="238,97 246,93 244,101" fill="#fbc531" />
+          <text x="220" y="45" font-size="28" text-anchor="middle">🛡️</text>
+        </svg>`,
+        text: "波波闭上眼睛，深深吸了一口气，然后用力跳了出去！风从耳边呼呼吹过，它拼命扇动翅膀——天啊，它飞起来了！原来，战胜害怕就是最棒的勇气！"
+      }
+    ],
+    checklist: [
+      "遇到有一点点害怕的事情（如黑夜或举手发言），勇敢试一下 (勇往直前)",
+      "写下或画出自己心里最想实现的一个美丽梦想 (追寻理想)",
+      "如果不小心摔倒了或没做好，不放弃，拍拍土站起来继续 (永不言弃)"
+    ]
+  },
+  {
+    id: 5,
+    title: "胸怀与合作的桥梁",
+    subtitle: "宽广胸怀 ➔ 合作沟通",
+    gem: "胸怀宝石 🌍",
+    color: "#a29bfe",
+    parentTip: "小孩子在一起玩耍时经常会为了玩具和规则产生争执。读到松鼠和小狸猫合作建桥的故事，您可以启发孩子：“当别人的意见和你不一样时，生闷气是解决不了问题的。如果我们包容不同，一起商量，就能造出最棒的城堡！”",
+    slides: [
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="120" cy="130" r="25" fill="#e67e22" />
+          <circle cx="110" cy="122" r="3.5" fill="#2d3436" />
+          <path d="M 108,138 Q 115,134 122,138" stroke="#2d3436" stroke-width="1.5" fill="none" id="squirrel-mouth" />
+          <ellipse cx="138" cy="115" rx="8" ry="16" fill="#d35400" />
+          <circle cx="280" cy="130" r="28" fill="#8d6e63" />
+          <circle cx="290" cy="122" r="3.5" fill="#2d3436" />
+          <path d="M 282,138 Q 290,134 298,138" stroke="#2d3436" stroke-width="1.5" fill="none" id="beaver-mouth" />
+          <ellipse cx="260" cy="140" rx="14" ry="8" fill="#5d4037" />
+          <text x="200" y="180" text-anchor="middle" font-size="11" font-weight="bold" fill="#7f8c8d">点击他们听心里话</text>
+        </svg>`,
+        text: "小松鼠查查和小狸猫皮皮为了建木滑梯争吵起来。“滑梯必须建在树枝上！”“不对，必须建在河岸边！”他们谁也不理谁，气呼呼地背过身去。"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="200" cy="130" r="30" fill="#ff9a9e" />
+          <circle cx="190" cy="122" r="4" fill="#333" />
+          <circle cx="210" cy="122" r="4" fill="#333" />
+          <path d="M 190,140 Q 200,150 210,140" stroke="#333" stroke-width="2" fill="none" />
+          <line x1="150" y1="80" x2="250" y2="80" stroke="#ffeaa7" stroke-width="4" />
+          <line x1="200" y1="80" x2="200" y2="110" stroke="#ffeaa7" stroke-width="4" />
+          <circle cx="150" cy="95" r="10" fill="#e67e22" opacity="0.8" />
+          <circle cx="250" cy="95" r="10" fill="#8d6e63" opacity="0.8" />
+        </svg>`,
+        text: "小圆拿出一架“胸怀天平”说：“查查、皮皮，深呼吸！大家都把肚子里的气放一放。听一听对方的想法，把滑梯造在靠近岸边的大树丫上，行不行？”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <path d="M 80,60 Q 200,100 320,160" stroke="#ffeaa7" stroke-width="15" fill="none" stroke-linecap="round" />
+          <circle cx="220" cy="85" r="18" fill="#e67e22" />
+          <circle cx="215" cy="80" r="2.5" fill="#fff" />
+          <circle cx="250" cy="105" r="20" fill="#8d6e63" />
+          <circle cx="245" cy="100" r="2.5" fill="#fff" />
+          <text x="200" y="45" font-size="28" text-anchor="middle">🌍</text>
+        </svg>`,
+        text: "两个小家伙揉揉眼睛，觉得这个主意太酷了！它们互相拉起手，分工搬木头，一起造出了一座水上飞天大滑梯。宽容对方、精诚合作的感觉好极了！"
+      }
+    ],
+    checklist: [
+      "别人的想法和我不一样时，不立刻生气，耐心听完他的话 (宽广胸怀)",
+      "和伙伴或爸爸妈妈分工合作，一起做好一件家务或小游戏 (合作沟通)",
+      "同伴不小心犯了错，大方包容，和对方说“没关系” (包容大度)"
+    ]
+  },
+  {
+    id: 6,
+    title: "同理与友谊的温暖",
+    subtitle: "拥有同理 ➔ 人际交流",
+    gem: "同理宝石 💛",
+    color: "#ffeaa7",
+    parentTip: "培养小睿的爱心和共情能力。当读到大象奇奇哭泣，小羊去关心安慰它时，爸爸可以问孩子：“如果学校有别的小朋友摔疼了哭泣，我们该怎么做呢？去扶他一下、递一张纸巾，这就是站在别人的鞋子里哦。”",
+    slides: [
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="260" cy="130" r="35" fill="#aab0c6" />
+          <circle cx="245" cy="122" r="4" fill="#2d3436" />
+          <path d="M 235,135 Q 230,155 240,160" stroke="#aab0c6" stroke-width="10" fill="none" stroke-linecap="round" />
+          <path d="M 242,126 Q 238,135 240,137" stroke="#74b9ff" stroke-width="2" fill="none" id="elephant-tear" />
+          <ellipse cx="285" cy="115" rx="15" ry="20" fill="#7d8496" />
+          <path d="M 248,142 Q 254,136 260,140" stroke="#2d3436" stroke-width="2" fill="none" id="elephant-mouth" />
+          <text x="260" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#7f8c8d">点击奇奇象听心声</text>
+        </svg>`,
+        text: "大象奇奇坐在树底下伤心地抹眼泪，因为它心爱的玩具球掉进深深的树洞里拿不出来了。旁边的小动物都围着看，不知道该怎么安慰它。"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="150" cy="130" r="25" fill="#fff" stroke="#ccc" stroke-width="2" />
+          <circle cx="135" cy="115" r="8" fill="#fff" stroke="#ccc" stroke-width="1.5" />
+          <circle cx="165" cy="115" r="8" fill="#fff" stroke="#ccc" stroke-width="1.5" />
+          <circle cx="150" cy="105" r="10" fill="#fff" stroke="#ccc" stroke-width="1.5" />
+          <circle cx="145" cy="122" r="3" fill="#333" />
+          <circle cx="155" cy="122" r="3" fill="#333" />
+          <path d="M 145,135 Q 150,140 155,135" stroke="#333" stroke-width="2" fill="none" />
+          <path d="M 250,90 Q 260,70 270,90 L 250,115 L 230,90 Q 240,70 250,90 Z" fill="#ff7675" />
+        </svg>`,
+        text: "小圆摸摸小绵羊阳阳的头，轻轻说：“阳阳，让我们站在奇奇的鞋子里，去体会它的难过（同理心）。走过去，温和地听听它的难过，去陪陪它吧。”"
+      },
+      {
+        svg: `<svg viewBox="0 0 400 200">
+          <circle cx="230" cy="120" r="35" fill="#aab0c6" />
+          <circle cx="215" cy="112" r="4" fill="#333" />
+          <ellipse cx="255" cy="105" rx="15" ry="20" fill="#7d8496" />
+          <path d="M 205,125 Q 200,140 210,142" stroke="#aab0c6" stroke-width="8" fill="none" stroke-linecap="round" />
+          <circle cx="150" cy="130" r="22" fill="#fff" stroke="#ccc" stroke-width="2" />
+          <circle cx="145" cy="122" r="3" fill="#333" />
+          <circle cx="155" cy="122" r="3" fill="#333" />
+          <path d="M 144,134 Q 150,140 156,134" stroke="#333" stroke-width="2" fill="none" />
+          <text x="190" y="45" font-size="28" text-anchor="middle">💛</text>
+        </svg>`,
+        text: "阳阳走过去静静地坐地陪在奇奇身边，拉着它的鼻子，用最温和有礼貌的话安慰它。奇奇擦干了眼泪，笑了起来。原来，温暖别人是一件这么美好的事！"
+      }
+    ],
+    checklist: [
+      "看到别人难过或哭泣时，主动上前关心并问一句“你怎么啦” (拥有同理)",
+      "和他人交谈时，用温和、礼貌的声音清晰表达自己的想法 (人际交流)",
+      "认真倾听别人说话，不随便插嘴、打断别人 (善于倾听)"
+    ]
+  }
+];
+
+let currentChapterId = 1;
+let currentSlide = 0;
+const totalSlides = 3;
+let currentChecklistStatus = [false, false, false];
+let preSelectedAchieve = '';
+
+/* ==========================================
    WDS SPA Page Router (单页路由控制器)
    ========================================== */
 function navigateTo(pageId) {
@@ -1305,6 +1775,10 @@ function navigateTo(pageId) {
     target.classList.add('active');
   }
   
+  // 章节选择页初始化
+  if (pageId === 'page-chapters') {
+    initChaptersPage();
+  }
   // 切换到打卡页时，初始化状态
   if (pageId === 'page-checkin') {
     initCheckinPage();
@@ -1316,123 +1790,278 @@ function navigateTo(pageId) {
 }
 
 /* ==========================================
+   01.1.5 Chapters Page Rendering (目录页渲染)
+   ========================================== */
+function initChaptersPage() {
+  const container = document.getElementById('chapters-container');
+  const history = JSON.parse(localStorage.getItem('growmap_checkin_history') || '[]');
+  const attitudes = {
+    1: "🚀 积极主动",
+    2: "🦁 充满自信",
+    3: "🪞 每日自省",
+    4: "🛡️ 勇往直前",
+    5: "🌍 宽广胸怀",
+    6: "💛 拥有同理"
+  };
+  
+  // 刷新已解锁徽章数
+  const unlocked = JSON.parse(localStorage.getItem('growmap_unlocked_badges') || '[]');
+  document.getElementById('chapters-badge-display').innerText = `✨ 已解锁 ${unlocked.length} 枚徽章`;
+  
+  let html = "";
+  chaptersData.forEach(ch => {
+    // 检查历史打卡中是否已经点亮过该态度
+    const isCompleted = history.some(item => item.achieves && item.achieves.some(act => act.includes(attitudes[ch.id])));
+    
+    html += `
+      <div class="chapter-card ${isCompleted ? 'completed' : 'not-completed'}" 
+           style="--chapter-color: ${ch.color};" 
+           onclick="startChapter(${ch.id})">
+        <div class="chapter-gem">${ch.gem.split(' ')[1]}</div>
+        <div class="chapter-title">第${ch.id}章：${ch.title}</div>
+        <div class="chapter-subtitle">${ch.subtitle}</div>
+        <div class="chapter-status">
+          ${isCompleted ? '已点亮宝石 ✓' : '前往探索 ➔'}
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function startChapter(chapterId) {
+  currentChapterId = chapterId;
+  renderStoryCarousel(chapterId);
+  navigateTo('page-story');
+}
+
+/* ==========================================
    01.2 Carousel Story Logic (Carousel 滑动与小狗彩蛋)
    ========================================== */
-let currentSlide = 0;
-const totalSlides = 3;
+function renderStoryCarousel(chapterId) {
+  const track = document.getElementById('carousel-track');
+  const ch = chaptersData.find(c => c.id === chapterId);
+  if (!ch) return;
+  
+  let html = "";
+  ch.slides.forEach((slide, index) => {
+    let clickHandler = "";
+    if (index === 0) {
+      clickHandler = `onclick="triggerEggAnimation(${chapterId})" style="cursor: pointer;"`;
+    }
+    
+    html += `
+      <div class="story-slide">
+        <div class="illustration-box" ${clickHandler}>
+          ${slide.svg}
+          ${index === 0 ? `<div style="position:absolute; top:10px; right:40px; background:white; padding:8px 12px; border-radius:12px; font-size:0.85em; border:1px solid #ddd; display:none; z-index: 5;" id="puppy-bubble"></div>` : ''}
+        </div>
+        <div class="story-text">
+          ${slide.text}
+        </div>
+      </div>
+    `;
+  });
+  
+  track.innerHTML = html;
+  
+  // 伴读小抽屉内容更新
+  const drawer = document.getElementById('story-parent-drawer');
+  drawer.querySelector('p:nth-of-type(2)').innerHTML = ch.parentTip;
+  
+  currentSlide = 0;
+  track.style.transform = `translateX(0%)`;
+  
+  updateCarouselNav();
+}
 
 function moveCarousel(direction) {
   currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + direction));
   const track = document.getElementById('carousel-track');
   track.style.transform = `translateX(-${currentSlide * 100}%)`;
   
-  // 更新导航点
-  const dots = document.getElementById('carousel-dots').children;
-  for (let i = 0; i < dots.length; i++) {
-    dots[i].classList.toggle('active', i === currentSlide);
+  updateCarouselNav();
+}
+
+function updateCarouselNav() {
+  const dotsContainer = document.getElementById('carousel-dots');
+  dotsContainer.innerHTML = '';
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = `dot ${i === currentSlide ? 'active' : ''}`;
+    dotsContainer.appendChild(dot);
   }
   
-  // 启用/禁用导航按钮
   document.getElementById('carousel-prev').disabled = (currentSlide === 0);
   document.getElementById('carousel-next').disabled = (currentSlide === totalSlides - 1);
   
-  // 最后一页浮现挑战入口
   const challengeBtn = document.getElementById('story-btn-challenge');
   challengeBtn.classList.toggle('visible', currentSlide === totalSlides - 1);
 }
 
-// 嘟嘟狗点击心声彩蛋
-function triggerPuppyAnimation() {
-  const eyeL = document.getElementById('puppy-eye-l');
-  const eyeR = document.getElementById('puppy-eye-r');
-  const tear = document.getElementById('puppy-tear');
-  const mouth = document.getElementById('puppy-mouth');
+// 拟人角色点击彩蛋
+function triggerEggAnimation(chapterId) {
   const bubble = document.getElementById('puppy-bubble');
+  if (!bubble) return;
   
-  // 改变表情
-  eyeL.setAttribute('r', '8');
-  eyeR.setAttribute('r', '8');
-  tear.style.display = 'none'; // 眼泪干了
-  mouth.setAttribute('d', 'M 270,148 Q 280,158 290,148'); // 翘嘴微笑
+  const happyTexts = {
+    1: '“汪！不找借口啦，只要努力总有办法！”',
+    2: '“瞧！只要我相信自己，我也能画出美丽的画！”',
+    3: '“哈！照着魔法自省镜，我今天完成了所有任务！”',
+    4: '“哇！张开翅膀勇敢飞，我的梦想就在彩虹尽头！”',
+    5: '“太棒了！我们松鼠和狸猫合作，造出了最炫的滑梯！”',
+    6: '“真开心！原来站在别人的鞋子里，能收获最好的朋友！”'
+  };
   
-  // 吐泡泡文字
   bubble.style.display = 'block';
-  bubble.innerText = '“汪！不找借口啦，只要努力总有办法！”';
+  bubble.innerText = happyTexts[chapterId];
   
-  // 解锁打底的答题小徽章记录
-  localStorage.setItem('growmap_quiz_puppy_clicked', 'true');
+  // 修改表情
+  if (chapterId === 1) {
+    const eyeL = document.getElementById('puppy-eye-l');
+    const eyeR = document.getElementById('puppy-eye-r');
+    const tear = document.getElementById('puppy-tear');
+    const mouth = document.getElementById('puppy-mouth');
+    if (eyeL) eyeL.setAttribute('r', '8');
+    if (eyeR) eyeR.setAttribute('r', '8');
+    if (tear) tear.style.display = 'none';
+    if (mouth) mouth.setAttribute('d', 'M 270,148 Q 280,158 290,148');
+  } else if (chapterId === 2) {
+    const tear = document.getElementById('rabbit-tear');
+    const mouth = document.getElementById('rabbit-mouth');
+    if (tear) tear.style.display = 'none';
+    if (mouth) mouth.setAttribute('d', 'M 276,130 Q 280,140 284,130');
+  } else if (chapterId === 3) {
+    const mouth = document.getElementById('monkey-mouth');
+    if (mouth) mouth.setAttribute('d', 'M 276,130 Q 280,140 284,130');
+  } else if (chapterId === 4) {
+    const mouth = document.getElementById('bird-mouth');
+    if (mouth) mouth.setAttribute('d', 'M 276,130 Q 280,140 284,130');
+  } else if (chapterId === 5) {
+    const mouth1 = document.getElementById('squirrel-mouth');
+    const mouth2 = document.getElementById('beaver-mouth');
+    if (mouth1) mouth1.setAttribute('d', 'M 108,132 Q 115,142 122,132');
+    if (mouth2) mouth2.setAttribute('d', 'M 282,132 Q 290,142 298,132');
+  } else if (chapterId === 6) {
+    const tear = document.getElementById('elephant-tear');
+    const mouth = document.getElementById('elephant-mouth');
+    if (tear) tear.style.display = 'none';
+    if (mouth) mouth.setAttribute('d', 'M 248,135 Q 254,145 260,135');
+  }
   
-  // 3秒后复原
+  localStorage.setItem(`growmap_chapter_${chapterId}_clicked`, 'true');
+  
   setTimeout(() => {
-    eyeL.setAttribute('r', '5');
-    eyeR.setAttribute('r', '5');
-    tear.style.display = 'block';
-    mouth.setAttribute('d', 'M 270,155 Q 280,148 290,155');
     bubble.style.display = 'none';
+    if (chapterId === 1) {
+      const eyeL = document.getElementById('puppy-eye-l');
+      const eyeR = document.getElementById('puppy-eye-r');
+      const tear = document.getElementById('puppy-tear');
+      const mouth = document.getElementById('puppy-mouth');
+      if (eyeL) eyeL.setAttribute('r', '5');
+      if (eyeR) eyeR.setAttribute('r', '5');
+      if (tear) tear.style.display = 'block';
+      if (mouth) mouth.setAttribute('d', 'M 270,155 Q 280,148 290,155');
+    } else if (chapterId === 2) {
+      const tear = document.getElementById('rabbit-tear');
+      const mouth = document.getElementById('rabbit-mouth');
+      if (tear) tear.style.display = 'block';
+      if (mouth) mouth.setAttribute('d', 'M 276,138 Q 280,132 284,138');
+    } else if (chapterId === 3) {
+      const mouth = document.getElementById('monkey-mouth');
+      if (mouth) mouth.setAttribute('d', 'M 272,142 Q 280,136 288,142');
+    } else if (chapterId === 4) {
+      const mouth = document.getElementById('bird-mouth');
+      if (mouth) mouth.setAttribute('d', 'M 134,142 Q 142,136 150,142');
+    } else if (chapterId === 5) {
+      const mouth1 = document.getElementById('squirrel-mouth');
+      const mouth2 = document.getElementById('beaver-mouth');
+      if (mouth1) mouth1.setAttribute('d', 'M 108,138 Q 115,134 122,138');
+      if (mouth2) mouth2.setAttribute('d', 'M 282,138 Q 290,134 298,138');
+    } else if (chapterId === 6) {
+      const tear = document.getElementById('elephant-tear');
+      const mouth = document.getElementById('elephant-mouth');
+      if (tear) tear.style.display = 'block';
+      if (mouth) mouth.setAttribute('d', 'M 248,142 Q 254,136 260,140');
+    }
   }, 3000);
 }
 
-// 伴读抽屉控制器
 function toggleParentDrawer(isOpen) {
   const drawer = document.getElementById('story-parent-drawer');
   drawer.classList.toggle('open', isOpen);
 }
 
 /* ==========================================
-   01.3 Quiz Logic (答题弹窗与 confetti)
+   01.3 Checklist Logic (魔法行动清单挑战逻辑)
    ========================================== */
-let isQuizDone = false;
-
-function openQuizModal() {
-  const overlay = document.getElementById('quiz-modal-overlay');
+function openChecklistModal() {
+  const overlay = document.getElementById('checklist-modal-overlay');
   overlay.classList.add('open');
-  // 重置状态
-  document.getElementById('quiz-opt-a').className = 'quiz-option-card';
-  document.getElementById('quiz-opt-b').className = 'quiz-option-card';
-  document.getElementById('quiz-feedback').innerText = '';
-  document.getElementById('quiz-feedback').className = 'quiz-feedback-box';
-  document.getElementById('quiz-btn-next').classList.remove('visible');
-  isQuizDone = false;
+  
+  const ch = chaptersData.find(c => c.id === currentChapterId);
+  if (!ch) return;
+  
+  document.getElementById('checklist-modal-title').innerText = `✨ ${ch.gem} 挑战 ✨`;
+  
+  const container = document.getElementById('checklist-items-container');
+  container.innerHTML = "";
+  currentChecklistStatus = [false, false, false];
+  
+  ch.checklist.forEach((item, index) => {
+    container.innerHTML += `
+      <div class="checklist-item-card" id="chk-card-${index}" onclick="toggleChecklistItem(${index})">
+        <div class="checklist-checkbox-box" id="chk-box-${index}"></div>
+        <span class="checklist-text">${item}</span>
+      </div>
+    `;
+  });
+  
+  document.getElementById('checklist-feedback').innerText = "勾选今天做到的所有成长行动吧！";
+  document.getElementById('checklist-feedback').className = "quiz-feedback-box";
+  document.getElementById('checklist-btn-next').classList.remove('visible');
 }
 
-function closeQuizModal() {
-  const overlay = document.getElementById('quiz-modal-overlay');
+function closeChecklistModal() {
+  const overlay = document.getElementById('checklist-modal-overlay');
   overlay.classList.remove('open');
 }
 
-function selectQuizOption(isCorrect, elementId) {
-  if (isQuizDone) return;
+function toggleChecklistItem(index) {
+  currentChecklistStatus[index] = !currentChecklistStatus[index];
   
-  const selected = document.getElementById(elementId);
-  const feedback = document.getElementById('quiz-feedback');
+  const card = document.getElementById(`chk-card-${index}`);
+  const box = document.getElementById(`chk-box-${index}`);
   
-  if (isCorrect) {
-    isQuizDone = true;
-    selected.classList.add('success');
-    feedback.innerText = '🎉 太棒了！这就是“积极主动”！小圆为你赢回了一颗【积极宝石】！';
-    feedback.className = 'quiz-feedback-box success-text';
+  card.classList.toggle('checked', currentChecklistStatus[index]);
+  box.classList.toggle('checked', currentChecklistStatus[index]);
+  
+  checkChecklistProgress();
+}
+
+function checkChecklistProgress() {
+  const allChecked = currentChecklistStatus.every(val => val === true);
+  const feedback = document.getElementById('checklist-feedback');
+  const nextBtn = document.getElementById('checklist-btn-next');
+  const ch = chaptersData.find(c => c.id === currentChapterId);
+  
+  if (allChecked) {
+    feedback.innerText = `🎉 棒极了！小睿完成了所有魔法行动，成功点亮了【${ch.gem.split(' ')[0]}】！`;
+    feedback.className = "quiz-feedback-box success-text";
     
-    // 撒花庆祝
     triggerConfetti();
+    nextBtn.classList.add('visible');
     
-    // 显示打卡进入按钮
-    document.getElementById('quiz-btn-next').classList.add('visible');
-    
-    // 写入完美答题标记
+    // 写入完美完成标记
     localStorage.setItem('growmap_quiz_perfect_pass', 'true');
+    localStorage.setItem(`growmap_chapter_${currentChapterId}_perfect_pass`, 'true');
   } else {
-    selected.classList.add('error');
-    feedback.innerText = '😢 哎呀，坐在沙发上生闷气是“找借口”哦。再想一想，有什么事情是我们自己能做主的？';
-    feedback.className = 'quiz-feedback-box error-text';
-    
-    // 抖动完毕自动恢复，可以重试
-    setTimeout(() => {
-      selected.classList.remove('error');
-    }, 400);
+    feedback.innerText = "还差一点点哦，勾选今天做到的所有成长行动吧！";
+    feedback.className = "quiz-feedback-box";
+    nextBtn.classList.remove('visible');
   }
 }
 
-// 离线 Confetti 庆祝礼花动画
 function triggerConfetti() {
   const container = document.getElementById('modal-confetti');
   container.innerHTML = '';
@@ -1457,8 +2086,20 @@ function triggerConfetti() {
   }
 }
 
-function finishQuiz() {
-  closeQuizModal();
+function finishChecklist() {
+  closeChecklistModal();
+  
+  // 设置对应的态度供打卡页预勾选
+  const attitudes = {
+    1: "🚀 积极主动",
+    2: "🦁 充满自信",
+    3: "🪞 每日自省",
+    4: "🛡️ 勇往直前",
+    5: "🌍 宽广胸怀",
+    6: "💛 拥有同理"
+  };
+  preSelectedAchieve = attitudes[currentChapterId];
+  
   navigateTo('page-checkin');
 }
 
@@ -1468,21 +2109,25 @@ function finishQuiz() {
 let selectedMoodValue = 0;
 let selectedAchieves = [];
 
-// 初始化打卡页
 function initCheckinPage() {
   selectedMoodValue = 0;
   selectedAchieves = [];
   
-  // 重置 UI
   document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
   document.querySelectorAll('.achieve-card').forEach(card => card.classList.remove('selected'));
   document.getElementById('checkin-slider').value = 8;
   updateSliderValue(8);
   
-  // 恢复魔法瓶高度
-  updateBottleLiquid();
+  // 预勾选刚刚点亮章节对应的态度卡片
+  if (preSelectedAchieve) {
+    const card = document.querySelector(`.achieve-card[data-achieve="${preSelectedAchieve}"]`);
+    if (card) {
+      toggleAchieve(preSelectedAchieve, card);
+    }
+    preSelectedAchieve = ''; // 使用后清空
+  }
   
-  // 渲染勋章墙
+  updateBottleLiquid();
   renderBadgeWall();
 }
 
@@ -1511,33 +2156,28 @@ function updateSliderValue(val) {
   document.getElementById('slider-bubble').innerText = val + "分";
 }
 
-// 刷新瓶内液体高度
 function updateBottleLiquid() {
   const history = JSON.parse(localStorage.getItem('growmap_checkin_history') || '[]');
   const count = history.length;
-  const targetHeight = Math.min(100, Math.max(10, count * 15)); // 每次打卡灌入15%高度，最低10%
+  const targetHeight = Math.min(100, Math.max(10, count * 15));
   document.getElementById('bottle-liquid').style.height = targetHeight + "%";
 }
 
-// 数据打卡提交
 function submitCheckin() {
   if (selectedMoodValue === 0) {
     alert("请小睿先选一选今天的心情卡片哦 😆");
     return;
   }
   
-  // 1. 获取数据
   const score = parseInt(document.getElementById('checkin-slider').value);
   const todayStr = new Date().toISOString().split('T')[0];
   
-  // 2. 读取并修改 LocalStorage 历史记录
   let history = JSON.parse(localStorage.getItem('growmap_checkin_history') || '[]');
   
-  // 防止一天内重复打卡
   const alreadyChecked = history.some(item => item.date === todayStr);
   if (alreadyChecked) {
     alert("今天已经存过成长宝石啦，明天再来冒险吧！");
-    navigateTo('page-cover');
+    navigateTo('page-chapters');
     return;
   }
   
@@ -1549,7 +2189,6 @@ function submitCheckin() {
   });
   localStorage.setItem('growmap_checkin_history', JSON.stringify(history));
   
-  // 3. 计算连续打卡天数 (Streak)
   let streak = parseInt(localStorage.getItem('growmap_streak_count') || '0');
   const lastCheckinStr = localStorage.getItem('growmap_last_checkin_date');
   
@@ -1559,22 +2198,20 @@ function submitCheckin() {
     const yesterdayStr = yesterday.toISOString().split('T')[0];
     
     if (lastCheckinStr === yesterdayStr) {
-      streak += 1; // 连续打卡递增
+      streak += 1;
     } else if (lastCheckinStr === todayStr) {
-      // 今天二次打卡不累加
+      // no-op
     } else {
-      streak = 1; // 间断后重置为1
+      streak = 1;
     }
   } else {
-    streak = 1; // 首次打卡为1
+    streak = 1;
   }
   localStorage.setItem('growmap_streak_count', streak.toString());
   localStorage.setItem('growmap_last_checkin_date', todayStr);
   
-  // 4. 触发气泡上升特效
   triggerBottleBubbles();
   
-  // 5. 延迟进行勋章判定与弹窗
   setTimeout(() => {
     checkBadgesUnlock(history, streak);
   }, 1000);
@@ -1585,42 +2222,35 @@ function triggerBottleBubbles() {
   const b2 = document.getElementById('btl-b2');
   const b3 = document.getElementById('btl-b3');
   
-  // 强制重置动画
   [b1, b2, b3].forEach(b => {
     b.style.animation = 'none';
-    b.offsetHeight; /* 触发回流 */
+    b.offsetHeight;
     b.style.animation = 'floatUp 1.5s ease-out';
   });
   
-  // 灌满瓶子
   updateBottleLiquid();
 }
 
-// 勋章判定
 function checkBadgesUnlock(history, streak) {
   let unlocked = JSON.parse(localStorage.getItem('growmap_unlocked_badges') || '[]');
   let newlyUnlocked = [];
   
-  // 勋章 1: 首次打卡
   if (history.length >= 1 && !unlocked.includes('badge-first')) {
     unlocked.push('badge-first');
     newlyUnlocked.push({ id: 'badge-first', title: '自省之星', icon: '🎖️', desc: '太棒了！你完成了第一次每日成长自省打卡！' });
   }
   
-  // 勋章 2: 答对趣味题 (LocalStorage标记)
   const isPerfectPass = localStorage.getItem('growmap_quiz_perfect_pass') === 'true';
   if (isPerfectPass && !unlocked.includes('badge-perfect')) {
     unlocked.push('badge-perfect');
-    newlyUnlocked.push({ id: 'badge-perfect', title: '努力嘟嘟', icon: '🦁', desc: '你答对了嘟嘟狗的积极宝石挑战，掌握了积极跑鞋的力量！' });
+    newlyUnlocked.push({ id: 'badge-perfect', title: '努力嘟嘟', icon: '🦁', desc: '你点亮了成长宝石，掌握了成长魔法同心圆的力量！' });
   }
   
-  // 勋章 3: 连续打卡 3 天
   if (streak >= 3 && !unlocked.includes('badge-streak-3')) {
     unlocked.push('badge-streak-3');
     newlyUnlocked.push({ id: 'badge-streak-3', title: '坚持到底', icon: '⚡', desc: '真有毅力！你已经连续 3 天记录自己的成长了！' });
   }
 
-  // 勋章 4: 连续打卡 7 天
   if (streak >= 7 && !unlocked.includes('badge-streak-7')) {
     unlocked.push('badge-streak-7');
     newlyUnlocked.push({ id: 'badge-streak-7', title: '全能魔导', icon: '🔮', desc: '天啊！你连续 7 天完成了自省打卡，是当之无愧的性格小魔导！' });
@@ -1628,20 +2258,17 @@ function checkBadgesUnlock(history, streak) {
   
   localStorage.setItem('growmap_unlocked_badges', JSON.stringify(unlocked));
   
-  // 如果有新解锁的徽章，递归弹窗展示
   if (newlyUnlocked.length > 0) {
     showUnlockEmblem(newlyUnlocked, 0);
   } else {
-    // 无新徽章则直接返回封面
     alert("成长宝石存入成功！");
-    navigateTo('page-cover');
+    navigateTo('page-chapters');
   }
 }
 
-// 级联弹窗解锁徽章
 function showUnlockEmblem(badgeList, index) {
   if (index >= badgeList.length) {
-    navigateTo('page-cover');
+    navigateTo('page-chapters');
     return;
   }
   
@@ -1657,7 +2284,6 @@ function showUnlockEmblem(badgeList, index) {
   
   modal.classList.add('open');
   
-  // 挂载下一步回调
   modal.querySelector('button').onclick = function() {
     modal.classList.remove('open');
     showUnlockEmblem(badgeList, index + 1);
@@ -1668,12 +2294,10 @@ function closeUnlockModal() {
   document.getElementById('unlock-modal').classList.remove('open');
 }
 
-// 渲染勋章墙
 function renderBadgeWall() {
   const unlocked = JSON.parse(localStorage.getItem('growmap_unlocked_badges') || '[]');
   const streak = parseInt(localStorage.getItem('growmap_streak_count') || '0');
   
-  // 更新高亮
   document.getElementById('badge-first').classList.toggle('unlocked', unlocked.includes('badge-first'));
   document.getElementById('badge-perfect').classList.toggle('unlocked', unlocked.includes('badge-perfect'));
   document.getElementById('badge-streak-3').classList.toggle('unlocked', unlocked.includes('badge-streak-3'));
@@ -1682,13 +2306,11 @@ function renderBadgeWall() {
   document.getElementById('streak-display').innerText = `连续打卡：${streak} 天`;
 }
 
-// 刷新封面页显示
 function refreshCoverBadgeCount() {
   const unlocked = JSON.parse(localStorage.getItem('growmap_unlocked_badges') || '[]');
   document.getElementById('cover-badge-display').innerText = `✨ 已解锁 ${unlocked.length} 枚徽章`;
 }
 
-// 滚动水晶球名人金句
 const quotes = [
   "“每一次自省，都是给心里的花浇水哦~”",
   "“积极主动的小脚丫，能带我们去任何想去的地方！”",
