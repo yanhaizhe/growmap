@@ -1,550 +1,1943 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小圆的成长魔法圈 · 小人书</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: "PingFang SC","Microsoft YaHei","KaiTi",sans-serif; background: #fff8e7; overflow-x: hidden; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小圆的成长魔法探索之旅 · 小人书</title>
+  <!-- 引入 Google Fonts 快乐体与 Outfit 字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-title: 'ZCOOL KuaiLe', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-body: 'Outfit', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      
+      /* 配色系统 */
+      --color-core: #ff5b7f;
+      --color-core-bg: #ffeef2;
+      --color-att: #ffa502;
+      --color-att-bg: #fff8eb;
+      --color-beh: #2ed573;
+      --color-beh-bg: #effcf4;
+      --color-text-dark: #2c3e50;
+      --color-text-light: #57606f;
+      --color-glass: rgba(255, 255, 255, 0.85);
+      --color-glass-border: rgba(255, 255, 255, 0.6);
+      
+      /* 页面渐变色背景 */
+      --bg-page-1: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 50%, #ffe5ec 100%);
+      --bg-page-2: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #e8f5e9 100%);
+      --bg-page-3: linear-gradient(135deg, #ffebee 0%, #ffcdd2 50%, #ffebee 100%);
+      --bg-page-4: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 50%, #fff3e0 100%);
+      --bg-page-5: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 50%, #e0f2f1 100%);
+      --bg-page-6: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #f3e5f5 100%);
+      --bg-page-7: linear-gradient(135deg, #fdf1f8 0%, #fbcfe8 50%, #fdf1f8 100%);
+      --bg-page-8: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #e3f2fd 100%);
+    }
 
-/* 每页 */
-.page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; position: relative; overflow: hidden; }
-.page-cover { background: linear-gradient(180deg,#ffecd2 0%,#fcb69f 50%,#ff9a9e 100%); }
-.page-cover h1 { font-size: 3em; color: #c0392b; text-align: center; text-shadow: 3px 3px 0 rgba(255,255,255,0.5); }
-.page-cover .sub { font-size: 1.4em; color: #e74c3c; margin-top: 10px; }
-.page-cover .author { font-size: 1em; color: #c0392b; margin-top: 30px; opacity: 0.8; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-/* 页面主题色 */
-.page-intro { background: #fffdf5; }
-.page-core { background: linear-gradient(180deg,#fff0f0,#ffe0e0); }
-.page-att { background: linear-gradient(180deg,#fff8f0,#ffe8d0); }
-.page-beh { background: linear-gradient(180deg,#f0fff0,#d8f8d8); }
-.page-end { background: linear-gradient(180deg,#f0f0ff,#e0e0ff); }
-.page-wisdom { background: linear-gradient(180deg,#fff0f8,#ffe0f0); }
+    body {
+      background: var(--bg-page-1);
+      font-family: var(--font-body);
+      color: var(--color-text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      transition: background 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+      padding: 20px;
+    }
 
-.page-title { font-size: 2.2em; color: #333; margin-bottom: 10px; text-align: center; }
-.page-subtitle { font-size: 1.1em; color: #777; margin-bottom: 30px; text-align: center; }
+    /* 烟花 Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
 
-/* SVG容器 */
-.svg-box { max-width: 650px; width: 100%; margin: 20px auto; }
+    /* 故事书外部容器 */
+    .book-container {
+      width: 100%;
+      max-width: 960px;
+      min-height: 75vh;
+      background: var(--color-glass);
+      border: 8px solid #ffffff;
+      border-radius: 36px;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border-color: #ffffff;
+    }
 
-/* 文字框 */
-.text-box { max-width: 600px; margin: 20px auto; padding: 24px 28px; background: rgba(255,255,255,0.75); border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-.text-box h3 { font-size: 1.4em; color: #c0392b; margin-bottom: 10px; }
-.text-box p { font-size: 1.1em; color: #444; line-height: 2; }
+    /* 进度条 */
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 14.28%; /* 1/7 */
+      background: linear-gradient(90deg, var(--color-core), var(--color-att), var(--color-beh));
+      border-radius: 0 4px 4px 0;
+      transition: width 0.5s ease;
+    }
 
-/* 气泡对话 */
-.bubble { position: relative; background: #fff; border-radius: 24px; padding: 18px 24px; font-size: 1.15em; color: #444; box-shadow: 0 4px 16px rgba(0,0,0,0.08); max-width: 500px; margin: 20px auto; }
-.bubble::after { content: ""; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-top: 16px solid #fff; }
+    /* 页面幻灯片 */
+    .slide {
+      display: none;
+      opacity: 0;
+      padding: 40px;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      animation: fade-in 0.6s forwards ease;
+    }
+    .slide.active {
+      display: flex;
+      opacity: 1;
+    }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-/* 小卡片 */
-.little-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; max-width: 800px; margin: 20px auto; padding: 0 10px; }
-.little-card { background: rgba(255,255,255,0.8); border-radius: 16px; padding: 18px; text-align: center; box-shadow: 0 3px 12px rgba(0,0,0,0.05); transition: transform 0.3s; }
-.little-card:hover { transform: translateY(-5px); }
-.little-card .emoji { font-size: 2.4em; margin-bottom: 8px; }
-.little-card .title { font-size: 1.1em; font-weight: bold; color: #333; margin-bottom: 4px; }
-.little-card .desc { font-size: 0.9em; color: #666; line-height: 1.5; }
+    /* 章节通用标题 */
+    .chapter-num {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--color-core);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      font-family: var(--font-title);
+    }
+    .chapter-title {
+      font-size: 2.2rem;
+      color: var(--color-text-dark);
+      text-align: center;
+      margin-bottom: 24px;
+      font-family: var(--font-title);
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+    }
 
-/* 箭头导航 */
-.arrow-down { text-align: center; font-size: 2em; color: #ccc; animation: bounce 2s infinite; margin: 20px 0; }
-@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(10px)} }
+    /* 故事叙事卡片 */
+    .story-card {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 24px;
+      padding: 24px 30px;
+      width: 100%;
+      max-width: 800px;
+      margin: 15px 0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+    }
+    .story-card p {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--color-text-dark);
+      margin-bottom: 12px;
+    }
+    .story-card p:last-child {
+      margin-bottom: 0;
+    }
+    .story-card strong {
+      color: var(--color-core);
+      font-weight: 800;
+    }
 
-/* 三步 */
-.steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 700px; margin: 20px auto; }
-.step { flex: 0 0 180px; text-align: center; padding: 20px; border-radius: 16px; }
-.step .num { width: 50px; height: 50px; line-height: 50px; border-radius: 50%; font-size: 1.4em; font-weight: bold; margin: 0 auto 10px; color: #fff; }
-.step-core .num { background: #e74c3c; }
-.step-att .num { background: #f39c12; }
-.step-beh .num { background: #27ae60; }
-.step h4 { font-size: 1.1em; color: #333; margin-bottom: 6px; }
-.step p { font-size: 0.9em; color: #666; line-height: 1.6; }
+    /* 底部导航 */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px 30px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      background: rgba(255, 255, 255, 0.4);
+    }
+    .nav-btn {
+      padding: 12px 28px;
+      border-radius: 20px;
+      border: none;
+      background: #ffffff;
+      color: var(--color-text-dark);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      background: var(--color-core-bg);
+      color: var(--color-core);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .nav-btn-next {
+      background: var(--color-core);
+      color: #ffffff;
+    }
+    .nav-btn-next:hover:not(:disabled) {
+      background: #ff3f69;
+      color: #ffffff;
+    }
+    .page-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .dot.active {
+      background: var(--color-core);
+      transform: scale(1.3);
+    }
 
-.final-msg { text-align: center; font-size: 1.6em; color: #8e44ad; font-weight: bold; max-width: 600px; margin: 30px auto; line-height: 1.8; }
+    /* ==============================================
+       封面 (Slide 1) 样式
+       ============================================== */
+    .cover-layout {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px 0;
+    }
+    .cover-title {
+      font-size: 3.2rem;
+      color: #c0392b;
+      font-family: var(--font-title);
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 0 #ffffff, 4px 4px 15px rgba(227, 85, 85, 0.3);
+      animation: title-float 3s ease-in-out infinite alternate;
+    }
+    .cover-subtitle {
+      font-size: 1.4rem;
+      color: #e74c3c;
+      margin-bottom: 24px;
+      font-weight: bold;
+    }
+    .cover-diagram {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+      margin: 10px 0;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.08));
+    }
+    .cover-desc {
+      font-size: 1.1rem;
+      color: var(--color-text-light);
+      max-width: 500px;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+    @keyframes title-float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
 
-/* 响应式 */
-@media (max-width: 600px) {
-  .page-cover h1 { font-size: 2em; }
-  .page-title { font-size: 1.6em; }
-  .little-cards { grid-template-columns: repeat(2, 1fr); }
-}
-</style>
+    /* ==============================================
+       第一章：成长树 (Slide 2) 样式
+       ============================================== */
+    .tree-layout {
+      display: flex;
+      width: 100%;
+      gap: 30px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .tree-diagram {
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+      display: flex;
+      justify-content: center;
+    }
+    .tree-diagram svg {
+      width: 100%;
+      height: auto;
+    }
+    .tree-content {
+      flex: 1.2;
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .tree-part-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 16px 20px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    }
+    .tree-part-card.active, .tree-part-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+    .tree-part-card.part-core.active { border-color: var(--color-core); background: var(--color-core-bg); }
+    .tree-part-card.part-att.active { border-color: var(--color-att); background: var(--color-att-bg); }
+    .tree-part-card.part-beh.active { border-color: var(--color-beh); background: var(--color-beh-bg); }
+    .tree-part-card.part-link.active { border-color: #8e44ad; background: #fdfcff; }
+    
+    .tree-part-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .tree-part-desc {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      line-height: 1.5;
+    }
+
+    /* ==============================================
+       第二章：诚信水晶 (Slide 3) 样式
+       ============================================== */
+    .crystal-layout {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .crystal-visual {
+      max-width: 450px;
+      width: 100%;
+    }
+    .bubble-tip {
+      background: #fff;
+      border-radius: 20px;
+      padding: 16px 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      border-left: 5px solid var(--color-core);
+      max-width: 600px;
+      margin: 10px 0;
+      position: relative;
+    }
+    .bubble-tip::before {
+      content: "💡";
+      position: absolute;
+      left: -18px;
+      top: 14px;
+      font-size: 1.2rem;
+    }
+
+    /* ==============================================
+       第三章：三对态度 (Slide 4) 样式
+       ============================================== */
+    .att-layout {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .twin-selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .selector-btn {
+      padding: 10px 20px;
+      border-radius: 15px;
+      border: 2px solid transparent;
+      background: rgba(255, 255, 255, 0.6);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--color-text-light);
+    }
+    .selector-btn.active {
+      background: var(--color-att-bg);
+      border-color: var(--color-att);
+      color: var(--color-att);
+      transform: translateY(-2px);
+    }
+    .twin-card-container {
+      width: 100%;
+      max-width: 800px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 600px) {
+      .twin-card-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    .twin-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+      border: 2px solid transparent;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .twin-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+    }
+    .twin-card-left { border-color: rgba(255, 165, 2, 0.3); }
+    .twin-card-right { border-color: rgba(94, 186, 125, 0.3); }
+    .twin-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: float 2.5s ease-in-out infinite alternate;
+    }
+    .twin-title {
+      font-size: 1.4rem;
+      font-family: var(--font-title);
+      color: var(--color-text-dark);
+      margin-bottom: 8px;
+    }
+    .twin-desc {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      line-height: 1.6;
+      text-align: left;
+    }
+    .twin-example {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      background: #f7f9fa;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border-left: 3px solid var(--color-att);
+      text-align: left;
+    }
+    .twin-balance-summary {
+      background: var(--color-att-bg);
+      border: 1px dashed var(--color-att);
+      padding: 15px 20px;
+      border-radius: 16px;
+      font-size: 1.05rem;
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+    }
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-6px); }
+    }
+
+    /* ==============================================
+       第四章：六大行为道具 (Slide 5) 样式
+       ============================================== */
+    .beh-layout {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .bag-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 600px) {
+      .bag-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .tool-box {
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 20px 15px;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.02);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .tool-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+      border-color: rgba(46, 213, 115, 0.3);
+    }
+    .tool-box.active {
+      background: var(--color-beh-bg);
+      border-color: var(--color-beh);
+      box-shadow: 0 10px 24px rgba(46, 213, 115, 0.15);
+    }
+    .tool-emoji {
+      font-size: 2.8rem;
+      margin-bottom: 8px;
+    }
+    .tool-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-text-dark);
+    }
+    .tool-detail-bubble {
+      background: #ffffff;
+      border: 2px solid var(--color-beh);
+      border-radius: 24px;
+      padding: 20px 24px;
+      width: 100%;
+      max-width: 800px;
+      position: relative;
+      animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: 10px;
+    }
+    @keyframes pop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .bubble-arrow {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-bottom: 12px solid var(--color-beh);
+    }
+    .bubble-arrow-inner {
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #ffffff;
+    }
+    .tool-story-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #1e8449;
+      margin-bottom: 6px;
+    }
+    .tool-story-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-text-light);
+    }
+
+    /* ==============================================
+       第五章：智慧天平 (Slide 6) 样式
+       ============================================== */
+    .scale-layout {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .scale-visual-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 15px 0;
+    }
+    .scale-visual-container svg {
+      width: 100%;
+      height: auto;
+    }
+    .scale-interactive-section {
+      width: 100%;
+      max-width: 800px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+    }
+    .scenario-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .scenario-btn {
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      background: #f8f9fa;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .scenario-btn.active {
+      background: #8e44ad;
+      color: #ffffff;
+      border-color: #8e44ad;
+    }
+    .scenario-explanation {
+      min-height: 120px;
+      background: #fdfcff;
+      border-left: 4px solid #8e44ad;
+      padding: 15px;
+      border-radius: 0 12px 12px 0;
+      animation: fade-in 0.4s;
+    }
+    .scenario-explanation h4 {
+      font-size: 1.1rem;
+      color: #8e44ad;
+      margin-bottom: 6px;
+    }
+    .scenario-explanation p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--color-text-light);
+      margin-bottom: 8px;
+    }
+
+    /* ==============================================
+       第五章：魔法纽带 (Slide 6) 样式
+       ============================================== */
+    .link-pairs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 768px) {
+      .link-pairs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 480px) {
+      .link-pairs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .link-pair-item {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      transition: all 0.3s ease;
+    }
+    .link-pair-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      border-color: rgba(142, 68, 173, 0.2);
+    }
+    .link-pair-item.active {
+      background: #fcfaff;
+      border-color: #8e44ad;
+      box-shadow: 0 8px 20px rgba(142, 68, 173, 0.15);
+    }
+    .link-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      flex: 1;
+      text-align: center;
+    }
+    .link-node-emoji {
+      font-size: 2rem;
+      margin-bottom: 4px;
+    }
+    .link-arrow-text {
+      font-size: 1.3rem;
+      color: #8e44ad;
+      margin: 0 6px;
+      animation: pulse 1.5s infinite;
+      font-weight: bold;
+    }
+    .link-detail-bubble {
+      background: #ffffff;
+      border: 2px solid #8e44ad;
+      border-radius: 24px;
+      padding: 20px 24px;
+      width: 100%;
+      max-width: 800px;
+      position: relative;
+      animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: 10px;
+      box-shadow: 0 6px 20px rgba(142, 68, 173, 0.05);
+    }
+    .link-bubble-arrow {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-bottom: 12px solid #8e44ad;
+    }
+    .link-bubble-arrow-inner {
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #ffffff;
+    }
+
+    /* ==============================================
+       第六章：成长挑战单 (Slide 7) 样式
+       ============================================== */
+    .checklist-layout {
+      display: flex;
+      width: 100%;
+      gap: 30px;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .checklist-left {
+      flex: 1.3;
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .checklist-right {
+      flex: 1;
+      min-width: 300px;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+      position: sticky;
+      top: 20px;
+    }
+    .checklist-right svg {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+    }
+    .checklist-group-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--color-text-light);
+      text-transform: uppercase;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      border-bottom: 2px dashed rgba(0,0,0,0.05);
+      padding-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .checklist-item {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+    }
+    .checklist-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+    }
+    .checklist-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid #ccc;
+      margin-top: 2px;
+      position: relative;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .checklist-checkbox::after {
+      content: "✓";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+    }
+    .checklist-item.checked .checklist-checkbox {
+      background: var(--color-core);
+      border-color: var(--color-core);
+    }
+    .checklist-item.checked.item-core .checklist-checkbox { background: var(--color-core); border-color: var(--color-core); }
+    .checklist-item.checked.item-att .checklist-checkbox { background: var(--color-att); border-color: var(--color-att); }
+    .checklist-item.checked.item-beh .checklist-checkbox { background: var(--color-beh); border-color: var(--color-beh); }
+    
+    .checklist-item.checked .checklist-checkbox::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .checklist-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .checklist-item-title {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--color-text-dark);
+      transition: color 0.3s;
+    }
+    .checklist-item.checked .checklist-item-title {
+      color: #a0a8b0;
+      text-decoration: line-through;
+    }
+    .checklist-item-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-light);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+    .concentric-status-board {
+      margin-top: 15px;
+      text-align: center;
+      width: 100%;
+    }
+    .status-counter {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--color-core);
+      font-family: var(--font-title);
+    }
+    .status-badge-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 10px;
+      min-height: 30px;
+    }
+    .mini-glow-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      opacity: 0.3;
+      transition: all 0.3s;
+      transform: scale(0.9);
+    }
+    .mini-glow-badge.unlocked {
+      opacity: 1;
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* 闪光效果动画 */
+    @keyframes sparkle-glow {
+      0% { filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+      50% { filter: drop-shadow(0 0 10px var(--glow-color, #ff5b7f)); }
+      100% { filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+    }
+    .sparkle-target {
+      transition: fill 0.4s, opacity 0.4s;
+    }
+    .sparkle-target.active {
+      animation: sparkle-glow 2s infinite alternate;
+    }
+
+    /* ==============================================
+       响应式细节
+       ============================================== */
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      .book-container {
+        border-width: 4px;
+        border-radius: 24px;
+      }
+      .slide {
+        padding: 20px 15px;
+      }
+      .chapter-title {
+        font-size: 1.6rem;
+      }
+      .cover-title {
+        font-size: 2.2rem;
+      }
+      .nav-bar {
+        padding: 15px;
+      }
+      .nav-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ========== 封面 ========== -->
-<div class="page page-cover">
-  <svg width="200" height="200" viewBox="0 0 200 200">
-    <defs>
-      <radialGradient id="rainbow" cx="50%" cy="50%"><stop offset="0%" stop-color="#e74c3c"/><stop offset="33%" stop-color="#f39c12"/><stop offset="66%" stop-color="#27ae60"/><stop offset="100%" stop-color="#3498db"/></radialGradient>
-    </defs>
-    <circle cx="100" cy="100" r="90" fill="url(#rainbow)" opacity="0.3"/>
-    <circle cx="100" cy="100" r="65" fill="url(#rainbow)" opacity="0.4"/>
-    <circle cx="100" cy="100" r="40" fill="url(#rainbow)" opacity="0.6"/>
-    <circle cx="100" cy="100" r="18" fill="#e74c3c"/>
-    <text x="100" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">做最好</text>
-    <text x="98" y="58" text-anchor="middle" fill="#333" font-size="10">行为</text>
-    <text x="98" y="128" text-anchor="middle" fill="#333" font-size="10">态度</text>
-    <text x="53" y="108" text-anchor="middle" fill="#333" font-size="10">价值观</text>
-  </svg>
+  <!-- 炫彩烟花 Canvas -->
+  <canvas id="confetti-canvas"></canvas>
 
-  <h1>小圆的<br>成长魔法圈</h1>
-  <div class="sub">—— 做最好的自己 ——</div>
-  <div class="author">根据李开复博士《做最好的自己》改编<br>适合 6-12 岁小朋友阅读</div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 角色介绍 ========== -->
-<div class="page page-intro">
-  <div class="page-title">认识小圆！</div>
-  <div class="page-subtitle">一个和你一样正在长大的小朋友</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 320">
-      <!-- 小圆 -->
-      <circle cx="150" cy="180" r="45" fill="#ff9a9e"/>
-      <circle cx="135" cy="168" r="6" fill="#333"/>
-      <circle cx="165" cy="168" r="6" fill="#333"/>
-      <ellipse cx="150" cy="188" rx="12" ry="5" fill="#fff" opacity="0.7"/>
-      <text x="150" y="250" text-anchor="middle" fill="#c0392b" font-size="18" font-weight="bold">小圆</text>
-      <text x="150" y="270" text-anchor="middle" fill="#999" font-size="12">8岁 · 小学二年级</text>
-
-      <!-- 魔法圈 -->
-      <circle cx="420" cy="160" r="75" fill="none" stroke="#27ae60" stroke-width="3" opacity="0.4"/>
-      <circle cx="420" cy="160" r="55" fill="none" stroke="#f39c12" stroke-width="3" opacity="0.4"/>
-      <circle cx="420" cy="160" r="35" fill="#e74c3c" opacity="0.3"/>
-      <circle cx="420" cy="160" r="12" fill="#e74c3c"/>
-      <text x="420" y="166" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">魔法圈</text>
-      <text x="420" y="255" text-anchor="middle" fill="#999" font-size="12">成功同心圆</text>
-
-      <!-- 箭头 -->
-      <line x1="200" y1="170" x2="340" y2="170" stroke="#999" stroke-width="2" stroke-dasharray="6,4"/>
-      <polygon points="340,165 350,170 340,175" fill="#999"/>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <h3>小圆发现了一个秘密！</h3>
-    <p>有一天，小圆在图书馆里发现了一张古老的"<strong>成长魔法圈</strong>"地图。地图上说，只要能穿过这个魔法圈的每一层，就能变成<strong>最好的自己</strong>！</p>
-    <p>小圆兴奋极了，"我也要试试！"</p>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 魔法圈全景 ========== -->
-<div class="page page-intro">
-  <div class="page-title">成长魔法圈长这样！</div>
-  <div class="page-subtitle">一共有三层，从里到外越来越厉害</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 500">
-      <!-- 外环 -->
-      <circle cx="300" cy="260" r="210" fill="#c8f7c5" stroke="#27ae60" stroke-width="4"/>
-      <text x="300" y="45" text-anchor="middle" fill="#27ae60" font-size="20" font-weight="bold">第三层 · 行为超能力（怎么做）</text>
-
-      <circle cx="300" cy="260" r="145" fill="#ffeaa7" stroke="#f39c12" stroke-width="4"/>
-      <text x="300" y="110" text-anchor="middle" fill="#f39c12" font-size="20" font-weight="bold">第二层 · 态度魔法（怎么想）</text>
-
-      <circle cx="300" cy="260" r="75" fill="#fab1a0" stroke="#e74c3c" stroke-width="4"/>
-      <circle cx="300" cy="260" r="30" fill="#e74c3c"/>
-      <text x="300" y="253" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">价值观</text>
-      <text x="300" y="270" text-anchor="middle" fill="#fff" font-size="11">诚信</text>
-      <text x="300" y="185" text-anchor="middle" fill="#e74c3c" font-size="20" font-weight="bold">第一层 · 核心价值观</text>
-
-      <!-- 标签 -->
-      <rect x="30" y="420" rx="12" width="160" height="36" fill="#e74c3c" opacity="0.9"/>
-      <text x="110" y="444" text-anchor="middle" fill="#fff" font-size="14">价值观 = 圆心</text>
-      <rect x="220" y="420" rx="12" width="160" height="36" fill="#f39c12" opacity="0.9"/>
-      <text x="300" y="444" text-anchor="middle" fill="#fff" font-size="14">态度 = 中环</text>
-      <rect x="410" y="420" rx="12" width="160" height="36" fill="#27ae60" opacity="0.9"/>
-      <text x="490" y="444" text-anchor="middle" fill="#fff" font-size="14">行为 = 外环</text>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <p><strong>圆圈最里面</strong>是"价值观"——这是最重要的，就像房子的地基。</p>
-    <p><strong>中间一圈</strong>是"态度"——你怎么想事情。</p>
-    <p><strong>最外面一圈</strong>是"行为"——你怎么做事情。</p>
-    <p>从里到外，一层一层练习，就能变成最好的自己！</p>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 第一层：价值观 ========== -->
-<div class="page page-core">
-  <div class="page-title">第一关 · 诚信宝石</div>
-  <div class="page-subtitle">魔法圈的最中心，藏着一颗闪闪发光的宝石</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 280">
-      <!-- 宝石 -->
-      <polygon points="300,30 370,90 300,180 230,90" fill="#e74c3c" opacity="0.9"/>
-      <polygon points="300,55 345,90 300,150 255,90" fill="#ff6b6b" opacity="0.7"/>
-      <text x="300" y="106" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">诚信</text>
-
-      <!-- 光晕 -->
-      <circle cx="300" cy="105" r="80" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.3"/>
-      <circle cx="300" cy="105" r="100" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.15"/>
-
-      <!-- 标签 -->
-      <text x="300" y="240" text-anchor="middle" fill="#c0392b" font-size="16">诚实守信 · 说到做到</text>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <h3>什么是诚信？</h3>
-    <p><strong>诚</strong> = 对自己诚实，知道自己做对了还是做错了，不骗自己。</p>
-    <p><strong>信</strong> = 对别人守信，答应的事一定做到。</p>
-    <p>小圆明白了：<strong>诚信就像魔法圈的地基</strong>。如果不诚实、不守信，整个魔法圈就会倒塌！</p>
-  </div>
-
-  <div class="bubble">
-    "我要做一个诚实守信的孩子！答应妈妈写完作业再看电视，就一定要先写完作业！" —— 小圆
-  </div>
-  <div class="arrow-down" style="margin-bottom:5px;">⬇</div>
-  <div style="text-align:center;color:#e74c3c;font-size:1em;margin-bottom:20px;">✏️ 想一想：今天你有没有说到做到？</div>
-</div>
-
-<!-- ========== 第二层：态度六魔法 ========== -->
-<div class="page page-att">
-  <div class="page-title">第二关 · 六大态度魔法</div>
-  <div class="page-subtitle">过了第一关，小圆来到了态度魔法环！这里有六种魔法要学习。</div>
-
-  <div class="little-cards">
-    <div class="little-card">
-      <div class="emoji">🚀</div>
-      <div class="title">积极主动</div>
-      <div class="desc">不要等着别人推你，自己主动去做！作业主动写，房间主动收拾。</div>
+  <div class="book-container">
+    <!-- 顶部进度条 -->
+    <div class="progress-bar-container">
+      <div id="progress" class="progress-bar"></div>
     </div>
-    <div class="little-card">
-      <div class="emoji">💛</div>
-      <div class="title">同理心</div>
-      <div class="desc">站在别人的角度想一想。朋友哭了，想想他为什么难过。</div>
+
+    <!-- ==================== SLIDE 1: 封面 ==================== -->
+    <div id="slide-1" class="slide active">
+      <div class="cover-layout">
+        <h1 class="cover-title">小圆的成长魔法圈</h1>
+        <div class="cover-subtitle">—— 做最好的自己 ——</div>
+        
+        <!-- 校正后的完美对称同心圆 SVG -->
+        <svg class="cover-diagram" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="covCore" cx="50%" cy="50%"><stop offset="0%" stop-color="#ff8da9"/><stop offset="100%" stop-color="#ff5b7f"/></radialGradient>
+            <radialGradient id="covAtt" cx="50%" cy="50%"><stop offset="0%" stop-color="#ffe0b2"/><stop offset="100%" stop-color="#ffa502"/></radialGradient>
+            <radialGradient id="covBeh" cx="50%" cy="50%"><stop offset="0%" stop-color="#b2dfdb"/><stop offset="100%" stop-color="#2ed573"/></radialGradient>
+          </defs>
+          <!-- 背景圆环 -->
+          <circle cx="160" cy="160" r="140" fill="url(#covBeh)" opacity="0.15" stroke="#2ed573" stroke-width="1.5"/>
+          <circle cx="160" cy="160" r="95" fill="url(#covAtt)" opacity="0.18" stroke="#ffa502" stroke-width="1.5"/>
+          <circle cx="160" cy="160" r="50" fill="url(#covCore)" opacity="0.25" stroke="#ff5b7f" stroke-width="1.5"/>
+          <circle cx="160" cy="160" r="15" fill="#ff5b7f"/>
+          
+          <!-- Emojis & Labels -->
+          <text x="160" y="164" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">诚信</text>
+          <!-- 态度层 (中环) 6点 -->
+          <text x="160" y="80" text-anchor="middle" font-size="12">🚀</text>
+          <text x="228" y="120" text-anchor="middle" font-size="12">💛</text>
+          <text x="228" y="200" text-anchor="middle" font-size="12">🦁</text>
+          <text x="160" y="244" text-anchor="middle" font-size="12">🪞</text>
+          <text x="92" y="200" text-anchor="middle" font-size="12">🛡️</text>
+          <text x="92" y="120" text-anchor="middle" font-size="12">🌍</text>
+          
+          <!-- 行为层 (外环) 6点 -->
+          <text x="160" y="38" text-anchor="middle" font-size="14">⭐</text>
+          <text x="265" y="98" text-anchor="middle" font-size="14">🎯</text>
+          <text x="265" y="235" text-anchor="middle" font-size="14">⚡</text>
+          <text x="160" y="294" text-anchor="middle" font-size="14">📚</text>
+          <text x="55" y="235" text-anchor="middle" font-size="14">💬</text>
+          <text x="55" y="98" text-anchor="middle" font-size="14">🤝</text>
+        </svg>
+
+        <div class="cover-desc">
+          这是一本送给小朋友的“成长秘密宝册”。只要你能穿过城堡的外环、中环，点亮最核心的宝石，你就能获得源源不断的魔法，变成<strong>最好的自己</strong>！
+        </div>
+      </div>
     </div>
-    <div class="little-card">
-      <div class="emoji">🦁</div>
-      <div class="title">自信</div>
-      <div class="desc">相信自己能做到！上台发言不害怕，因为你知道自己准备了。</div>
+
+    <!-- ==================== SLIDE 2: 第一章 成长树 ==================== -->
+    <div id="slide-2" class="slide">
+      <div>
+        <div class="chapter-num">Chapter 1</div>
+        <h2 class="chapter-title">成长树与同心圆的秘密</h2>
+      </div>
+      <div class="tree-layout">
+        <!-- SVG成长树示意图 -->
+        <div class="tree-diagram">
+          <svg viewBox="0 0 280 320" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="trunkGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8d6e63"/><stop offset="100%" stop-color="#5d4037"/></linearGradient>
+            </defs>
+            <!-- 树叶/枝叶 (行为) -->
+            <path id="svg-tree-leaves" d="M140,40 C80,40 50,80 60,130 C40,160 70,200 110,180 C120,200 160,200 170,180 C210,200 240,160 220,130 C230,80 200,40 140,40 Z" fill="#2ed573" opacity="0.2" stroke="#2ed573" stroke-width="2" style="cursor:pointer; transition: opacity 0.3s;"/>
+            <!-- 树干 (态度) -->
+            <path id="svg-tree-trunk" d="M125,170 L115,240 L165,240 L155,170 Z" fill="url(#trunkGrad)" opacity="0.3" style="cursor:pointer; transition: opacity 0.3s;"/>
+            <!-- 树根 (价值观) -->
+            <path id="svg-tree-roots" d="M115,240 Q90,260 70,285 M130,240 Q130,270 135,295 M145,240 Q160,270 175,290 M165,240 Q200,265 215,280" stroke="#ff5b7f" stroke-width="6" stroke-linecap="round" opacity="0.3" fill="none" style="cursor:pointer; transition: opacity 0.3s;"/>
+            
+            <circle cx="140" cy="110" r="8" fill="#fff" opacity="0.8"/>
+            <text x="140" y="114" text-anchor="middle" font-size="11" fill="#2c3e50" font-weight="bold">果</text>
+            
+            <!-- 文字标签指示 -->
+            <text x="140" y="130" text-anchor="middle" fill="#1e8449" font-size="12" font-weight="bold">行为(叶)</text>
+            <text x="140" y="210" text-anchor="middle" fill="#d35400" font-size="12" font-weight="bold">态度(干)</text>
+            <text x="140" y="275" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold">价值观(根)</text>
+          </svg>
+        </div>
+        
+        <div class="tree-content">
+          <p style="font-size: 1.05rem; line-height: 1.6;">小朋友，我们每个人都在像小树一样成长。点击右侧的树木部位，看看它们各代表什么魔法以及它们是如何紧密相连的：</p>
+          
+          <div class="tree-part-card part-core" onclick="selectTreePart('roots')">
+            <div class="tree-part-title" style="color: var(--color-core);">🌱 树根 = 核心价值观（圆心）</div>
+            <div class="tree-part-desc">树根深深埋在地下，虽然看不见，却牢牢抓住大地，输送最基本的营养。这是做人的底线，以“诚信”为根基。如果树根烂了，树木再高大也会倒塌。</div>
+          </div>
+          <div class="tree-part-card part-att" onclick="selectTreePart('trunk')">
+            <div class="tree-part-title" style="color: var(--color-att);">🪵 树干 = 人生态度（内环）</div>
+            <div class="tree-part-desc">树干决定了小树是挺拔笔直地向上、还是歪歪扭扭。这代表我们遇到事情时“怎么想”。好的态度就像粗壮的树干，支撑我们迎接大风大雨。</div>
+          </div>
+          <div class="tree-part-card part-beh" onclick="selectTreePart('leaves')">
+            <div class="tree-part-title" style="color: var(--color-beh);">🍃 枝叶 = 行为方式（外环）</div>
+            <div class="tree-part-desc">枝叶和花果是树木最外面、最亮丽的部分，大家都能直接看到。这代表我们做事的具体方式，是我们每天的行动。</div>
+          </div>
+          <div class="tree-part-card part-link" onclick="selectTreePart('link')" style="border-left: 4px dashed #8e44ad;">
+            <div class="tree-part-title" style="color: #8e44ad;">🔗 魔法连结 = 养分的流动</div>
+            <div class="tree-part-desc"><strong>树根（价值观）</strong>决定<strong>树干（态度）</strong>怎么长，诚信的根长出直挺的干；而<strong>树干（态度）</strong>支撑并长出<strong>枝叶（行为）</strong>去伸展和行动；而<strong>阳光雨露（选择的智慧）</strong>照耀整棵树，调节态度和行为的完整与平衡。它们缺一不可！</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="little-card">
-      <div class="emoji">🪞</div>
-      <div class="title">自省</div>
-      <div class="desc">每天照照"心里的镜子"，想想今天哪里可以做得更好。</div>
+
+    <!-- ==================== SLIDE 3: 第二章 诚信水晶 ==================== -->
+    <div id="slide-3" class="slide">
+      <div>
+        <div class="chapter-num">Chapter 2</div>
+        <h2 class="chapter-title">闪闪发光的圆心 —— 诚信水晶</h2>
+      </div>
+      <div class="crystal-layout">
+        <div class="crystal-visual">
+          <!-- 诚信水晶与魔镜、承诺桥的SVG -->
+          <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crystalGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ff7979"/><stop offset="100%" stop-color="#eb4d4b"/></linearGradient>
+            </defs>
+            <!-- 诚信水晶 -->
+            <g transform="translate(250, 80)">
+              <polygon points="0,-45 35,-15 20,40 -20,40 -35,-15" fill="url(#crystalGrad)" filter="drop-shadow(0 6px 12px rgba(235,77,75,0.4))"/>
+              <polygon points="0,-45 0,40 20,40 35,-15" fill="#ff7979" opacity="0.4"/>
+              <text x="0" y="5" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">诚信</text>
+              <text x="0" y="-55" text-anchor="middle" fill="#e74c3c" font-size="12" font-weight="bold">核心</text>
+            </g>
+            
+            <!-- 诚实镜 (左) -->
+            <g transform="translate(100, 110)">
+              <ellipse cx="0" cy="0" rx="35" ry="45" fill="#e0f7fa" stroke="#00acc1" stroke-width="4"/>
+              <path d="M-20,-10 Q0,20 20,-10" stroke="#00acc1" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <text x="0" y="25" text-anchor="middle" font-size="10" fill="#006064" font-weight="bold">诚实镜(不骗自己)</text>
+              <text x="0" y="-15" text-anchor="middle" font-size="20">🪞</text>
+            </g>
+
+            <!-- 承诺桥 (右) -->
+            <g transform="translate(400, 110)">
+              <path d="M-40,20 Q0,-15 40,20" fill="none" stroke="#e67e22" stroke-width="6"/>
+              <line x1="-40" y1="23" x2="40" y2="23" stroke="#d35400" stroke-width="2"/>
+              <text x="0" y="35" text-anchor="middle" font-size="10" fill="#d35400" font-weight="bold">承诺桥(不骗别人)</text>
+              <text x="0" y="-5" text-anchor="middle" font-size="20">🌉</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="story-card">
+          <p>小圆来到了成长圈的最核心。这里住着守护小树的<strong>“诚信水晶”</strong>。李开复博士告诉我们，诚信是一切成功的地基。</p>
+          <p>水晶有两面，像两个神奇的小道具：</p>
+          <p>1. <strong>诚实魔镜 🪞（对自己诚实）</strong>：当你考砸了、或者弄坏了东西，不要在镜子前找借口。勇敢地看着镜子说：“我没有做好，但我不骗自己，我要努力改正！”</p>
+          <p>2. <strong>承诺石桥 🌉（对别人守信）</strong>：“答应别人的事，就一定要做到！”当你跟妈妈约好写完作业再看电视，或者答应分玩具给伙伴，你就修起了一座承诺桥。如果你说话不算话，桥就会断掉，再也得不到别人的信任了。</p>
+        </div>
+
+        <div class="bubble-tip">
+          <strong>小圆的魔法心语：</strong>“答应别人的小事也要做到！今天我答应帮爸爸拿拖鞋，我放学回家立刻就去做了，我的承诺桥今天亮晶晶的！”
+        </div>
+      </div>
     </div>
-    <div class="little-card">
-      <div class="emoji">🛡️</div>
-      <div class="title">勇气</div>
-      <div class="desc">害怕也要向前走！承认错误需要勇气，尝试新事物也需要勇气。</div>
+
+    <!-- ==================== SLIDE 4: 第三章 态度魔法 ==================== -->
+    <div id="slide-4" class="slide">
+      <div>
+        <div class="chapter-num">Chapter 3</div>
+        <h2 class="chapter-title">态度魔法环 —— 三对神奇的双胞胎</h2>
+      </div>
+      <div class="att-layout">
+        <p style="margin-bottom:15px; text-align:center; max-width:700px; line-height:1.6;">
+          在态度的中环，有六种神奇的魔法。但它们不是孤立的，而是像三对双胞胎一样，必须<strong>两两配对、保持平衡</strong>，小树才能健康成长！点击按钮看看它们的平衡秘密：
+        </p>
+        
+        <div class="twin-selector">
+          <button id="twin-btn-1" class="selector-btn active" onclick="switchTwin(1)">第一对：积极 🚀 & 同理心 💛</button>
+          <button id="twin-btn-2" class="selector-btn" onclick="switchTwin(2)">第二对：自信 🦁 & 自省 🪞</button>
+          <button id="twin-btn-3" class="selector-btn" onclick="switchTwin(3)">第三对：勇气 🛡️ & 胸怀 🌍</button>
+        </div>
+
+        <!-- 双胞胎展示卡片 -->
+        <div id="twin-view-1" class="twin-card-container">
+          <div class="twin-card twin-card-left">
+            <div class="twin-emoji">🚀</div>
+            <h4 class="twin-title">积极主动 (Proactive)</h4>
+            <p class="twin-desc">不要等别人来推你，自己主动去探索世界！不为失败找借口，主动想办法解决问题。</p>
+            <div class="twin-example"><strong>日常生活：</strong>房间乱了，不用妈妈唠叨，自己像小超人一样主动收拾整齐！</div>
+          </div>
+          <div class="twin-card twin-card-right">
+            <div class="twin-emoji">💛</div>
+            <h4 class="twin-title">同理心 (Empathy)</h4>
+            <p class="twin-desc">学会换位思考，站在别人的角度看世界。关心别人的喜怒哀乐，多对别人表达感谢。</p>
+            <div class="twin-example"><strong>日常生活：</strong>看到好朋友摔倒哭了，过去抱抱他，问问他：“你疼不疼？我陪你。”</div>
+          </div>
+        </div>
+
+        <div id="twin-view-2" class="twin-card-container" style="display:none;">
+          <div class="twin-card twin-card-left">
+            <div class="twin-emoji">🦁</div>
+            <h4 class="twin-title">自信 (Confidence)</h4>
+            <p class="twin-desc">相信自己的力量，相信只要努力自己就能做到。挺起胸膛，敢于在大家面前展示自己。</p>
+            <div class="twin-example"><strong>日常生活：</strong>上课时老师提问，哪怕不确定也勇敢举起手：“老师，我想试着回答！”</div>
+          </div>
+          <div class="twin-card twin-card-right">
+            <div class="twin-emoji">🪞</div>
+            <h4 class="twin-title">自省 (Self-Reflection)</h4>
+            <p class="twin-desc">像照镜子一样看清自己的短板，敢于承认并接受自己的错误，努力让自己变得更好。</p>
+            <div class="twin-example"><strong>日常生活：</strong>默写错了几个字，没有哭闹，而是拿出生字本认真地重新写5遍，记住它们。</div>
+          </div>
+        </div>
+
+        <div id="twin-view-3" class="twin-card-container" style="display:none;">
+          <div class="twin-card twin-card-left">
+            <div class="twin-emoji">🛡️</div>
+            <h4 class="twin-title">勇气 (Courage)</h4>
+            <p class="twin-desc">勇气是不怕困难、不怕犯错。在需要的时候，鼓起勇气去改变那些你可以改变的事情！</p>
+            <div class="twin-example"><strong>日常生活：</strong>遇到很难的数学题，不哭鼻子退缩，大喊一声：“大魔王，看我打败你！”</div>
+          </div>
+          <div class="twin-card twin-card-right">
+            <div class="twin-emoji">🌍</div>
+            <h4 class="twin-title">胸怀 (Broad-Minded)</h4>
+            <p class="twin-desc">像大海一样能装下很多事。当遇到不能改变的事（如天气不好、落选），微笑着包容和原谅。</p>
+            <div class="twin-example"><strong>日常生活：</strong>玩具被小表弟不小心踩坏了，虽然心疼，但也拉着小表弟的手说：“没关系，我们一起修。”</div>
+          </div>
+        </div>
+
+        <!-- 总结平衡 -->
+        <div id="twin-summary" class="twin-balance-summary">
+          <strong>平衡之美：</strong>如果积极火箭（🚀）飞得太猛，不顾及同理心（💛），就会撞伤别人；如果只有同理心没有积极，我们就会停步不前。我们要带着热情奔跑，也要带着温柔看世界！
+        </div>
+      </div>
     </div>
-    <div class="little-card">
-      <div class="emoji">🌍</div>
-      <div class="title">胸怀</div>
-      <div class="desc">心里能装下很多事。别人不小心碰到你，微笑着说"没关系"。</div>
+
+    <!-- ==================== SLIDE 5: 第四章 行为道具 ==================== -->
+    <div id="slide-5" class="slide">
+      <div>
+        <div class="chapter-num">Chapter 4</div>
+        <h2 class="chapter-title">行为外环 —— 探索包里的六个神奇道具</h2>
+      </div>
+      <div class="beh-layout">
+        <p style="margin-bottom:20px; text-align:center; max-width:700px; line-height:1.6;">
+          只在心里想还不够，我们还要把态度变成行动！小圆的魔法背包里有六个宝贝道具，点击它们，看看怎么在日常中使用这些超能力：
+        </p>
+
+        <!-- 6个行为网格 -->
+        <div class="bag-grid">
+          <div class="tool-box active" onclick="showToolStory('dream', this)">
+            <div class="tool-emoji">⭐</div>
+            <div class="tool-title">追寻理想</div>
+          </div>
+          <div class="tool-box" onclick="showToolStory('interest', this)">
+            <div class="tool-emoji">🎯</div>
+            <div class="tool-title">发现兴趣</div>
+          </div>
+          <div class="tool-box" onclick="showToolStory('learning', this)">
+            <div class="tool-emoji">📚</div>
+            <div class="tool-title">努力学习</div>
+          </div>
+          <div class="tool-box" onclick="showToolStory('execution', this)">
+            <div class="tool-emoji">⚡</div>
+            <div class="tool-title">有效执行</div>
+          </div>
+          <div class="tool-box" onclick="showToolStory('communication', this)">
+            <div class="tool-emoji">💬</div>
+            <div class="tool-title">人际交流</div>
+          </div>
+          <div class="tool-box" onclick="showToolStory('cooperation', this)">
+            <div class="tool-emoji">🤝</div>
+            <div class="tool-title">合作沟通</div>
+          </div>
+        </div>
+
+        <!-- 故事详细气泡 -->
+        <div class="tool-detail-bubble">
+          <div class="bubble-arrow"></div>
+          <div class="bubble-arrow-inner"></div>
+          <h4 id="tool-story-title" class="tool-story-title">⭐ 理想北极星：找到前行的路</h4>
+          <p id="tool-story-text" class="tool-story-text">
+            理想就像夜空中最闪亮的一颗星星。小圆说：“我想成为一个会画画的设计师！”虽然现在还做不到，但有了这颗北极星，她每次拿起画笔就有了方向。小朋友，你的理想北极星是什么呢？
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 6: 第五章 魔法纽带 ==================== -->
+    <div id="slide-6" class="slide">
+      <div>
+        <div class="chapter-num">Chapter 5</div>
+        <h2 class="chapter-title">魔法密码的金色纽带</h2>
+      </div>
+      <div class="link-layout">
+        <p style="margin-bottom:20px; text-align:center; max-width:700px; line-height:1.6; margin: 0 auto 20px;">
+          你知道吗？成长圈里，中环的<b>态度魔法</b>是发射塔，外环的<b>行为道具</b>是接收器。你的每一次行动，背后都连着一种态度魔法哦！点击下方纽带卡片看看它们的联结：
+        </p>
+
+        <!-- 态度与行为的6对映射 -->
+        <div class="link-pairs-grid">
+          <div class="link-pair-item active" onclick="showLinkDetail('active_learning', this)">
+            <div class="link-node">
+              <span class="link-node-emoji">🚀</span>
+              <span>积极主动</span>
+            </div>
+            <span class="link-arrow-text">➔</span>
+            <div class="link-node">
+              <span class="link-node-emoji">📚</span>
+              <span>努力学习</span>
+            </div>
+          </div>
+          <div class="link-pair-item" onclick="showLinkDetail('empathy_communication', this)">
+            <div class="link-node">
+              <span class="link-node-emoji">💛</span>
+              <span>同理心</span>
+            </div>
+            <span class="link-arrow-text">➔</span>
+            <div class="link-node">
+              <span class="link-node-emoji">💬</span>
+              <span>人际交流</span>
+            </div>
+          </div>
+          <div class="link-pair-item" onclick="showLinkDetail('confidence_interest', this)">
+            <div class="link-node">
+              <span class="link-node-emoji">🦁</span>
+              <span>自信</span>
+            </div>
+            <span class="link-arrow-text">➔</span>
+            <div class="link-node">
+              <span class="link-node-emoji">🎯</span>
+              <span>发现兴趣</span>
+            </div>
+          </div>
+          <div class="link-pair-item" onclick="showLinkDetail('reflection_execution', this)">
+            <div class="link-node">
+              <span class="link-node-emoji">🪞</span>
+              <span>自省</span>
+            </div>
+            <span class="link-arrow-text">➔</span>
+            <div class="link-node">
+              <span class="link-node-emoji">⚡</span>
+              <span>有效执行</span>
+            </div>
+          </div>
+          <div class="link-pair-item" onclick="showLinkDetail('courage_dream', this)">
+            <div class="link-node">
+              <span class="link-node-emoji">🛡️</span>
+              <span>勇气</span>
+            </div>
+            <span class="link-arrow-text">➔</span>
+            <div class="link-node">
+              <span class="link-node-emoji">⭐</span>
+              <span>追寻理想</span>
+            </div>
+          </div>
+          <div class="link-pair-item" onclick="showLinkDetail('broad_cooperation', this)">
+            <div class="link-node">
+              <span class="link-node-emoji">🌍</span>
+              <span>胸怀</span>
+            </div>
+            <span class="link-arrow-text">➔</span>
+            <div class="link-node">
+              <span class="link-node-emoji">🤝</span>
+              <span>合作沟通</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 映射气泡 -->
+        <div class="link-detail-bubble">
+          <div class="link-bubble-arrow"></div>
+          <div class="link-bubble-arrow-inner"></div>
+          <h4 id="link-story-title" style="color: #8e44ad; font-size: 1.2rem; margin-bottom: 6px;">🚀 积极主动 ➔ 📚 努力学习：主动汲取养分</h4>
+          <p id="link-story-text" style="color: var(--color-text-light); font-size: 1rem; line-height: 1.6;">
+            李开复博士说，努力学习是终身受益的过程。因为小圆想主动探索世界、对自己负责（积极主动的态度），所以她捧起了魔法书（努力学习的行为），自己主动寻找新本领，不让别人推着走！
+          </p>
+        </div>
+
+        <!-- 行为内部关系卡片 -->
+        <div class="story-card" style="border-top: 5px solid var(--color-beh); background: var(--color-beh-bg); margin-top: 25px;">
+          <h3 style="font-family: var(--font-title); color: #1e8449; font-size: 1.3rem; margin-bottom: 8px; text-align: center;">🍃 探索包里行为道具的“连环魔法”</h3>
+          <p style="font-size: 1rem; line-height: 1.7; text-align: center; color: var(--color-text-dark);">
+            六个行为超能力也不是单独工作的，它们像一圈精妙的<b>魔法齿轮</b>相互推动：
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
+            <div style="background: #ffffff; padding: 15px; border-radius: 16px; border: 1px solid rgba(46,213,115,0.2);">
+              <h4 style="color:#1e8449; font-size:1.05rem; margin-bottom:6px; text-align:center;">1. 起航动力组 ⭐ & 🎯</h4>
+              <p style="font-size:0.88rem; line-height:1.5; color:var(--color-text-light);">
+                【理想】北极星指引你前行的大方向，而【发现兴趣】是点燃火苗的仙女棒，提供无限的快乐和内在火苗。
+              </p>
+            </div>
+            <div style="background: #ffffff; padding: 15px; border-radius: 16px; border: 1px solid rgba(46,213,115,0.2);">
+              <h4 style="color:#1e8449; font-size:1.05rem; margin-bottom:6px; text-align:center;">2. 行动双脚组 📚 & ⚡</h4>
+              <p style="font-size:0.88rem; line-height:1.5; color:var(--color-text-light);">
+                有了理想与兴趣，还要靠【努力学习】的魔法书来长本领，并穿上【有效执行】的飞鞋克服拖延，脚踏实地走过去。
+              </p>
+            </div>
+            <div style="background: #ffffff; padding: 15px; border-radius: 16px; border: 1px solid rgba(46,213,115,0.2);">
+              <h4 style="color:#1e8449; font-size:1.05rem; margin-bottom:6px; text-align:center;">3. 团队远航组 💬 & 🤝</h4>
+              <p style="font-size:0.88rem; line-height:1.5; color:var(--color-text-light);">
+                一个人走得快，一群人走得远。在信息时代，我们要用【人际交流】有礼貌地沟通，并【合作沟通】组队划船，共享大智慧！
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 7: 第六章 智慧天平 ==================== -->
+    <div id="slide-7" class="slide">
+      <div>
+        <div class="chapter-num">Chapter 6</div>
+        <h2 class="chapter-title">终极魔法 —— 智慧的平衡天平</h2>
+      </div>
+      <div class="scale-layout">
+        <div class="story-card" style="margin-top:0;">
+          <p>探险走到了终点，小圆得到了终极魔杖——<strong>“选择的智慧天平”</strong>。李开复博士告诉我们，真正的智慧，是知道什么时候该“坚持”，什么时候该“放手”。</p>
+          <p style="text-align:center; font-weight:800; color:#8e44ad; font-size:1.2rem; margin:10px 0;">
+            “用勇气去改变可以改变的事，用胸怀去接受不能改变的事，用智慧去分辨两者的不同。”
+          </p>
+        </div>
+
+        <!-- SVG 天平动画 -->
+        <div class="scale-visual-container">
+          <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#a88beb"/><stop offset="100%" stop-color="#8e44ad"/></linearGradient>
+            </defs>
+            <!-- 支架 -->
+            <rect x="245" y="30" width="10" height="130" fill="url(#purpleGrad)" rx="5"/>
+            <polygon points="220,160 280,160 270,180 230,180" fill="#7012a6"/>
+            
+            <!-- 天平横梁 (动态倾斜) -->
+            <g id="scale-beam" style="transform-origin: 250px 45px; transition: transform 0.8s ease;">
+              <line x1="100" y1="45" x2="400" y2="45" stroke="#9b59b6" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="250" cy="45" r="10" fill="#7012a6"/>
+              
+              <!-- 左秤盘 (勇气·改变) -->
+              <g id="left-pan" style="transition: transform 0.8s ease;">
+                <line x1="100" y1="45" x2="70" y2="120" stroke="#8e44ad" stroke-width="2"/>
+                <line x1="100" y1="45" x2="130" y2="120" stroke="#8e44ad" stroke-width="2"/>
+                <path d="M60,120 L140,120 A40,40 0 0,1 60,120 Z" fill="#ff7675" opacity="0.9"/>
+                <text x="100" y="112" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">🛡️ 勇气改变</text>
+              </g>
+
+              <!-- 右秤盘 (胸怀·接受) -->
+              <g id="right-pan" style="transition: transform 0.8s ease;">
+                <line x1="400" y1="45" x2="370" y2="120" stroke="#8e44ad" stroke-width="2"/>
+                <line x1="400" y1="45" x2="430" y2="120" stroke="#8e44ad" stroke-width="2"/>
+                <path d="M360,120 L440,120 A40,40 0 0,1 360,120 Z" fill="#54a0ff" opacity="0.9"/>
+                <text x="400" y="112" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">🌍 胸怀接受</text>
+              </g>
+            </g>
+
+            <!-- 智慧宝石 -->
+            <circle cx="250" cy="45" r="18" fill="#ffd32a" opacity="0.3"/>
+            <polygon points="250,37 256,43 250,49 244,43" fill="#ffd32a"/>
+          </svg>
+        </div>
+
+        <!-- 交互区域 -->
+        <div class="scale-interactive-section">
+          <div class="scenario-selector">
+            <button id="scen-btn-1" class="scenario-btn active" onclick="playScenario(1)">🌧️ 场景一：下大雨不能出去野餐</button>
+            <button id="scen-btn-2" class="scenario-btn" onclick="playScenario(2)">📝 场景二：数学听写错了很多字</button>
+            <button id="scen-btn-3" class="scenario-btn" onclick="playScenario(3)">✏️ 场景三：同桌拿了我铅笔没说</button>
+          </div>
+          
+          <div id="scenario-explanation" class="scenario-explanation">
+            <!-- 动态注入 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 8: 第七章 挑战单 ==================== -->
+    <div id="slide-8" class="slide">
+      <div>
+        <div class="chapter-num">Chapter 7</div>
+        <h2 class="chapter-title">小睿睿的每日成长魔法单</h2>
+      </div>
+      <div class="checklist-layout">
+        <!-- 左侧打卡清单 -->
+        <div class="checklist-left">
+          
+          <div class="checklist-group-title">💎 核心圆心：价值观</div>
+          <div class="checklist-item item-core" onclick="toggleCheck(this, 'mini-core')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">做到“诚信”</span>
+              <span class="checklist-item-desc">今天我没有撒谎骗人，答应别人的事情全部认真做到了。</span>
+            </div>
+          </div>
+
+          <div class="checklist-group-title">✨ 中环魔法：平衡态度</div>
+          <div class="checklist-item item-att" onclick="toggleCheck(this, 'mini-att-1')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">积极主动 🚀</span>
+              <span class="checklist-item-desc">我今天主动写作业、整理书桌，没有让爸爸妈妈催我。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-att" onclick="toggleCheck(this, 'mini-att-2')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">同理心 💛</span>
+              <span class="checklist-item-desc">我关心了家人或朋友，或者说了一句“谢谢你”。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-att" onclick="toggleCheck(this, 'mini-att-3')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">自信心 🦁</span>
+              <span class="checklist-item-desc">我相信自己能行，勇敢地表达了自己的想法。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-att" onclick="toggleCheck(this, 'mini-att-4')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">勇敢自省 🪞</span>
+              <span class="checklist-item-desc">我没有逃避我的小错，而是主动反思并积极改错。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-att" onclick="toggleCheck(this, 'mini-att-5')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">直面勇气 🛡️</span>
+              <span class="checklist-item-desc">面对有点害怕或者困难的事情，我勇敢地迎了上去。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-att" onclick="toggleCheck(this, 'mini-att-6')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">宽阔胸怀 🌍</span>
+              <span class="checklist-item-desc">今天遇到没法改变的事情，我微笑着接受，没有发脾气。</span>
+            </div>
+          </div>
+
+          <div class="checklist-group-title">🎒 外环道具：超能力行为</div>
+          <div class="checklist-item item-beh" onclick="toggleCheck(this, 'mini-beh-1')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">追寻理想 ⭐</span>
+              <span class="checklist-item-desc">今天我画了画、读了书，为了自己的小梦想前行了一步。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-beh" onclick="toggleCheck(this, 'mini-beh-2')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">兴趣探索 🎯</span>
+              <span class="checklist-item-desc">我花时间做了一件真正让我开心的兴趣爱好。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-beh" onclick="toggleCheck(this, 'mini-beh-3')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">努力学习 📚</span>
+              <span class="checklist-item-desc">我掌握了一个新知识，或者认认真真看了一篇故事。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-beh" onclick="toggleCheck(this, 'mini-beh-4')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">快速执行 ⚡</span>
+              <span class="checklist-item-desc">今天做事利落，没有磨蹭，立刻行动。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-beh" onclick="toggleCheck(this, 'mini-beh-5')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">友好交流 💬</span>
+              <span class="checklist-item-desc">我好好说话，耐心倾听了别人，没有无理取闹。</span>
+            </div>
+          </div>
+          <div class="checklist-item item-beh" onclick="toggleCheck(this, 'mini-beh-6')">
+            <div class="checklist-checkbox"></div>
+            <div class="checklist-text-group">
+              <span class="checklist-item-title">团结合作 🤝</span>
+              <span class="checklist-item-desc">我跟别的小伙伴或者爸爸妈妈一起，合作完成了一件事。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧反馈看板 -->
+        <div class="checklist-right">
+          <!-- 实时渲染的魔法圆 -->
+          <svg viewBox="0 0 200 200" width="100%">
+            <!-- 外环背景 -->
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#eef2f5" stroke-width="15"/>
+            <!-- 中环背景 -->
+            <circle cx="100" cy="100" r="55" fill="none" stroke="#eef2f5" stroke-width="15"/>
+            <!-- 内圆背景 -->
+            <circle id="mini-core" class="sparkle-target" cx="100" cy="100" r="28" fill="#eef2f5" style="--glow-color: #ff5b7f;"/>
+            
+            <!-- 态度中环 (6个点坐标) -->
+            <circle id="mini-att-1" class="sparkle-target" cx="100" cy="45" r="8" fill="#eef2f5" style="--glow-color: #ffa502;"/>
+            <circle id="mini-att-2" class="sparkle-target" cx="148" cy="72" r="8" fill="#eef2f5" style="--glow-color: #ffa502;"/>
+            <circle id="mini-att-3" class="sparkle-target" cx="148" cy="128" r="8" fill="#eef2f5" style="--glow-color: #ffa502;"/>
+            <circle id="mini-att-4" class="sparkle-target" cx="100" cy="155" r="8" fill="#eef2f5" style="--glow-color: #ffa502;"/>
+            <circle id="mini-att-5" class="sparkle-target" cx="52" cy="128" r="8" fill="#eef2f5" style="--glow-color: #ffa502;"/>
+            <circle id="mini-att-6" class="sparkle-target" cx="52" cy="72" r="8" fill="#eef2f5" style="--glow-color: #ffa502;"/>
+
+            <!-- 行为外环 (6个点坐标) -->
+            <circle id="mini-beh-1" class="sparkle-target" cx="100" cy="20" r="9" fill="#eef2f5" style="--glow-color: #2ed573;"/>
+            <circle id="mini-beh-2" class="sparkle-target" cx="169" cy="60" r="9" fill="#eef2f5" style="--glow-color: #2ed573;"/>
+            <circle id="mini-beh-3" class="sparkle-target" cx="169" cy="140" r="9" fill="#eef2f5" style="--glow-color: #2ed573;"/>
+            <circle id="mini-beh-4" class="sparkle-target" cx="100" cy="180" r="9" fill="#eef2f5" style="--glow-color: #2ed573;"/>
+            <circle id="mini-beh-5" class="sparkle-target" cx="31" cy="140" r="9" fill="#eef2f5" style="--glow-color: #2ed573;"/>
+            <circle id="mini-beh-6" class="sparkle-target" cx="31" cy="60" r="9" fill="#eef2f5" style="--glow-color: #2ed573;"/>
+            
+            <!-- 圆心文本 -->
+            <text x="100" y="104" text-anchor="middle" fill="#7f8c8d" font-size="12" font-weight="bold">圆心</text>
+          </svg>
+
+          <div class="concentric-status-board">
+            <p>已点亮魔法：<span id="light-count" class="status-counter">0</span> / 13</p>
+            
+            <!-- 勋章面板 -->
+            <div class="status-badge-container">
+              <span id="badge-core" class="mini-glow-badge">💎</span>
+              <span id="badge-active" class="mini-glow-badge">🚀</span>
+              <span id="badge-empathy" class="mini-glow-badge">💛</span>
+              <span id="badge-confidence" class="mini-glow-badge">🦁</span>
+              <span id="badge-reflection" class="mini-glow-badge">🪞</span>
+              <span id="badge-courage" class="mini-glow-badge">🛡️</span>
+              <span id="badge-broad" class="mini-glow-badge">🌍</span>
+              <span id="badge-dream" class="mini-glow-badge">⭐</span>
+              <span id="badge-interest" class="mini-glow-badge">🎯</span>
+              <span id="badge-learning" class="mini-glow-badge">📚</span>
+              <span id="badge-execution" class="mini-glow-badge">⚡</span>
+              <span id="badge-communication" class="mini-glow-badge">💬</span>
+              <span id="badge-cooperation" class="mini-glow-badge">🤝</span>
+            </div>
+            
+            <button onclick="resetChecklist()" style="margin-top:20px; padding:8px 16px; border:1px solid #ddd; background:#fff; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#7f8c8d;">重新开始</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部控制栏 -->
+    <div class="nav-bar">
+      <button id="btn-prev" class="nav-btn" onclick="changePage(-1)" disabled>
+        ⬅ 上一页
+      </button>
+      <div class="page-dots">
+        <span class="dot active" onclick="goToPage(1)"></span>
+        <span class="dot" onclick="goToPage(2)"></span>
+        <span class="dot" onclick="goToPage(3)"></span>
+        <span class="dot" onclick="goToPage(4)"></span>
+        <span class="dot" onclick="goToPage(5)"></span>
+        <span class="dot" onclick="goToPage(6)"></span>
+        <span class="dot" onclick="goToPage(7)"></span>
+        <span class="dot" onclick="goToPage(8)"></span>
+      </div>
+      <button id="btn-next" class="nav-btn nav-btn-next" onclick="changePage(1)">
+        下一页 ➡
+      </button>
     </div>
   </div>
 
-  <div class="text-box">
-    <h3>态度就是"方向盘"</h3>
-    <p>遇到事情时，你是怎么想的，决定了你会怎么做。这六种态度就像一个<strong>魔法方向盘</strong>，帮你把人生的小车开向正确的方向！</p>
-  </div>
-  <div class="arrow-down" style="margin-bottom:5px;">⬇</div>
-  <div style="text-align:center;color:#f39c12;font-size:1em;margin-bottom:20px;">✏️ 想一想：今天你用到了哪种态度魔法？</div>
-</div>
+  <script>
+    let currentPage = 1;
+    const totalPages = 8;
+    
+    // 背景渐变图映射
+    const backgrounds = {
+      1: 'var(--bg-page-1)',
+      2: 'var(--bg-page-2)',
+      3: 'var(--bg-page-3)',
+      4: 'var(--bg-page-4)',
+      5: 'var(--bg-page-5)',
+      6: 'var(--bg-page-6)',
+      7: 'var(--bg-page-7)',
+      8: 'var(--bg-page-8)'
+    };
 
-<!-- ========== 态度详细 ========== -->
-<div class="page page-att">
-  <div class="page-title">态度魔法怎么用？</div>
+    // 翻页导航逻辑
+    function changePage(direction) {
+      const targetPage = currentPage + direction;
+      if (targetPage >= 1 && targetPage <= totalPages) {
+        goToPage(targetPage);
+      }
+    }
 
-  <div class="svg-box">
-    <svg viewBox="0 0 600 480">
-      <!-- 6个态度围绕中心圆 -->
-      <circle cx="300" cy="240" r="60" fill="none" stroke="#f39c12" stroke-width="3" opacity="0.3"/>
-      <circle cx="300" cy="240" r="25" fill="#f39c12" opacity="0.5"/>
-      <text x="300" y="246" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">态度</text>
+    function goToPage(pageNumber) {
+      // 移除旧页面的 active
+      document.querySelector(`.slide.active`).classList.remove('active');
+      document.querySelector(`.dot.active`).classList.remove('active');
+      
+      // 设置新页面
+      currentPage = pageNumber;
+      document.getElementById(`slide-${currentPage}`).classList.add('active');
+      document.querySelectorAll(`.dot`)[currentPage - 1].classList.add('active');
+      
+      // 更新顶部进度条
+      const progressPercent = (currentPage / totalPages) * 100;
+      document.getElementById('progress').style.width = `${progressPercent}%`;
+      
+      // 平滑改变背景颜色
+      document.body.style.background = backgrounds[currentPage];
+      
+      // 更新导航按钮状态
+      document.getElementById('btn-prev').disabled = (currentPage === 1);
+      
+      const btnNext = document.getElementById('btn-next');
+      if (currentPage === totalPages) {
+        btnNext.innerHTML = '点亮全部魔法 ✨';
+        btnNext.onclick = function() {
+          // 如果全部勾选，就放礼花
+          const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
+          if (checkedCount === 13) {
+            triggerConfetti();
+          } else {
+            alert('加油哦！再多做一些打卡，点亮这颗成长魔法圈吧！🌟');
+          }
+        };
+      } else {
+        btnNext.innerHTML = '下一页 ➡';
+        btnNext.onclick = function() { changePage(1); };
+      }
+    }
 
-      <!-- 六个 -->
-      <circle cx="300" cy="120" r="35" fill="#ffe0b2"/>
-      <text x="300" y="117" text-anchor="middle" font-size="22">🚀</text>
-      <text x="300" y="140" text-anchor="middle" font-size="10" fill="#e67e22">积极主动</text>
+    // 键盘左右键翻页
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') changePage(1);
+      if (e.key === 'ArrowLeft') changePage(-1);
+    });
 
-      <circle cx="430" cy="180" r="35" fill="#ffe0b2"/>
-      <text x="430" y="177" text-anchor="middle" font-size="22">💛</text>
-      <text x="430" y="200" text-anchor="middle" font-size="10" fill="#e67e22">同理心</text>
+    // ==================== Slide 2 (成长树) 交互 ====================
+    function selectTreePart(part) {
+      // 重置所有卡片和SVG
+      document.querySelectorAll('.tree-part-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('svg-tree-leaves').style.opacity = '0.3';
+      document.getElementById('svg-tree-trunk').style.opacity = '0.3';
+      document.getElementById('svg-tree-roots').style.opacity = '0.3';
+      
+      if (part === 'roots') {
+        document.querySelector('.part-core').classList.add('active');
+        document.getElementById('svg-tree-roots').style.opacity = '1.0';
+      } else if (part === 'trunk') {
+        document.querySelector('.part-att').classList.add('active');
+        document.getElementById('svg-tree-trunk').style.opacity = '1.0';
+      } else if (part === 'leaves') {
+        document.querySelector('.part-beh').classList.add('active');
+        document.getElementById('svg-tree-leaves').style.opacity = '1.0';
+      } else if (part === 'link') {
+        document.querySelector('.part-link').classList.add('active');
+        document.getElementById('svg-tree-roots').style.opacity = '1.0';
+        document.getElementById('svg-tree-trunk').style.opacity = '1.0';
+        document.getElementById('svg-tree-leaves').style.opacity = '1.0';
+      }
+    }
 
-      <circle cx="455" cy="300" r="35" fill="#ffe0b2"/>
-      <text x="455" y="297" text-anchor="middle" font-size="22">🦁</text>
-      <text x="455" y="320" text-anchor="middle" font-size="10" fill="#e67e22">自信</text>
+    // ==================== Slide 4 (三对态度) 交互 ====================
+    const twinSummaries = {
+      1: '<strong>平衡之美：</strong>如果积极火箭（🚀）飞得太猛，不顾及同理心（💛），就会撞伤别人；如果只有同理心没有积极，我们就会停步不前。我们要带着热情奔跑，也要带着温柔看世界！',
+      2: '<strong>平衡之美：</strong>如果小狮子（🦁）盲目自信，不配合自省魔镜（🪞）查找错漏，就会变成骄傲自大的自负者；如果只有自省没有自信，就会变得自卑。只有自信而又自省，小睿睿才能稳步前进！',
+      3: '<strong>平衡之美：</strong>用勇气盾牌（🛡️）去改变能改变的事（如习惯、成绩）；用胸怀海洋（🌍）去包容接受不能改变的事（如天气、意外）。分清这两者的不同，就是最聪明的“选择智慧”！'
+    };
 
-      <circle cx="370" cy="390" r="35" fill="#ffe0b2"/>
-      <text x="370" y="387" text-anchor="middle" font-size="22">🪞</text>
-      <text x="370" y="410" text-anchor="middle" font-size="10" fill="#e67e22">自省</text>
+    function switchTwin(index) {
+      document.querySelectorAll('.twin-card-container').forEach(c => c.style.display = 'none');
+      document.querySelectorAll('.selector-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(`twin-view-${index}`).style.display = 'grid';
+      document.getElementById(`twin-btn-${index}`).classList.add('active');
+      document.getElementById('twin-summary').innerHTML = twinSummaries[index];
+    }
 
-      <circle cx="230" cy="390" r="35" fill="#ffe0b2"/>
-      <text x="230" y="387" text-anchor="middle" font-size="22">🛡️</text>
-      <text x="230" y="410" text-anchor="middle" font-size="10" fill="#e67e22">勇气</text>
+    // ==================== Slide 5 (行为道具) 交互 ====================
+    const toolsData = {
+      dream: {
+        title: '⭐ 理想北极星：找到前行的路',
+        text: '理想就像夜空中最闪亮的一颗星星。小圆说：“我想成为一个会画画的设计师！”虽然现在还做不到，但有了这颗北极星，她每次拿起画笔就有了方向。小朋友，你的理想北极星是什么呢？'
+      },
+      interest: {
+        title: '🎯 发现兴趣：点亮激情的火花',
+        text: '兴趣是一根亮晶晶的魔杖。每当小圆写故事、拼积木时，魔法棒就会亮起！这就是她的兴趣。做自己真正热爱的事，你就会充满力量，一点也不会觉得累哦！'
+      },
+      learning: {
+        title: '📚 努力学习：变聪明的魔法书',
+        text: '这本魔法书很神奇，每天翻看几页，它就会变得越来越厚。读书不只是为了考个好成绩，更是为了长本领、解开世界上的各种奥秘，成为博学的小探索者！'
+      },
+      execution: {
+        title: '⚡ 有效执行：立刻起飞的飞鞋',
+        text: '光有想法可不行，穿上“执行飞鞋”，马上去做！“今天的事今天做完”，把大任务拆成几个小石子，一步步跳过去。战胜拖延，你就会发现行动原来这么爽快！'
+      },
+      communication: {
+        title: '💬 人际交流：友谊的传声筒',
+        text: '在交往时，我们需要两件东西：大耳朵（倾听）和小嘴巴（礼貌表达）。用海螺传声筒听懂妈妈为什么累了，也清楚地告诉大家：“我的想法是这样的。”大家都会喜欢你！'
+      },
+      cooperation: {
+        title: '🤝 合作沟通：划动小船的齐心桨',
+        text: '海上有大风浪，一个人划独木舟很容易翻，但如果我们和伙伴们一起划动大桨、分工合作，就能平稳地穿过风浪，到达宝藏海岛！合作让我们变得更强大。'
+      }
+    };
 
-      <circle cx="145" cy="300" r="35" fill="#ffe0b2"/>
-      <text x="145" y="297" text-anchor="middle" font-size="22">🌍</text>
-      <text x="145" y="320" text-anchor="middle" font-size="10" fill="#e67e22">胸怀</text>
+    function showToolStory(toolKey, element) {
+      document.querySelectorAll('.tool-box').forEach(b => b.classList.remove('active'));
+      element.classList.add('active');
+      
+      const data = toolsData[toolKey];
+      document.getElementById('tool-story-title').innerHTML = data.title;
+      document.getElementById('tool-story-text').innerHTML = data.text;
+    }
 
-      <!-- 连线 -->
-      <line x1="300" y1="155" x2="300" y2="215" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="400" y1="200" x2="330" y2="225" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="430" y1="300" x2="330" y2="265" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="370" y1="355" x2="320" y2="290" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="230" y1="355" x2="280" y2="290" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="170" y1="300" x2="270" y2="265" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
+    // ==================== Slide 6 (魔法纽带) 交互 ====================
+    const linkPairsData = {
+      active_learning: {
+        title: '🚀 积极主动 ➔ 📚 努力学习：主动汲取养分',
+        text: '李开复博士说，努力学习是终身受益的过程。因为小圆想主动探索世界、对自己负责（<b>积极主动</b>的态度），所以她不需要别人推着走，就会自己捧起魔法书（<b>努力学习</b>的行为），主动获取新本领！'
+      },
+      empathy_communication: {
+        title: '💛 同理心 ➔ 💬 人际交流：用爱去倾听与表达',
+        text: '人际交流是现代人的必修课。因为小圆懂得换位思考、关心别人（<b>同理心</b>的态度），所以当她用传声筒说话和倾听时（<b>人际交流</b>的行为），能够听到同伴心里真正的想法，建立温暖的友谊。'
+      },
+      confidence_interest: {
+        title: '🦁 自信 ➔ 🎯 发现兴趣：用信心释放无限热情',
+        text: '兴趣是激情的源泉。因为小圆相信自己只要努力就一定行（<b>自信</b>的态度），所以她敢于拿着魔杖四处尝试不同的画笔、琴键，从而找到了让自己真正眼睛发光的爱好（<b>发现兴趣</b>的行为）！'
+      },
+      reflection_execution: {
+        title: '🪞 自省 ➔ ⚡ 有效执行：从反思中获得行动力',
+        text: '执行力是迈向成功的阶梯。因为小圆每天照镜子检查自己的小毛病（<b>自省</b>的态度），她能够知道自己哪里拖拉了，于是能套上飞鞋（<b>有效执行</b>的行为）飞快改错，马上行动！'
+      },
+      courage_dream: {
+        title: '🛡️ 勇气 ➔ ⭐ 追寻理想：用勇敢托起人生星空',
+        text: '理想是指引人生的罗盘。因为小圆拥有不怕困难、不怕失败的坚强力量（<b>勇气</b>的态度），所以她敢于在心中定下一个大大的梦想，迎着风朝着最闪亮的北极星（<b>追寻理想</b>的行为）奔跑！'
+      },
+      broad_cooperation: {
+        title: '🌍 胸怀 ➔ 🤝 合作沟通：海纳百川划大船',
+        text: '合作沟通是信息时代的成功之道。因为小圆的心像大海一样大（<b>胸怀</b>的态度），能包容和尊重别人不同的意见，所以她能和好伙伴们坐上同一艘大船，齐心协力地划桨（<b>合作沟通</b>的行为）！'
+      }
+    };
 
-      <text x="300" y="465" text-anchor="middle" fill="#999" font-size="12">六种态度都连着中心的魔法核心</text>
-    </svg>
-  </div>
+    function showLinkDetail(pairKey, element) {
+      document.querySelectorAll('.link-pair-item').forEach(b => b.classList.remove('active'));
+      element.classList.add('active');
+      
+      const data = linkPairsData[pairKey];
+      document.getElementById('link-story-title').innerHTML = data.title;
+      document.getElementById('link-story-text').innerHTML = data.text;
+    }
 
-  <div class="text-box">
-    <p>小圆发现，这六种态度就像一个<strong>六角星</strong>，每个角都很重要，而且它们是连在一起的——有勇气的人更自信，有同理心的人更有胸怀！</p>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
+    // ==================== Slide 7 (智慧天平) 交互 ====================
+    const scenarios = {
+      1: {
+        title: '🌧️ 场景一：下大雨不能出去野餐了，怎么办？',
+        valueText: '💎 <b>价值观（诚信）</b>：对自己诚实（不赌气哭闹，承认失望），对他人守信（约好的野餐要换个方式和家人兑现）。',
+        attitudeText: '⚙️ <b>态度平衡</b>：用【胸怀】平静包容下雨天，同时用【积极主动】寻找室内野餐的新点子。',
+        behaviorText: '🎒 <b>行为动作</b>：换上【有效执行】的飞鞋，和家人在客厅铺开餐垫，开始好玩的室内野餐！',
+        wisdomText: '⚖️ <b>选择的智慧</b>：天平平衡了！接受天气（胸怀） + 改变玩法（勇气与执行） = 依然开心快乐的一天！',
+        tilt: -10
+      },
+      2: {
+        title: '📝 场景二：数学听写错了很多字，好难过……',
+        valueText: '💎 <b>价值观（诚信）</b>：对自己诚实（承认错字，不去怪铅笔不听话，更不去偷偷改分数）。',
+        attitudeText: '⚙️ <b>态度平衡</b>：用【自信】相信自己能学会，用【自省】仔细检查出错的笔画，用【勇气】面对错误。',
+        behaviorText: '🎒 <b>行为动作</b>：利用【努力学习】纠正错词，穿上【有效执行】飞鞋立刻多练习几遍。',
+        wisdomText: '⚖️ <b>选择的智慧</b>：天平平衡了！错字已成过去（胸怀接受） + 现在的努力决定未来（勇气改变） = 下次全对！',
+        tilt: 5
+      },
+      3: {
+        title: '✏️ 场景三：同桌不小心拿了我的铅笔，没打招呼。',
+        valueText: '💎 <b>价值观（诚信）</b>：诚信做人，不随意冤枉别人，诚实冷静地向同桌核对事实。',
+        attitudeText: '⚙️ <b>态度平衡</b>：用【同理心】体谅同桌可能是一时粗心，用【胸怀】大度包容，用【勇气】温和表达底线。',
+        behaviorText: '🎒 <b>行为动作</b>：通过【人际交流】有礼貌地沟通：“这是我的铅笔，你下次拿之前记得先问我哦。”',
+        wisdomText: '⚖️ <b>选择的智慧</b>：天平平衡了！大度包容（胸怀） + 友好坚定沟通（勇气与交流） = 牢固的同伴友情！',
+        tilt: 0
+      }
+    };
 
-<!-- ========== 第三层：行为六超能力 ========== -->
-<div class="page page-beh">
-  <div class="page-title">第三关 · 六大行为超能力</div>
-  <div class="page-subtitle">学会了态度魔法，还要学会行为超能力，才能真正变成闪闪发光的小圆！</div>
+    function playScenario(index) {
+      document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`scen-btn-${index}`).classList.add('active');
+      
+      const data = scenarios[index];
+      
+      // 动效天平倾斜
+      const beam = document.getElementById('scale-beam');
+      beam.style.transform = `rotate(${data.tilt}deg)`;
+      
+      // 更新文字，展现连结链条
+      const explanationDiv = document.getElementById('scenario-explanation');
+      explanationDiv.innerHTML = `
+        <h4 style="margin-bottom: 12px; color: #8e44ad;">${data.title}</h4>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.6;">
+          <p style="border-left: 3px solid var(--color-core); padding-left: 10px; margin: 0;">${data.valueText}</p>
+          <p style="border-left: 3px solid var(--color-att); padding-left: 10px; margin: 0;">${data.attitudeText}</p>
+          <p style="border-left: 3px solid var(--color-beh); padding-left: 10px; margin: 0;">${data.behaviorText}</p>
+          <p style="border-left: 3px solid #8e44ad; padding-left: 10px; margin: 5px 0 0 0; color: #8e44ad; font-weight: bold;">${data.wisdomText}</p>
+        </div>
+      `;
+    }
 
-  <div class="little-cards">
-    <div class="little-card">
-      <div class="emoji">⭐</div>
-      <div class="title">追寻理想</div>
-      <div class="desc">找到你的梦想！想当科学家？宇航员？画家？先有一个目标。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">🎯</div>
-      <div class="title">发现兴趣</div>
-      <div class="desc">做你喜欢的事！画画、踢球、弹琴，找到让你眼睛发光的事。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">⚡</div>
-      <div class="title">有效执行</div>
-      <div class="desc">说到做到，马上去做！今天能做完的事，绝不拖到明天。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">📚</div>
-      <div class="title">努力学习</div>
-      <div class="desc">天天向上！不只为了考试，是为了让自己变得更聪明、更有本领。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">💬</div>
-      <div class="title">人际交流</div>
-      <div class="desc">学会好好说话。认真听别人说，清楚地说出自己的想法。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">🤝</div>
-      <div class="title">合作沟通</div>
-      <div class="desc">和大家一起努力！一个人走得快，一群人走得远。</div>
-    </div>
-  </div>
+    // 初始化运行场景一
+    playScenario(1);
 
-  <div class="text-box">
-    <h3>行为就是"小脚丫"</h3>
-    <p>态度是你怎么想，行为是你怎么做。光有好的想法还不够，还要用行动做出来！这六种行为就像你的<strong>六只魔法小脚丫</strong>，带你一步步走向最好的自己。</p>
-  </div>
-  <div class="arrow-down" style="margin-bottom:5px;">⬇</div>
-  <div style="text-align:center;color:#27ae60;font-size:1em;margin-bottom:20px;">✏️ 想一想：今天你用了哪种行为超能力？</div>
-</div>
+    // ==================== Slide 7 (成长挑战单) 交互 ====================
+    // 点击勾选项目
+    function toggleCheck(card, elementId) {
+      card.classList.toggle('checked');
+      const targetElement = document.getElementById(elementId);
+      
+      const mappedBadges = {
+        'mini-core': 'badge-core',
+        'mini-att-1': 'badge-active',
+        'mini-att-2': 'badge-empathy',
+        'mini-att-3': 'badge-confidence',
+        'mini-att-4': 'badge-reflection',
+        'mini-att-5': 'badge-courage',
+        'mini-att-6': 'badge-broad',
+        'mini-beh-1': 'badge-dream',
+        'mini-beh-2': 'badge-interest',
+        'mini-beh-3': 'badge-learning',
+        'mini-beh-4': 'badge-execution',
+        'mini-beh-5': 'badge-communication',
+        'mini-beh-6': 'badge-cooperation'
+      };
 
-<!-- ========== 行为详细 ========== -->
-<div class="page page-beh">
-  <div class="page-title">行为超能力怎么用？</div>
+      const badgeId = mappedBadges[elementId];
+      const badgeSpan = document.getElementById(badgeId);
+      const isChecked = card.classList.contains('checked');
 
-  <div class="svg-box">
-    <svg viewBox="0 0 600 480">
-      <!-- 6个行为围绕中心圆 -->
-      <circle cx="300" cy="240" r="60" fill="none" stroke="#27ae60" stroke-width="3" opacity="0.3"/>
-      <circle cx="300" cy="240" r="25" fill="#27ae60" opacity="0.5"/>
-      <text x="300" y="246" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">行为</text>
+      if (isChecked) {
+        targetElement.setAttribute('fill', targetElement.style.getPropertyValue('--glow-color'));
+        targetElement.classList.add('active');
+        if (badgeSpan) badgeSpan.classList.add('unlocked');
+      } else {
+        targetElement.setAttribute('fill', '#eef2f5');
+        targetElement.classList.remove('active');
+        if (badgeSpan) badgeSpan.classList.remove('unlocked');
+      }
 
-      <circle cx="300" cy="120" r="35" fill="#c8f7c5"/>
-      <text x="300" y="117" text-anchor="middle" font-size="22">⭐</text>
-      <text x="300" y="140" text-anchor="middle" font-size="10" fill="#1e8449">追寻理想</text>
+      // 计算已勾选数量
+      const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
+      document.getElementById('light-count').innerText = checkedCount;
 
-      <circle cx="430" cy="180" r="35" fill="#c8f7c5"/>
-      <text x="430" y="177" text-anchor="middle" font-size="22">🎯</text>
-      <text x="430" y="200" text-anchor="middle" font-size="10" fill="#1e8449">发现兴趣</text>
+      // 如果 13 个魔法全部点亮，触发大烟花！
+      if (checkedCount === 13) {
+        triggerConfetti();
+        document.getElementById('mini-core').style.animation = 'sparkle-glow 1s infinite alternate';
+      } else {
+        document.getElementById('mini-core').style.animation = '';
+      }
+    }
 
-      <circle cx="455" cy="300" r="35" fill="#c8f7c5"/>
-      <text x="455" y="297" text-anchor="middle" font-size="22">⚡</text>
-      <text x="455" y="320" text-anchor="middle" font-size="10" fill="#1e8449">有效执行</text>
+    // 重置打卡单
+    function resetChecklist() {
+      document.querySelectorAll('.checklist-item').forEach(c => c.classList.remove('checked'));
+      document.querySelectorAll('.sparkle-target').forEach(t => {
+        t.setAttribute('fill', '#eef2f5');
+        t.classList.remove('active');
+      });
+      document.querySelectorAll('.mini-glow-badge').forEach(b => b.classList.remove('unlocked'));
+      document.getElementById('light-count').innerText = 0;
+    }
 
-      <circle cx="370" cy="390" r="35" fill="#c8f7c5"/>
-      <text x="370" y="387" text-anchor="middle" font-size="22">📚</text>
-      <text x="370" y="410" text-anchor="middle" font-size="10" fill="#1e8449">努力学习</text>
+    // ==================== 纯 HTML5 Canvas 烟花效果 ====================
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.display = 'block';
 
-      <circle cx="230" cy="390" r="35" fill="#c8f7c5"/>
-      <text x="230" y="387" text-anchor="middle" font-size="22">💬</text>
-      <text x="230" y="410" text-anchor="middle" font-size="10" fill="#1e8449">人际交流</text>
+      let particles = [];
+      const colors = ['#ff5b7f', '#ffd32a', '#2ed573', '#54a0ff', '#5f27cd', '#ff9f43'];
 
-      <circle cx="145" cy="300" r="35" fill="#c8f7c5"/>
-      <text x="145" y="297" text-anchor="middle" font-size="22">🤝</text>
-      <text x="145" y="320" text-anchor="middle" font-size="10" fill="#1e8449">合作沟通</text>
+      // 从下方喷涌出五颜六色的碎纸片
+      for (let i = 0; i < 180; i++) {
+        particles.push({
+          x: canvas.width / 2 + (Math.random() - 0.5) * 50,
+          y: canvas.height + 20,
+          vx: (Math.random() - 0.5) * 16,
+          vy: -Math.random() * 18 - 8,
+          size: Math.random() * 10 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rSpeed: Math.random() * 8 - 4,
+          alpha: 1,
+          decay: Math.random() * 0.012 + 0.006
+        });
+      }
 
-      <!-- 连线：行为间的促进关系 -->
-      <line x1="300" y1="155" x2="300" y2="215" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="400" y1="200" x2="330" y2="225" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="430" y1="300" x2="330" y2="265" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="370" y1="355" x2="320" y2="290" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="230" y1="355" x2="280" y2="290" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="170" y1="300" x2="270" y2="265" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
+      function update() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.22; // 重力加速度
+          p.rotation += p.rSpeed;
+          p.alpha -= p.decay;
+          
+          if (p.alpha > 0) {
+            alive = true;
+            ctx.save();
+            ctx.globalAlpha = p.alpha;
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation * Math.PI / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+          }
+        });
 
-      <!-- 循环箭头 -->
-      <path d="M340,160 Q400,130 440,170" fill="none" stroke="#27ae60" stroke-width="1.5" opacity="0.5" marker-end="url(#arrowGreen)"/>
-      <defs>
-        <marker id="arrowGreen" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-          <path d="M0,0 L6,3 L0,6 Z" fill="#27ae60"/>
-        </marker>
-      </defs>
-
-      <text x="300" y="465" text-anchor="middle" fill="#999" font-size="12">六种行为互相推动，像一个不停转动的风车</text>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <p>小圆发现，六种行为就像<strong>风车的六个叶片</strong>，连在一起转起来才有力量！找到理想（⭐）帮你发现兴趣（🎯），有了兴趣就愿意努力学习（📚），学好本领才能有效执行（⚡），在行动中和大家一起交流（💬）、合作（🤝）——越转越快，越来越强！</p>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 三层全景 ========== -->
-<div class="page page-intro">
-  <div class="page-title">三层魔法圈 · 全景图</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 580">
-      <!-- 背景装饰 -->
-      <circle cx="300" cy="290" r="260" fill="#f0fff0" stroke="#27ae60" stroke-width="3"/>
-      <circle cx="300" cy="290" r="185" fill="#fff8e8" stroke="#f39c12" stroke-width="3"/>
-      <circle cx="300" cy="290" r="110" fill="#fff0f0" stroke="#e74c3c" stroke-width="3"/>
-      <circle cx="300" cy="290" r="40" fill="#e74c3c"/>
-
-      <!-- 外环行为 -->
-      <text x="300" y="22" text-anchor="middle" fill="#27ae60" font-size="18" font-weight="bold">外环：行为（怎么做）</text>
-      <text x="530" y="290" text-anchor="middle" fill="#2ecc71" font-size="13" transform="rotate(90,530,290)">有 效 执 行</text>
-      <text x="300" y="558" text-anchor="middle" fill="#2ecc71" font-size="13">努 力 学 习</text>
-      <text x="70" y="290" text-anchor="middle" fill="#2ecc71" font-size="13" transform="rotate(-90,70,290)">合 作 沟 通</text>
-
-      <!-- 中环态度 -->
-      <text x="300" y="100" text-anchor="middle" fill="#f39c12" font-size="18" font-weight="bold">中环：态度（怎么想）</text>
-      <text x="440" y="230" text-anchor="middle" fill="#e67e22" font-size="13" transform="rotate(45,440,230)">积极主动</text>
-      <text x="160" y="350" text-anchor="middle" fill="#e67e22" font-size="13" transform="rotate(-45,160,350)">勇气</text>
-
-      <!-- 圆心 -->
-      <text x="300" y="284" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">价值观</text>
-      <text x="300" y="300" text-anchor="middle" fill="#fff" font-size="11">诚信</text>
-      <text x="300" y="178" text-anchor="middle" fill="#e74c3c" font-size="18" font-weight="bold">圆心：价值观（地基）</text>
-    </svg>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 终极智慧 ========== -->
-<div class="page page-wisdom">
-  <div class="page-title">终极魔法 · 选择的智慧</div>
-  <div class="page-subtitle">小圆学会了所有魔法，还差最后一步——怎样用这些魔法选对路呢？</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 250">
-      <!-- 天平 -->
-      <rect x="280" y="30" width="40" height="10" rx="3" fill="#8e44ad"/>
-      <rect x="295" y="40" width="10" height="120" fill="#8e44ad"/>
-
-      <!-- 左盘 -->
-      <path d="M180,170 Q180,210 220,210 L340,210 Q380,210 380,170" fill="none" stroke="#8e44ad" stroke-width="3"/>
-      <text x="280" y="195" text-anchor="middle" fill="#e74c3c" font-size="14" font-weight="bold">勇气</text>
-      <text x="280" y="212" text-anchor="middle" fill="#333" font-size="11">改变可以改变的事</text>
-
-      <!-- 右盘 -->
-      <path d="M220,170 Q220,210 260,210 L560,210 Q600,210 600,170" fill="none" stroke="#8e44ad" stroke-width="3" opacity="0.6"/>
-      <text x="410" y="195" text-anchor="middle" fill="#3498db" font-size="14" font-weight="bold">胸怀</text>
-      <text x="410" y="212" text-anchor="middle" fill="#333" font-size="11">接受不可改变的事</text>
-
-      <!-- 中间智慧 -->
-      <circle cx="300" cy="140" r="30" fill="#8e44ad"/>
-      <text x="300" y="136" text-anchor="middle" fill="#fff" font-size="10">智慧</text>
-      <text x="300" y="150" text-anchor="middle" fill="#fff" font-size="9">分辨两者</text>
-
-      <text x="300" y="245" text-anchor="middle" fill="#8e44ad" font-size="13">用勇气改变 + 用胸怀接受 + 用智慧选择</text>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <h3>最重要的秘密</h3>
-    <p>还记得第二关学的"勇气"和"胸怀"吗？现在要把它们合在一起用了！</p>
-    <p>小圆学会了最后也是最重要的魔法：</p>
-    <p><strong>用勇气</strong>去改变可以改变的事情（比如努力学习、改正错误）</p>
-    <p><strong>用胸怀</strong>去接受不能改变的事情（比如天气、别人的想法）</p>
-    <p><strong>用智慧</strong>去分辨什么能改变、什么不能改变</p>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 结束 ========== -->
-<div class="page page-end">
-  <div class="page-title">小圆变成了最好的自己！</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 350">
-      <!-- 成长后的小圆 -->
-      <circle cx="300" cy="140" r="55" fill="#ff9a9e"/>
-      <!-- 皇冠 -->
-      <polygon points="270,85 280,65 290,80 300,58 310,80 320,65 330,85" fill="#f1c40f"/>
-      <!-- 星星眼 -->
-      <text x="278" y="132" text-anchor="middle" font-size="20">⭐</text>
-      <text x="322" y="132" text-anchor="middle" font-size="20">⭐</text>
-      <!-- 微笑 -->
-      <path d="M275,150 Q300,170 325,150" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
-      <!-- 脸颊 -->
-      <circle cx="265" cy="145" r="8" fill="#ff6b6b" opacity="0.3"/>
-      <circle cx="335" cy="145" r="8" fill="#ff6b6b" opacity="0.3"/>
-
-      <!-- 周围魔法星星 -->
-      <text x="180" y="80" font-size="24">✨</text>
-      <text x="420" y="70" font-size="20">🌟</text>
-      <text x="160" y="200" font-size="18">💫</text>
-      <text x="440" y="200" font-size="22">⭐</text>
-      <text x="220" y="240" font-size="16">✨</text>
-      <text x="380" y="240" font-size="18">🌟</text>
-
-      <text x="300" y="280" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">最好的小圆！</text>
-      <text x="300" y="310" text-anchor="middle" fill="#999" font-size="13">你也可以像小圆一样！</text>
-    </svg>
-  </div>
-
-  <div class="final-msg">
-    每个小朋友<br>心中都有一个<br><span style="font-size:1.4em;color:#e74c3c;">成长魔法圈</span><br><br>从今天开始<br>做一个诚实守信、积极向上、勇敢又自信的<br><span style="font-size:1.4em;color:#f39c12;">最好的自己！</span>
-  </div>
-
-  <!-- 三步复习 -->
-  <div class="steps">
-    <div class="step step-core">
-      <div class="num">1</div>
-      <h4>诚信价值观</h4>
-      <p>做一个诚实守信的孩子，这是最重要的地基。</p>
-    </div>
-    <div class="step step-att">
-      <div class="num">2</div>
-      <h4>六种态度</h4>
-      <p>积极、同理、自信、自省、勇气、胸怀。</p>
-    </div>
-    <div class="step step-beh">
-      <div class="num">3</div>
-      <h4>六种行为</h4>
-      <p>追梦、兴趣、执行、学习、交流、合作。</p>
-    </div>
-  </div>
-
-  <div style="text-align:center;margin-top:30px;color:#999;font-size:0.85em;">
-    <p>根据李开复博士《做最好的自己》成功同心圆改编</p>
-    <p>1个核心价值观 · 6种态度 · 6种行为 = 最好的自己</p>
-  </div>
-</div>
-
+        if (alive) {
+          requestAnimationFrame(update);
+        } else {
+          canvas.style.display = 'none';
+        }
+      }
+      update();
+    }
+  </script>
 </body>
 </html>
