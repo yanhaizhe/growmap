@@ -1,4 +1,2 @@
-docker-compose.yml
-Dockerfile
-nginx.conf
-.dockerignore
+.git
+.DS_Store

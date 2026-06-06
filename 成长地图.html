@@ -8,15 +8,64 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); min-height: 100vh; color: #fff; }
 .header { text-align: center; padding: 40px 20px 20px; }
-.header h1 { font-size: 2.5em; background: linear-gradient(90deg,#f7971e,#ffd200); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+.header h1 { font-size: 2.5em; background: linear-gradient(90deg,#f7971e,#ffd200); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
 .header .subtitle { font-size: 1.1em; color: #aab; }
 .header .source { font-size: 0.85em; color: #667; margin-top: 6px; }
+.header .jump-tip { margin-top: 18px; color: #dde4ff; font-size: 0.95em; }
+.header .route-tip {
+  display: none;
+  margin: 16px auto 0;
+  max-width: 720px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px dashed rgba(255,210,0,0.45);
+  background: rgba(255,210,0,0.08);
+  color: #ffe37a;
+  font-size: 0.94em;
+}
+.header .route-tip.visible { display: block; }
+.book-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 12px 18px;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.25s, background 0.25s, border-color 0.25s;
+}
+.book-entry:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.34);
+}
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
 
 /* SVG同心圆 */
 .diagram-section { text-align: center; margin: 20px 0; }
 .diagram-section svg { max-width: 750px; width: 100%; height: auto; }
+.node-hotspot {
+  fill: rgba(255,255,255,0.001);
+  cursor: pointer;
+  transition: fill 0.25s, stroke 0.25s, stroke-width 0.25s;
+}
+.node-hotspot:hover,
+.node-hotspot:focus {
+  fill: rgba(255,255,255,0.08);
+  stroke: rgba(255,255,255,0.55);
+  stroke-width: 2;
+  outline: none;
+}
+.node-hotspot.route-active {
+  fill: rgba(255,210,0,0.18);
+  stroke: rgba(255,210,0,0.92);
+  stroke-width: 3;
+}
 
 /* 图例 */
 .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; margin: 24px 0; }
@@ -30,6 +79,25 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; }
 .card { background: rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; }
 .card:hover { background: rgba(255,255,255,0.12); transform: translateY(-3px); border-color: rgba(255,255,255,0.25); }
+.card.is-link { cursor: pointer; position: relative; }
+.card.is-link::after {
+  content: "去小人书探索 ->";
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.88em;
+  color: #ffd200;
+  opacity: 0.95;
+}
+.card.is-link:focus {
+  outline: 2px solid rgba(255,210,0,0.8);
+  outline-offset: 4px;
+}
+.card.route-active {
+  background: rgba(255,210,0,0.12);
+  border-color: rgba(255,210,0,0.72);
+  box-shadow: 0 0 0 3px rgba(255,210,0,0.16), 0 18px 36px rgba(0,0,0,0.16);
+  transform: translateY(-4px);
+}
 .card h3 { font-size: 1.2em; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
 .card .ch { font-size: 0.8em; color: #888; margin-bottom: 10px; }
 .card .desc { font-size: 0.92em; color: #ccc; line-height: 1.7; }
@@ -50,6 +118,9 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
   <h1>成功同心圆 · 成长地图</h1>
   <div class="subtitle">李开复《做最好的自己》核心框架 —— 第一性原理 · 不重不漏</div>
   <div class="source">价值观为圆心 → 六种态度为内环 → 六种行为为外环 → 完整均衡为选择智慧</div>
+  <a class="book-entry" href="小人书.html?route=home&from=map">打开互动小人书</a>
+  <div class="jump-tip">点击圆点或下方卡片，可直接跳到小人书对应章节</div>
+  <div id="route-tip" class="route-tip"></div>
 </div>
 
 <div class="container">
@@ -88,31 +159,37 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
   <circle cx="375" cy="100" r="24" fill="none" stroke="#2ed573" stroke-width="2" opacity="0.8"/>
   <text x="375" y="107" text-anchor="middle" fill="#2ed573" font-size="22">⭐</text>
   <text x="375" y="80" text-anchor="middle" fill="#7bed9f" font-size="16" font-weight="bold">追寻理想</text>
+  <circle class="node-hotspot" cx="375" cy="100" r="34" data-book-route="behavior-dream"/>
 
   <!-- 发现兴趣 (60° 右上) -->
   <circle cx="620" cy="235" r="24" fill="none" stroke="#2ed573" stroke-width="2" opacity="0.8"/>
   <text x="620" y="242" text-anchor="middle" fill="#2ed573" font-size="22">🎯</text>
   <text x="633" y="218" text-anchor="middle" fill="#7bed9f" font-size="16" font-weight="bold">发现兴趣</text>
+  <circle class="node-hotspot" cx="620" cy="235" r="34" data-book-route="behavior-interest"/>
 
   <!-- 有效执行 (120° 右下) -->
   <circle cx="620" cy="515" r="24" fill="none" stroke="#2ed573" stroke-width="2" opacity="0.8"/>
   <text x="620" y="522" text-anchor="middle" fill="#2ed573" font-size="22">⚡</text>
   <text x="633" y="540" text-anchor="middle" fill="#7bed9f" font-size="16" font-weight="bold">有效执行</text>
+  <circle class="node-hotspot" cx="620" cy="515" r="34" data-book-route="behavior-execution"/>
 
   <!-- 努力学习 (180° 底部) -->
   <circle cx="375" cy="650" r="24" fill="none" stroke="#2ed573" stroke-width="2" opacity="0.8"/>
   <text x="375" y="657" text-anchor="middle" fill="#2ed573" font-size="22">📚</text>
   <text x="375" y="680" text-anchor="middle" fill="#7bed9f" font-size="16" font-weight="bold">努力学习</text>
+  <circle class="node-hotspot" cx="375" cy="650" r="34" data-book-route="behavior-learning"/>
 
   <!-- 人际交流 (240° 左下) -->
   <circle cx="130" cy="515" r="24" fill="none" stroke="#2ed573" stroke-width="2" opacity="0.8"/>
   <text x="130" y="522" text-anchor="middle" fill="#2ed573" font-size="22">💬</text>
   <text x="117" y="540" text-anchor="middle" fill="#7bed9f" font-size="16" font-weight="bold">人际交流</text>
+  <circle class="node-hotspot" cx="130" cy="515" r="34" data-book-route="behavior-communication"/>
 
   <!-- 合作沟通 (300° 左上) -->
   <circle cx="130" cy="235" r="24" fill="none" stroke="#2ed573" stroke-width="2" opacity="0.8"/>
   <text x="130" y="242" text-anchor="middle" fill="#2ed573" font-size="22">🤝</text>
   <text x="117" y="218" text-anchor="middle" fill="#7bed9f" font-size="16" font-weight="bold">合作沟通</text>
+  <circle class="node-hotspot" cx="130" cy="235" r="34" data-book-route="behavior-cooperation"/>
 
   <!-- ===== 中环：态度（6项，间距60°，偏移30°）===== -->
   <!-- 径向连线 -->
@@ -127,31 +204,37 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
   <circle cx="375" cy="195" r="20" fill="none" stroke="#ffa502" stroke-width="2" opacity="0.8"/>
   <text x="375" y="202" text-anchor="middle" fill="#ffa502" font-size="18">🚀</text>
   <text x="375" y="177" text-anchor="middle" fill="#ffbe76" font-size="16" font-weight="bold">积极主动</text>
+  <circle class="node-hotspot" cx="375" cy="195" r="30" data-book-route="attitude-active"/>
 
   <!-- 同理心 (60° 右上) -->
   <circle cx="538" cy="285" r="20" fill="none" stroke="#ffa502" stroke-width="2" opacity="0.8"/>
   <text x="538" y="292" text-anchor="middle" fill="#ffa502" font-size="18">💛</text>
   <text x="550" y="270" text-anchor="middle" fill="#ffbe76" font-size="16" font-weight="bold">同理心</text>
+  <circle class="node-hotspot" cx="538" cy="285" r="30" data-book-route="attitude-empathy"/>
 
   <!-- 自信 (120° 右下) -->
   <circle cx="538" cy="465" r="20" fill="none" stroke="#ffa502" stroke-width="2" opacity="0.8"/>
   <text x="538" y="472" text-anchor="middle" fill="#ffa502" font-size="18">🦁</text>
   <text x="550" y="480" text-anchor="middle" fill="#ffbe76" font-size="16" font-weight="bold">自 信</text>
+  <circle class="node-hotspot" cx="538" cy="465" r="30" data-book-route="attitude-confidence"/>
 
   <!-- 自省 (180° 底部) -->
   <circle cx="375" cy="555" r="20" fill="none" stroke="#ffa502" stroke-width="2" opacity="0.8"/>
   <text x="375" y="562" text-anchor="middle" fill="#ffa502" font-size="18">🪞</text>
   <text x="375" y="580" text-anchor="middle" fill="#ffbe76" font-size="16" font-weight="bold">自 省</text>
+  <circle class="node-hotspot" cx="375" cy="555" r="30" data-book-route="attitude-reflection"/>
 
   <!-- 勇气 (240° 左下) -->
   <circle cx="212" cy="465" r="20" fill="none" stroke="#ffa502" stroke-width="2" opacity="0.8"/>
   <text x="212" y="472" text-anchor="middle" fill="#ffa502" font-size="18">🛡️</text>
   <text x="200" y="480" text-anchor="middle" fill="#ffbe76" font-size="16" font-weight="bold">勇 气</text>
+  <circle class="node-hotspot" cx="212" cy="465" r="30" data-book-route="attitude-courage"/>
 
   <!-- 胸怀 (300° 左上) -->
   <circle cx="212" cy="285" r="20" fill="none" stroke="#ffa502" stroke-width="2" opacity="0.8"/>
   <text x="212" y="292" text-anchor="middle" fill="#ffa502" font-size="18">🌍</text>
   <text x="200" y="270" text-anchor="middle" fill="#ffbe76" font-size="16" font-weight="bold">胸 怀</text>
+  <circle class="node-hotspot" cx="212" cy="285" r="30" data-book-route="attitude-broad"/>
 
   <!-- ===== 圆心：价值观 ===== -->
   <circle cx="375" cy="375" r="55" fill="url(#coreGrad)" opacity="0.6" filter="url(#glow)"/>
@@ -159,6 +242,7 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
 
   <text x="375" y="369" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold">价值观</text>
   <text x="375" y="390" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="12">诚 信</text>
+  <circle class="node-hotspot" cx="375" cy="375" r="62" data-book-route="core"/>
 
   <!-- 层标签（左侧竖排） -->
   <text x="58" y="375" text-anchor="middle" fill="#2ed573" font-size="13" transform="rotate(-90,58,375)">外 环 · 行 为</text>
@@ -180,7 +264,7 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
 <!-- 圆心 -->
 <div class="section-title">圆心 · 价值观</div>
 <div class="cards" style="grid-template-columns: 1fr; max-width: 600px; margin: 0 auto;">
-  <div class="card">
+  <div class="card is-link" data-book-route="core" tabindex="0" role="link">
     <h3><span class="tag core">圆心</span> 价值观 —— 成功源于诚信</h3>
     <div class="ch">第2章</div>
     <div class="desc">
@@ -192,32 +276,32 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
 <!-- 态度层 -->
 <div class="section-title">内环 · 六种态度</div>
 <div class="cards">
-  <div class="card">
+  <div class="card is-link" data-book-route="attitude-active" tabindex="0" role="link">
     <h3><span class="tag attitude">态度①</span> 积极主动</h3>
     <div class="ch">第3章 · 成功的选择在于自己</div>
     <div class="desc">不为失败找借口，只为成功找方法。主动承担责任，主动寻求改变，主动把握人生。遇到问题时问自己"我能做什么"，而不是"为什么会这样"。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="attitude-empathy" tabindex="0" role="link">
     <h3><span class="tag attitude">态度②</span> 同理心</h3>
     <div class="ch">第4章 · 人际交往的基础</div>
     <div class="desc">"我怎么对待别人，别人就怎么对待我"。想要得到理解，就要先理解他人。站在对方的角度思考问题，设身处地为他人着想。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="attitude-confidence" tabindex="0" role="link">
     <h3><span class="tag attitude">态度③</span> 自信</h3>
     <div class="ch">第5章 · 用信心放飞自我</div>
     <div class="desc">自信是潜能的"放大镜"。相信自己能做到，就已经成功了一半。自信来自每一次小成功的积累，来自对自己清晰的认知。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="attitude-reflection" tabindex="0" role="link">
     <h3><span class="tag attitude">态度④</span> 自省</h3>
     <div class="ch">第6章 · 在反思中走向成功</div>
     <div class="desc">勇于承认错误，主动接受批评。"足够好是不够的"——不断追求进步。事后认真反省，努力改变自己，培养自省的习惯。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="attitude-courage" tabindex="0" role="link">
     <h3><span class="tag attitude">态度⑤</span> 勇气</h3>
     <div class="ch">第7章 · 勇往直前的精神</div>
     <div class="desc">四种最重要的勇气：不畏失败的勇气、承认错误的勇气、坚持原则的勇气、走出舒适区的勇气。勇气不是不害怕，而是害怕了依然前行。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="attitude-broad" tabindex="0" role="link">
     <h3><span class="tag attitude">态度⑥</span> 胸怀</h3>
     <div class="ch">第8章 · 有胸怀才会有成功</div>
     <div class="desc">务实——接受无法改变的事；自律——自我控制和调整；尊重——尊重别人发表意见的权利；涵养——"有容德乃大"。</div>
@@ -227,32 +311,32 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
 <!-- 行为层 -->
 <div class="section-title">外环 · 六种行为</div>
 <div class="cards">
-  <div class="card">
+  <div class="card is-link" data-book-route="behavior-dream" tabindex="0" role="link">
     <h3><span class="tag behavior">行为①</span> 追寻理想</h3>
     <div class="ch">第9章 · 指引成功的"指南针"</div>
     <div class="desc">理想引领人生。理想源于自我——找到真正让自己热血沸腾的方向，并为之持续努力。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="behavior-interest" tabindex="0" role="link">
     <h3><span class="tag behavior">行为②</span> 发现兴趣</h3>
     <div class="ch">第10章 · 用激情拥抱成功</div>
     <div class="desc">激情是成功的必要前提，兴趣是点燃激情的火种。做自己真正热爱的事情，才能持久地投入并做到最好。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="behavior-execution" tabindex="0" role="link">
     <h3><span class="tag behavior">行为③</span> 有效执行</h3>
     <div class="ch">第11章 · 迈向成功的阶梯</div>
     <div class="desc">关键在于执行。好的想法不值钱，把好想法变成现实才值钱。设定清晰目标，拆解为可执行的步骤，立即行动。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="behavior-learning" tabindex="0" role="link">
     <h3><span class="tag behavior">行为④</span> 努力学习</h3>
     <div class="ch">第12章 · 终生受益的过程</div>
     <div class="desc">学习有四种境界：熟能生巧、举一反三、无师自通、融会贯通。学习不是为了考试，而是为了终身成长。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="behavior-communication" tabindex="0" role="link">
     <h3><span class="tag behavior">行为⑤</span> 人际交流</h3>
     <div class="ch">第13章 · 现代人的必修课</div>
     <div class="desc">以诚待人，平等交往。做个有人际魅力的人——学会倾听、学会表达、学会建立深厚的人际关系网。</div>
   </div>
-  <div class="card">
+  <div class="card is-link" data-book-route="behavior-cooperation" tabindex="0" role="link">
     <h3><span class="tag behavior">行为⑥</span> 合作沟通</h3>
     <div class="ch">第14章 · 信息时代的成功之道</div>
     <div class="desc">团队合作的四个准则：共同目标、相互信任、互补技能、有效沟通。合作高于竞争，沟通是合作的血液。</div>
@@ -262,7 +346,7 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
 <!-- 整合 -->
 <div class="section-title">完整与均衡 · 用智慧选择成功</div>
 <div class="cards" style="grid-template-columns: 1fr; max-width: 600px; margin: 0 auto 40px;">
-  <div class="card">
+  <div class="card is-link" data-book-route="wisdom" tabindex="0" role="link">
     <h3><span class="tag" style="background:rgba(255,210,0,0.2);color:#ffd200;">第15章</span> 融会中西 · 均衡发展</h3>
     <div class="desc">
       "选择成功"的七种智慧融会了中西方文化的精髓。真正的成功不是偏执一端，而是价值观、态度、行为的完整统一与均衡发展。用勇气改变可以改变的事，用胸怀接受不可改变的事，用智慧分辨两者的不同——这就是"做最好的自己"的终极秘密。
@@ -276,5 +360,89 @@ body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: line
 </div>
 
 </div>
+<script>
+const bookPage = new URL("小人书.html", window.location.href);
+const routeLabels = {
+  home: "小人书首页",
+  overview: "成长树与同心圆的秘密",
+  core: "诚信水晶",
+  "attitude-active": "积极主动",
+  "attitude-empathy": "同理心",
+  "attitude-confidence": "自信",
+  "attitude-reflection": "自省",
+  "attitude-courage": "勇气",
+  "attitude-broad": "胸怀",
+  "behavior-dream": "追寻理想",
+  "behavior-interest": "发现兴趣",
+  "behavior-execution": "有效执行",
+  "behavior-learning": "努力学习",
+  "behavior-communication": "人际交流",
+  "behavior-cooperation": "合作沟通",
+  wisdom: "完整与均衡"
+};
+
+function openBookRoute(route) {
+  const target = new URL(bookPage);
+  target.searchParams.set("route", route);
+  target.searchParams.set("from", "map");
+  window.location.href = target.toString();
+}
+
+document.querySelectorAll("[data-book-route]").forEach((element) => {
+  element.addEventListener("click", () => openBookRoute(element.dataset.bookRoute));
+  element.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openBookRoute(element.dataset.bookRoute);
+    }
+  });
+});
+
+function clearRouteFocus() {
+  document.querySelectorAll(".route-active").forEach((element) => {
+    element.classList.remove("route-active");
+  });
+}
+
+function showRouteTip(message) {
+  const tip = document.getElementById("route-tip");
+  if (!tip) return;
+  if (!message) {
+    tip.classList.remove("visible");
+    tip.textContent = "";
+    return;
+  }
+  tip.textContent = message;
+  tip.classList.add("visible");
+}
+
+function applyFocusFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const route = params.get("route") || params.get("focus");
+  const from = params.get("from");
+  if (!route) return;
+
+  clearRouteFocus();
+  const matching = [...document.querySelectorAll(`[data-book-route="${route}"]`)];
+  matching.forEach((element) => {
+    element.classList.add("route-active");
+  });
+
+  const scrollTarget =
+    matching.find((element) => element.classList.contains("card")) ||
+    matching.find((element) => element.classList.contains("node-hotspot"));
+
+  if (scrollTarget) {
+    scrollTarget.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+  }
+
+  if (from === "book") {
+    const label = routeLabels[route] || "当前章节";
+    showRouteTip(`你从小人书回到了成长地图，当前定位：${label}`);
+  }
+}
+
+applyFocusFromUrl();
+</script>
 </body>
 </html>
