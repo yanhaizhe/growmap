@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小圆的成长魔法探索之旅 · 小人书</title>
+  <title>小睿睿的成长魔法探索之旅 · 小人书</title>
   <!-- 引入 Google Fonts 快乐体与 Outfit 字体 -->
-  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --font-title: 'ZCOOL KuaiLe', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      --font-body: 'Outfit', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-title: 'Ma Shan Zheng', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-body: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
       
       /* 配色系统 */
       --color-core: #ff5b7f;
@@ -53,6 +53,11 @@
       overflow-x: hidden;
       transition: background 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
       padding: 20px;
+    }
+
+    .user-name-span {
+      font-family: var(--font-body) !important;
+      font-weight: bold;
     }
 
     /* 烟花 Canvas */
@@ -926,6 +931,427 @@
         font-size: 0.9rem;
       }
     }
+
+    /* ==============================================
+       角色定制区域样式
+       ============================================== */
+    .custom-section {
+      background: rgba(255, 255, 255, 0.85);
+      border: 3px dashed var(--color-core);
+      border-radius: 24px;
+      padding: 16px 24px;
+      margin-top: 15px;
+      max-width: 500px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(255, 91, 127, 0.08);
+      animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .custom-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--color-core);
+      font-family: var(--font-title);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .custom-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .custom-label {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--color-text-dark);
+    }
+    .custom-input {
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 2px solid #ffccd5;
+      outline: none;
+      font-size: 1rem;
+      font-family: var(--font-body);
+      width: 140px;
+      transition: all 0.3s;
+      text-align: center;
+      color: var(--color-text-dark);
+      font-weight: bold;
+    }
+    .custom-input:focus {
+      border-color: var(--color-core);
+      box-shadow: 0 0 8px rgba(255, 91, 127, 0.25);
+    }
+    .avatar-options {
+      display: flex;
+      gap: 8px;
+    }
+    .avatar-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid #eee;
+      background: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .avatar-btn:hover {
+      transform: scale(1.1);
+    }
+    .avatar-btn.active {
+      border-color: var(--color-core);
+      background: var(--color-core-bg);
+      transform: scale(1.18);
+      box-shadow: 0 4px 10px rgba(255, 91, 127, 0.2);
+    }
+
+    /* ==============================================
+       打印卡片样式 (A4 尺寸)
+       ============================================== */
+    .print-page-container {
+      display: none;
+    }
+
+    @media print {
+      /* 隐藏屏幕上的所有容器 */
+      html, body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+      }
+      body * {
+        visibility: hidden;
+      }
+      
+      /* 仅显示打印专用容器 */
+      .print-page-container, .print-page-container * {
+        visibility: visible;
+      }
+      .print-page-container {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+      
+      .print-card-page {
+        width: 297mm;
+        height: 210mm;
+        padding: 10mm 15mm;
+        box-sizing: border-box;
+        page-break-after: always;
+        position: relative;
+        background: #ffffff !important;
+        border: 3.5px solid #6a1b9a !important;
+        border-radius: 16px;
+        overflow: hidden;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 0 auto;
+      }
+      
+      /* 打卡卡专有布局 */
+      .print-header {
+        text-align: center;
+        margin-bottom: 5mm;
+        border-bottom: 2.5px dashed #8e44ad;
+        padding-bottom: 3mm;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .print-title {
+        font-size: 24pt;
+        font-family: var(--font-title);
+        color: #4a148c;
+        margin-bottom: 1mm;
+      }
+      .print-subtitle {
+        font-size: 12pt;
+        color: #111;
+        font-weight: bold;
+      }
+      .print-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 35mm;
+        gap: 3mm;
+        flex-grow: 1;
+      }
+      .print-grid-item {
+        border: 2px solid #00796b !important;
+        border-radius: 10px;
+        padding: 2.5mm;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #ffffff !important;
+      }
+      .print-grid-item.item-core-print {
+        grid-column: span 4;
+        height: 22mm;
+        border: 2.5px solid #c2185b !important;
+        background: #ffffff !important;
+      }
+      .print-grid-item.item-att-print {
+        border: 2px solid #d84315 !important;
+        background: #ffffff !important;
+      }
+      .print-item-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 12pt;
+        border-bottom: 1.5px solid #000;
+        padding-bottom: 0.8mm;
+        color: #000000;
+      }
+      .print-item-desc {
+        font-size: 10.5pt;
+        color: #111111;
+        line-height: 1.45;
+        margin-top: 1mm;
+        flex-grow: 1;
+      }
+      .print-item-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1.5mm;
+      }
+      .print-stamp-area {
+        width: 14mm;
+        height: 14mm;
+        border: 2.5px solid #b71c1c;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9pt;
+        color: #b71c1c;
+        font-weight: bold;
+        background: #fff;
+      }
+      .print-parent-note {
+        flex-grow: 1;
+        margin-left: 2.5mm;
+        border-bottom: 1.5px solid #111;
+        height: 7mm;
+        font-size: 11pt;
+        color: #000000;
+        padding-left: 1mm;
+        line-height: 7mm;
+      }
+      
+      .print-footer-info {
+        text-align: center;
+        font-size: 9.5pt;
+        color: #000000;
+        border-top: 1.5px solid #000000;
+        padding-top: 1.8mm;
+        margin-top: 3.5mm;
+        font-weight: bold;
+      }
+      
+      /* 升级树卡专有布局 */
+      .print-tree-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        gap: 6mm;
+      }
+      .print-tree-svg-container {
+        width: 135mm;
+        height: 135mm;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .print-tree-svg-container svg {
+        width: 100%;
+        height: 100%;
+      }
+      .print-tree-rules {
+        flex-grow: 1;
+        width: 120mm;
+        background: #ffffff !important;
+        border: 2.5px solid #6a1b9a;
+        border-radius: 12px;
+        padding: 4mm;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .print-tree-rules-title {
+        font-weight: bold;
+        font-size: 13pt;
+        color: #4a148c;
+        margin-bottom: 3mm;
+        text-align: center;
+        font-family: var(--font-title);
+      }
+      .print-rules-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2.5mm;
+        font-size: 11pt;
+      }
+      .print-rule-item {
+        display: flex;
+        align-items: center;
+        gap: 2mm;
+      }
+      .print-color-box {
+        width: 12mm;
+        height: 5.5mm;
+        border-radius: 4px;
+        border: 1.5px solid #111;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+ 
+      /* weekly check table styles */
+      .weekly-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        flex-grow: 1;
+      }
+      .weekly-table th {
+        background: #4a148c;
+        color: #fff;
+        font-size: 11pt;
+        font-weight: 700;
+        padding: 1.8mm 1.5mm;
+        text-align: center;
+        border: 1.8px solid #310a5e;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .weekly-table td {
+        border: 1.5px solid #111 !important;
+        padding: 1.5mm 2mm;
+        font-size: 10.5pt;
+        color: #000000;
+        vertical-align: top;
+        line-height: 1.45;
+      }
+      .weekly-table tr:nth-child(even) td {
+        background: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .weekly-table .day-cell {
+        width: 18mm;
+        text-align: center;
+        font-weight: 700;
+        font-size: 12pt;
+        color: #4a148c;
+        vertical-align: middle;
+      }
+      .weekly-table .theme-cell {
+        width: 36mm;
+        text-align: center;
+        font-weight: 700;
+        font-size: 11pt;
+        vertical-align: middle;
+        line-height: 1.4;
+      }
+      .weekly-table .check-cell {
+        font-size: 10.5pt;
+        line-height: 1.5;
+      }
+      .weekly-table .stamp-cell {
+        width: 18mm;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .weekly-stamp {
+        width: 11mm;
+        height: 11mm;
+        border: 2px solid #b71c1c;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8.5pt;
+        color: #b71c1c;
+        font-weight: bold;
+      }
+      .check-item { margin-bottom: 0.8mm; }
+      .check-box {
+        display: inline-block;
+        width: 4mm;
+        height: 4mm;
+        border: 1.8px solid #000;
+        border-radius: 2px;
+        margin-right: 1.5mm;
+        vertical-align: middle;
+      }
+      .core-check {
+        background: #ffffff !important;
+        padding: 0.8mm 1.5mm;
+        border-radius: 3px;
+        border: 1.5px dashed #b71c1c !important;
+        border-left: 4px solid #b71c1c !important;
+        margin-bottom: 1.2mm;
+        display: block;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .weekly-week-label {
+        display: inline-block;
+        background: #6a1b9a;
+        color: #fff;
+        font-size: 11.5pt;
+        font-weight: 700;
+        padding: 1mm 4mm;
+        border-radius: 6px;
+        margin-left: 3mm;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .weekly-note-line {
+        margin-top: 2.5mm;
+        border-top: 1.5px solid #111;
+        padding-top: 1.8mm;
+        font-size: 11pt;
+        color: #000000;
+        font-weight: 500;
+      }
+      .sunday-row td {
+        background: #ffffff !important;
+        border-bottom: 2.5px solid #b71c1c !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
   </style>
 </head>
 <body>
@@ -942,7 +1368,7 @@
     <!-- ==================== SLIDE 1: 封面 ==================== -->
     <div id="slide-1" class="slide active">
       <div class="cover-layout">
-        <h1 class="cover-title">小圆的成长魔法圈</h1>
+        <h1 class="cover-title"><span class="user-name-span">小睿睿</span>的成长魔法圈</h1>
         <div class="cover-subtitle">—— 做最好的自己 ——</div>
         
         <!-- 校正后的完美对称同心圆 SVG -->
@@ -979,8 +1405,25 @@
 
         <div class="cover-desc">
           这是一本送给小朋友的“成长秘密宝册”。只要你能穿过城堡的外环、中环，点亮最核心的宝石，你就能获得源源不断的魔法，变成<strong>最好的自己</strong>！
-          <div style="margin-top: 10px; font-size: 0.95rem; color: #8e44ad; font-weight: bold;">
-            🤔 魔法小提问：小睿睿，你觉得“最好的自己”是什么样的呢？是跟别人比赛拿第一，还是今天比昨天学会了更多魔法、过得更开心呢？让我们翻开下一页去寻找答案吧！
+          <div style="margin-top: 10px; font-size: 0.95rem; color: #8e44ad; font-weight: bold; margin-bottom: 12px;">
+            🤔 魔法小提问：<span class="user-name-span">小睿睿</span>，你觉得“最好的自己”是什么样的呢？是跟别人比赛拿第一，还是今天比昨天学会了更多魔法、过得更开心呢？让我们翻开下一页去寻找答案吧！
+          </div>
+        </div>
+        
+        <!-- 角色定制面板 -->
+        <div class="custom-section">
+          <div class="custom-title">✨ 开启你的成长角色定制 ✨</div>
+          <div class="custom-row">
+            <span class="custom-label">你的名字：</span>
+            <input type="text" id="user-name-input" class="custom-input" value="小睿睿" maxlength="6" oninput="updateNameAndAvatar()">
+          </div>
+          <div class="custom-row">
+            <span class="custom-label">选择魔法头像：</span>
+            <div class="avatar-options">
+              <button class="avatar-btn active" onclick="selectAvatar('👧', this)">👧</button>
+              <button class="avatar-btn" onclick="selectAvatar('🐱', this)">🐱</button>
+              <button class="avatar-btn" onclick="selectAvatar('🦄', this)">🦄</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1099,13 +1542,13 @@
         </div>
 
         <div class="story-card" style="border-left: 5px solid var(--color-core); margin-top: 15px;">
-          <p>小圆来到了成长圈的最核心。这里住着守护小树的<strong>“诚信水晶”</strong>。李开复博士说，诚信是做人的基本原则，是一切成功的绝对地基。</p>
+          <p><span class="user-name-span">小睿睿</span>来到了成长圈的最核心。这里住着守护小树的<strong>“诚信水晶”</strong>。李开复博士说，诚信是做人的基本原则，是一切成功的绝对地基。</p>
           
           <div style="background: rgba(255, 91, 127, 0.05); padding: 12px 18px; border-radius: 12px; font-weight: bold; margin-bottom: 15px; border: 1px dashed var(--color-core); text-align: center; color: #c0392b;">
             💡 记忆金句：“诚实魔镜照自己，承诺石桥连友谊；说到做到不撒谎，水晶闪闪人人爱！”
           </div>
 
-          <p>诚信有两面，是小圆冒险背包里必带的宝贝：</p>
+          <p>诚信有两面，是<span class="user-name-span">小睿睿</span>冒险背包里必带的宝贝：</p>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
             <div style="background: #ffffff; padding: 15px; border-radius: 16px; border: 1px solid rgba(255, 91, 127, 0.2);">
               <h4 style="color:#c0392b; font-size:1.05rem; margin-bottom:6px;">1. 诚实魔镜 🪞（对自己诚实）</h4>
@@ -1270,7 +1713,7 @@
       </div>
       <div class="beh-layout">
         <p style="margin-bottom:20px; text-align:center; max-width:700px; line-height:1.6;">
-          只在心里想还不够，我们还要把态度变成行动！小圆的魔法背包里有六个宝贝道具，点击它们，看看怎么在日常中使用这些超能力：
+          只在心里想还不够，我们还要把态度变成行动！<span class="user-name-span">小睿睿</span>的魔法背包里有六个宝贝道具，点击它们，看看怎么在日常中使用这些超能力：
         </p>
 
         <!-- 6个行为网格 -->
@@ -1442,7 +1885,7 @@
       </div>
       <div class="scale-layout">
         <div class="story-card" style="margin-top:0;">
-          <p>探险走到了终点，小圆得到了终极魔杖——<strong>“选择的智慧天平”</strong>。李开复博士告诉我们，真正的智慧，是知道什么时候该“坚持”，什么时候该“放手”。</p>
+          <p>探险走到了终点，<span class="user-name-span">小睿睿</span>得到了终极魔杖——<strong>“选择的智慧天平”</strong>。李开复博士告诉我们，真正的智慧，是知道什么时候该“坚持”，什么时候该“放手”。</p>
           <p style="text-align:center; font-weight:800; color:#8e44ad; font-size:1.2rem; margin:10px 0;">
             “用勇气去改变可以改变的事，用胸怀去接受不能改变的事，用智慧去分辨两者的不同。”
           </p>
@@ -1505,7 +1948,7 @@
     <div id="slide-8" class="slide">
       <div>
         <div class="chapter-num">Chapter 7</div>
-        <h2 class="chapter-title">小睿睿的每日成长魔法单</h2>
+        <h2 class="chapter-title"><span class="user-name-span">小睿睿</span>的每日成长魔法单</h2>
       </div>
       <div class="checklist-layout">
         <!-- 左侧打卡清单 -->
@@ -1661,6 +2104,8 @@
             </div>
             
             <button onclick="resetChecklist()" style="margin-top:20px; padding:8px 16px; border:1px solid #ddd; background:#fff; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#7f8c8d;">重新开始</button>
+            <button onclick="window.print()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px dashed #8e44ad; background:#fdfcff; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#8e44ad; font-weight:bold;">🖨️ 打印纸质魔法卡片</button>
+            <button onclick="printStoryBook()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px solid #00796b; background:#e0f2f1; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#00796b; font-weight:bold;">📖 打印故事画册 (前6章)</button>
           </div>
         </div>
       </div>
@@ -1688,6 +2133,18 @@
   </div>
 
   <script>
+    let currentUserName = "小睿睿";
+    let currentUserAvatar = "👧";
+    let currentTwinIndex = 1;
+    let currentToolKey = 'dream';
+    let currentLinkKey = 'active_learning';
+    let currentScenarioIndex = 1;
+
+    function getFormattedText(text) {
+      if (!text) return "";
+      return text.replace(/小圆|小睿睿/g, currentUserName);
+    }
+
     let currentPage = 1;
     const totalPages = 8;
     
@@ -1788,12 +2245,13 @@
     };
 
     function switchTwin(index) {
+      currentTwinIndex = index;
       document.querySelectorAll('.twin-card-container').forEach(c => c.style.display = 'none');
       document.querySelectorAll('.selector-btn').forEach(b => b.classList.remove('active'));
       
       document.getElementById(`twin-view-${index}`).style.display = 'grid';
       document.getElementById(`twin-btn-${index}`).classList.add('active');
-      document.getElementById('twin-summary').innerHTML = twinSummaries[index];
+      document.getElementById('twin-summary').innerHTML = getFormattedText(twinSummaries[index]);
     }
 
     // ==================== Slide 5 (行为道具) 交互 ====================
@@ -1873,12 +2331,13 @@
     };
 
     function showToolStory(toolKey, element) {
+      currentToolKey = toolKey;
       document.querySelectorAll('.tool-box').forEach(b => b.classList.remove('active'));
-      element.classList.add('active');
+      if (element) element.classList.add('active');
       
       const data = toolsData[toolKey];
-      document.getElementById('tool-story-title').innerHTML = data.title;
-      document.getElementById('tool-story-text').innerHTML = data.text;
+      document.getElementById('tool-story-title').innerHTML = getFormattedText(data.title);
+      document.getElementById('tool-story-text').innerHTML = getFormattedText(data.text);
     }
 
     // ==================== Slide 6 (魔法纽带) 交互 ====================
@@ -1958,12 +2417,13 @@
     };
 
     function showLinkDetail(pairKey, element) {
+      currentLinkKey = pairKey;
       document.querySelectorAll('.link-pair-item').forEach(b => b.classList.remove('active'));
-      element.classList.add('active');
+      if (element) element.classList.add('active');
       
       const data = linkPairsData[pairKey];
-      document.getElementById('link-story-title').innerHTML = data.title;
-      document.getElementById('link-story-text').innerHTML = data.text;
+      document.getElementById('link-story-title').innerHTML = getFormattedText(data.title);
+      document.getElementById('link-story-text').innerHTML = getFormattedText(data.text);
     }
 
     // ==================== Slide 7 (智慧天平) 交互 ====================
@@ -1998,6 +2458,7 @@
     };
 
     function playScenario(index) {
+      currentScenarioIndex = index;
       document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(`scen-btn-${index}`).classList.add('active');
       
@@ -2005,22 +2466,24 @@
       
       // 动效天平倾斜
       const beam = document.getElementById('scale-beam');
-      beam.style.transform = `rotate(${data.tilt}deg)`;
+      if (beam) beam.style.transform = `rotate(${data.tilt}deg)`;
       
       // 更新文字，展现连结链条
       const explanationDiv = document.getElementById('scenario-explanation');
-      explanationDiv.innerHTML = `
-        <h4 style="margin-bottom: 12px; color: #8e44ad;">${data.title}</h4>
-        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.6;">
-          <p style="border-left: 3px solid var(--color-core); padding-left: 10px; margin: 0;">${data.valueText}</p>
-          <p style="border-left: 3px solid var(--color-att); padding-left: 10px; margin: 0;">${data.attitudeText}</p>
-          <p style="border-left: 3px solid var(--color-beh); padding-left: 10px; margin: 0;">${data.behaviorText}</p>
-          <p style="border-left: 3px solid #8e44ad; padding-left: 10px; margin: 5px 0 0 0; color: #8e44ad; font-weight: bold;">${data.wisdomText}</p>
-          <div style="margin-top: 5px; padding: 8px 12px; background: #fdfcff; border-radius: 12px; border: 1.5px dashed #8e44ad; color: #8e44ad; font-weight: bold; font-size: 0.9rem;">
-            ${data.questionText}
+      if (explanationDiv) {
+        explanationDiv.innerHTML = `
+          <h4 style="margin-bottom: 12px; color: #8e44ad;">${getFormattedText(data.title)}</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.6;">
+            <p style="border-left: 3px solid var(--color-core); padding-left: 10px; margin: 0;">${getFormattedText(data.valueText)}</p>
+            <p style="border-left: 3px solid var(--color-att); padding-left: 10px; margin: 0;">${getFormattedText(data.attitudeText)}</p>
+            <p style="border-left: 3px solid var(--color-beh); padding-left: 10px; margin: 0;">${getFormattedText(data.behaviorText)}</p>
+            <p style="border-left: 3px solid #8e44ad; padding-left: 10px; margin: 5px 0 0 0; color: #8e44ad; font-weight: bold;">${getFormattedText(data.wisdomText)}</p>
+            <div style="margin-top: 5px; padding: 8px 12px; background: #fdfcff; border-radius: 12px; border: 1.5px dashed #8e44ad; color: #8e44ad; font-weight: bold; font-size: 0.9rem;">
+              ${getFormattedText(data.questionText)}
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
     }
 
     // 初始化运行场景一
@@ -2086,6 +2549,12 @@
       document.getElementById('light-count').innerText = 0;
     }
 
+    function printStoryBook() {
+      const name = currentUserName;
+      const avatar = currentUserAvatar;
+      window.open(`故事书打印版.html?name=${encodeURIComponent(name)}&avatar=${encodeURIComponent(avatar)}`, '_blank');
+    }
+
     // ==================== 纯 HTML5 Canvas 烟花效果 ====================
     function triggerConfetti() {
       const canvas = document.getElementById('confetti-canvas');
@@ -2144,6 +2613,518 @@
       }
       update();
     }
+
+    // 个性化逻辑函数
+    function updateNameAndAvatar() {
+      const nameInput = document.getElementById('user-name-input');
+      if (nameInput) {
+        currentUserName = nameInput.value.trim() || "小睿睿";
+      }
+      
+      // 更新所有带 user-name-span 类的元素
+      document.querySelectorAll('.user-name-span').forEach(span => {
+        span.textContent = currentUserName;
+      });
+      
+      // 更新浏览器 tab 标题
+      document.title = currentUserName + '的成长魔法探索之旅 · 小人书';
+      
+      // 同步更新 A4 打印区域的姓名和头像
+      const avatarBox1 = document.getElementById('print-avatar-box');
+      if (avatarBox1) avatarBox1.textContent = currentUserAvatar;
+      const avatarBox2 = document.getElementById('print-avatar-box-2');
+      if (avatarBox2) avatarBox2.textContent = currentUserAvatar;
+      const avatarBox3 = document.getElementById('print-avatar-box-3');
+      if (avatarBox3) avatarBox3.textContent = currentUserAvatar;
+      const avatarBox4 = document.getElementById('print-avatar-box-4');
+      if (avatarBox4) avatarBox4.textContent = currentUserAvatar;
+      
+      // 刷新当前页面的自定义动态内容
+      switchTwin(currentTwinIndex);
+      
+      const activeToolBox = document.querySelector('.tool-box.active');
+      if (activeToolBox) {
+        showToolStory(currentToolKey, activeToolBox);
+      }
+      
+      const activeLinkItem = document.querySelector('.link-pair-item.active');
+      if (activeLinkItem) {
+        showLinkDetail(currentLinkKey, activeLinkItem);
+      }
+      
+      playScenario(currentScenarioIndex);
+    }
+
+    function selectAvatar(emoji, btn) {
+      currentUserAvatar = emoji;
+      
+      // 移除其他头像按钮的 active 状态
+      document.querySelectorAll('.avatar-btn').forEach(b => {
+        b.classList.remove('active');
+      });
+      if (btn) {
+        btn.classList.add('active');
+      }
+      
+      updateNameAndAvatar();
+    }
+
+    // 页面加载时执行一次初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      updateNameAndAvatar();
+    });
   </script>
+  <!-- ==============================================
+       打印专用 A4 卡片容器 (屏幕隐藏，打印显示)
+       ============================================== -->
+  <div class="print-page-container">
+    <!-- 第一页：打卡印章卡 -->
+    <div class="print-card-page">
+      <div class="print-header">
+        <div style="text-align: left;">
+          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的“成长圈”魔法打卡印章卡</h1>
+          <div class="print-subtitle">每日践行成功同心圆，点亮诚信、态度与行为超能力</div>
+        </div>
+        <div style="font-size: 24pt; border: 2.5px solid #4a148c; padding: 1mm 3mm; border-radius: 8px;" id="print-avatar-box">👧</div>
+      </div>
+      
+      <div class="print-grid">
+        <!-- 核心：诚信 -->
+        <div class="print-grid-item item-core-print">
+          <div class="print-item-header">
+            <span>💎 核心价值观：诚信水晶</span>
+            <span>说到做到</span>
+          </div>
+          <div class="print-item-desc">对自己诚实，承认错误或不足并改正；对他人守信，遵守约定不撒谎。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">守护者寄语：_______________________________________</div>
+            <div class="print-stamp-area">家长盖章/星</div>
+          </div>
+        </div>
+        
+        <!-- 态度层 6个 -->
+        <div class="print-grid-item item-att-print">
+          <div class="print-item-header">
+            <span>🚀 积极主动火箭</span>
+            <span>我先来做</span>
+          </div>
+          <div class="print-item-desc">主动写作业、整理房间和刷牙，不用催促，积极探索好玩的世界。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item item-att-print">
+          <div class="print-item-header">
+            <span>💛 同理心小红心</span>
+            <span>体贴他人</span>
+          </div>
+          <div class="print-item-desc">关心家人和朋友的感受，换位思考，甜甜地说声“谢谢”。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item item-att-print">
+          <div class="print-item-header">
+            <span>🦁 自信小狮子</span>
+            <span>我相信我行</span>
+          </div>
+          <div class="print-item-desc">相信努力一定行，挺胸抬头，勇敢举手大声朗读。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item item-att-print">
+          <div class="print-item-header">
+            <span>🪞 自省小魔镜</span>
+            <span>发现缺点</span>
+          </div>
+          <div class="print-item-desc">照着镜子检查自己，坦然承认小错误，马上改正。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item item-att-print">
+          <div class="print-item-header">
+            <span>🛡️ 勇气大盾牌</span>
+            <span>迎难而上</span>
+          </div>
+          <div class="print-item-desc">面对有点难的事情或困难，举起盾牌大步往前冲，不退缩。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item item-att-print">
+          <div class="print-item-header">
+            <span>🌍 胸怀大海洋</span>
+            <span>大度包容</span>
+          </div>
+          <div class="print-item-desc">大度包容，原谅别人的粗心；微笑着接受下雨等没法改变的意外。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        
+        <!-- 行为层 6个 -->
+        <div class="print-grid-item">
+          <div class="print-item-header">
+            <span>⭐ 理想北极星</span>
+            <span>追寻理想</span>
+          </div>
+          <div class="print-item-desc">为了梦想向前走，看太空科普书或构思小童话故事。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header">
+            <span>🎯 发现兴趣</span>
+            <span>激情投入</span>
+          </div>
+          <div class="print-item-desc">开心地拼乐高、画画、手工，专注于最爱做的事情。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header">
+            <span>📚 努力学习</span>
+            <span>融会贯通</span>
+          </div>
+          <div class="print-item-desc">认真看课外书，掌握新知识并学会举一反三（如现实除法游戏）。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header">
+            <span>⚡ 有效执行</span>
+            <span>快速飞鞋</span>
+          </div>
+          <div class="print-item-desc">做事麻利不磨蹭，今天任务今天好，成功击败拖延小怪兽。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header">
+            <span>💬 人际交流</span>
+            <span>传声倾听</span>
+          </div>
+          <div class="print-item-desc">温和礼貌地表达，用两个耳朵认真听别人把话讲完。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header">
+            <span>🤝 合作沟通</span>
+            <span>齐心划船</span>
+          </div>
+          <div class="print-item-desc">分工合作做画报、帮爸妈做家务，相信队友并互补优势。</div>
+          <div class="print-item-footer">
+            <div class="print-parent-note">评语：________________</div>
+            <div class="print-stamp-area">盖章/星</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="print-footer-info">
+        <span>守望成长 · 用爱浇灌 ｜ 打印日期：2026年 ｜ 闫孜睿成长魔法地图专用卡片</span>
+      </div>
+    </div>
+    
+    <!-- 第二页：成长树涂色升级卡 -->
+    <div class="print-card-page">
+      <div class="print-header">
+        <div style="text-align: left;">
+          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的“成长树”魔法升级卡</h1>
+          <div class="print-subtitle">亲手涂色点亮你的价值观、态度与行为，见证小树苗茁壮成长</div>
+        </div>
+        <div style="font-size: 24pt; border: 2.5px solid #4a148c; padding: 1mm 3mm; border-radius: 8px;" id="print-avatar-box-2">👧</div>
+      </div>
+      
+      <div class="print-tree-container">
+        <!-- 成长树线稿 SVG，适合儿童涂色 -->
+        <div class="print-tree-svg-container">
+          <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- 树叶轮廓（行为） -->
+            <path d="M140,30 C75,30 40,75 50,130 C30,160 60,200 100,180 C110,205 160,205 170,180 C210,200 240,160 220,130 C230,75 195,30 140,30 Z" fill="none" stroke="#2c3e50" stroke-width="2.5" stroke-dasharray="3,3"/>
+            <!-- 树叶内部线条，供涂色 -->
+            <path d="M140,30 Q110,60 100,90 Q90,130 100,160" fill="none" stroke="#999" stroke-width="1.5"/>
+            <path d="M140,30 Q170,60 180,90 Q190,130 180,160" fill="none" stroke="#999" stroke-width="1.5"/>
+            <!-- 树叶指示 -->
+            <text x="140" y="85" text-anchor="middle" font-size="10" fill="#333">【行为枝叶】</text>
+            <text x="140" y="105" text-anchor="middle" font-size="8" fill="#555">(可涂翠绿色)</text>
+            
+            <!-- 树干轮廓（态度） -->
+            <path d="M125,170 L115,245 L165,245 L155,170 Z" fill="none" stroke="#2c3e50" stroke-width="2.5"/>
+            <path d="M135,170 L135,245" fill="none" stroke="#999" stroke-width="1.5"/>
+            <path d="M145,170 L145,245" fill="none" stroke="#999" stroke-width="1.5"/>
+            <!-- 树干指示 -->
+            <text x="140" y="195" text-anchor="middle" font-size="10" fill="#333">【态度树干】</text>
+            <text x="140" y="210" text-anchor="middle" font-size="8" fill="#555">(可涂橙黄色)</text>
+            
+            <!-- 树根轮廓（价值观） -->
+            <path d="M115,245 Q90,260 65,280" fill="none" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+            <path d="M130,245 Q130,265 135,290" fill="none" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+            <path d="M145,245 Q160,265 175,285" fill="none" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+            <path d="M165,245 Q200,265 220,278" fill="none" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+            <!-- 树根指示 -->
+            <text x="140" y="265" text-anchor="middle" font-size="10" fill="#333">【价值观树根】</text>
+            <text x="140" y="278" text-anchor="middle" font-size="8" fill="#555">(可涂粉红色)</text>
+            
+            <!-- 太阳（选择的智慧） -->
+            <circle cx="240" cy="50" r="16" fill="none" stroke="#2c3e50" stroke-width="2"/>
+            <path d="M240,25 L240,30 M240,70 L240,75 M215,50 L220,50 M260,50 L265,50 M222,32 L226,36 M254,64 L258,68 M222,68 L226,64 M254,32 L258,36" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round"/>
+            <text x="240" y="53" text-anchor="middle" font-size="8" fill="#333">智慧</text>
+          </svg>
+        </div>
+        
+        <div class="print-tree-rules">
+          <div class="print-tree-rules-title">🎨 树苗升级涂色法</div>
+          <div class="print-rules-grid">
+            <div class="print-rule-item">
+              <div class="print-color-box" style="background:#f48fb1; border-color:#c62828;"></div>
+              <span><b>价值观树根</b>：涂粉红色，代表做到<b>诚信</b>。</span>
+            </div>
+            <div class="print-rule-item">
+              <div class="print-color-box" style="background:#ffcc80; border-color:#e65100;"></div>
+              <span><b>态度树干</b>：涂橙黄色，代表学会了<b>6大态度</b>。</span>
+            </div>
+            <div class="print-rule-item">
+              <div class="print-color-box" style="background:#80cbc4; border-color:#00695c;"></div>
+              <span><b>行为枝叶</b>：涂翠绿色，代表使用了<b>6种行为道具</b>。</span>
+            </div>
+            <div class="print-rule-item">
+              <div class="print-color-box" style="background:#fff176; border-color:#f57f17;"></div>
+              <span><b>智慧太阳</b>：涂金黄色，代表懂得了<b>选择的天平</b>。</span>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 4mm; font-size: 10pt; color: #4a148c; font-weight: bold; border-top: 1.5px solid #999; padding-top: 3mm;">
+            🌟 升级大成就：当整棵树被鲜艳的色彩涂满时，说明你已经获得了全部成长魔法！
+          </div>
+        </div>
+      </div>
+      
+      <div class="print-footer-info">
+        <span>做最好的自己 · 闫孜睿成长魔法地图专属卡片 ｜ 守护者见证：_________________</span>
+      </div>
+    </div>
+
+    <!-- Page 3: Weekly Check A -->
+    <div class="print-card-page">
+      <div class="print-header">
+        <div style="text-align: left;">
+          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的成功同心圆每周检查表 <span class="weekly-week-label">A 基础周</span></h1>
+          <div class="print-subtitle">每天聚焦一对"态度→行为"魔法配对 + 每日必检诚信核心 | 日期：____月____日 ~ ____月____日</div>
+        </div>
+        <div style="font-size: 24pt; border: 2.5px solid #4a148c; padding: 1mm 3mm; border-radius: 8px;" id="print-avatar-box-3">👧</div>
+      </div>
+
+      <table class="weekly-table">
+        <thead>
+          <tr>
+            <th>星期</th>
+            <th>今日魔法主题</th>
+            <th>💎 诚信核心 + 今日成长检查项</th>
+            <th>⭐</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="day-cell">周一</td>
+            <td class="theme-cell">🚀 积极主动<br>➔ 📚 努力学习</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
+              <div class="check-item"><span class="check-box"></span>🚀 放学后主动写作业，不等爸妈催促</div>
+              <div class="check-item"><span class="check-box"></span>📚 认真阅读了一篇课外书或做了一道课外题</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周二</td>
+            <td class="theme-cell">💛 同理心<br>➔ 💬 人际交流</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
+              <div class="check-item"><span class="check-box"></span>💛 换位思考体贴了家人或同学的感受</div>
+              <div class="check-item"><span class="check-box"></span>💬 用温和有礼的语气说话，认真倾听别人讲话</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周三</td>
+            <td class="theme-cell">🦁 自信<br>➔ 🎯 发现兴趣</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
+              <div class="check-item"><span class="check-box"></span>🦁 课堂上勇敢举手回答问题或大声朗读</div>
+              <div class="check-item"><span class="check-box"></span>🎯 花时间做自己喜欢的事（画画/手工/阅读等）</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周四</td>
+            <td class="theme-cell">🪞 自省<br>➔ ⚡ 有效执行</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
+              <div class="check-item"><span class="check-box"></span>🪞 照照心灵魔镜，发现并承认了一个小缺点</div>
+              <div class="check-item"><span class="check-box"></span>⚡ 今天的任务当天完成，不磨蹭不拖延</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周五</td>
+            <td class="theme-cell">🛡️ 勇气<br>➔ ⭐ 追寻理想</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
+              <div class="check-item"><span class="check-box"></span>🛡️ 面对一件有点难的事情，没有退缩</div>
+              <div class="check-item"><span class="check-box"></span>⭐ 为梦想做了一件小事（读相关书/练相关技能）</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周六</td>
+            <td class="theme-cell">🌍 胸怀<br>➔ 🤝 合作沟通</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
+              <div class="check-item"><span class="check-box"></span>🌍 包容原谅了一件让自己不开心的小事</div>
+              <div class="check-item"><span class="check-box"></span>🤝 和家人一起做了一件事（家务/游戏/手工）</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr class="sunday-row">
+            <td class="day-cell">周日</td>
+            <td class="theme-cell">⚖️ 智慧总结<br>🌟 全面回顾</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：本周诚实守信，没有欺骗自己和他人</span>
+              <div class="check-item"><span class="check-box"></span>⚖️ 想想本周哪些事需要勇气改变，哪些需要胸怀接受</div>
+              <div class="check-item"><span class="check-box"></span>🌟 本周我最棒的一件事是：_______________________</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="weekly-note-line">
+        📝 守护者本周寄语：_______________________________________________________________
+      </div>
+
+      <div class="print-footer-info">
+        <span>做最好的自己 · 成功同心圆每周检查表 A（基础周）| 闫孜睿成长魔法地图专用</span>
+      </div>
+    </div>
+
+    <!-- Page 4: Weekly Check B -->
+    <div class="print-card-page">
+      <div class="print-header">
+        <div style="text-align: left;">
+          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的成功同心圆每周检查表 <span class="weekly-week-label" style="background:#00695c;">B 进阶周</span></h1>
+          <div class="print-subtitle">每天聚焦一对"态度→行为"魔法配对 + 每日必检诚信核心 | 日期：____月____日 ~ ____月____日</div>
+        </div>
+        <div style="font-size: 24pt; border: 2.5px solid #4a148c; padding: 1mm 3mm; border-radius: 8px;" id="print-avatar-box-4">👧</div>
+      </div>
+
+      <table class="weekly-table">
+        <thead>
+          <tr>
+            <th>星期</th>
+            <th>今日魔法主题</th>
+            <th>💎 诚信核心 + 今日成长检查项</th>
+            <th>⭐</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="day-cell">周一</td>
+            <td class="theme-cell">🚀 积极主动<br>➔ 📚 努力学习</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：对自己诚实，不懂的题主动问老师</span>
+              <div class="check-item"><span class="check-box"></span>🚀 主动帮老师或同学做了一件力所能及的事</div>
+              <div class="check-item"><span class="check-box"></span>📚 预习了明天的新课文或复习了今天的生字</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周二</td>
+            <td class="theme-cell">💛 同理心<br>➔ 💬 人际交流</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：答应同学的事情认真完成</span>
+              <div class="check-item"><span class="check-box"></span>💛 关心了一位看起来不开心或需要帮助的同学</div>
+              <div class="check-item"><span class="check-box"></span>💬 对家人或老师真诚地说了一句感谢的话</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周三</td>
+            <td class="theme-cell">🦁 自信<br>➔ 🎯 发现兴趣</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：做错了题目坦然面对，不偷改答案</span>
+              <div class="check-item"><span class="check-box"></span>🦁 尝试了一件以前不敢做或没做过的新事情</div>
+              <div class="check-item"><span class="check-box"></span>🎯 把喜欢的事做得更认真更专注更深入</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周四</td>
+            <td class="theme-cell">🪞 自省<br>➔ ⚡ 有效执行</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：承认了一个小错误并主动改正</span>
+              <div class="check-item"><span class="check-box"></span>🪞 睡前想想今天有什么地方可以做得更好</div>
+              <div class="check-item"><span class="check-box"></span>⚡ 制定了一个小计划（如写作业步骤）并完整执行</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周五</td>
+            <td class="theme-cell">🛡️ 勇气<br>➔ ⭐ 追寻理想</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：即使没人看见，也做了正确的事</span>
+              <div class="check-item"><span class="check-box"></span>🛡️ 向老师请教了一道不懂的题或一个疑惑</div>
+              <div class="check-item"><span class="check-box"></span>⭐ 和家人分享了自己的一个小梦想或进步</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr>
+            <td class="day-cell">周六</td>
+            <td class="theme-cell">🌍 胸怀<br>➔ 🤝 合作沟通</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：遵守了和父母约定的时间规则</span>
+              <div class="check-item"><span class="check-box"></span>🌍 平静接受了一件不能改变的事（天气/计划变动等）</div>
+              <div class="check-item"><span class="check-box"></span>🤝 和小伙伴或家人分工合作完成了一个任务</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+          <tr class="sunday-row">
+            <td class="day-cell">周日</td>
+            <td class="theme-cell">⚖️ 智慧总结<br>🌟 全面回顾</td>
+            <td class="check-cell">
+              <span class="core-check"><span class="check-box"></span>💎 诚信：回顾这周，我没有亏心事</span>
+              <div class="check-item"><span class="check-box"></span>⚖️ 分清了哪些事能用勇气改变、哪些要用胸怀接受</div>
+              <div class="check-item"><span class="check-box"></span>🌟 下周我想努力做到：___________________________</div>
+            </td>
+            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="weekly-note-line">
+        📝 守护者本周寄语：_______________________________________________________________
+      </div>
+
+      <div class="print-footer-info">
+        <span>做最好的自己 · 成功同心圆每周检查表 B（进阶周）| 闫孜睿成长魔法地图专用</span>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
