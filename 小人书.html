@@ -1058,6 +1058,7 @@
         padding: 10mm 15mm;
         box-sizing: border-box;
         page-break-after: always;
+        page-break-inside: avoid;
         position: relative;
         background: #ffffff !important;
         border: 3.5px solid #6a1b9a !important;
@@ -2104,7 +2105,8 @@
             </div>
             
             <button onclick="resetChecklist()" style="margin-top:20px; padding:8px 16px; border:1px solid #ddd; background:#fff; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#7f8c8d;">重新开始</button>
-            <button onclick="window.print()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px dashed #8e44ad; background:#fdfcff; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#8e44ad; font-weight:bold;">🖨️ 打印纸质魔法卡片</button>
+            <button onclick="window.print()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px dashed #8e44ad; background:#fdfcff; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#8e44ad; font-weight:bold;">🖨️ 打印魔法卡片 (打卡与升级)</button>
+            <button onclick="printWeeklyChecks()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px solid #6a1b9a; background:#f3e5f5; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#6a1b9a; font-weight:bold;">📅 打印每周检查表 (A与B)</button>
             <button onclick="printStoryBook()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px solid #00796b; background:#e0f2f1; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#00796b; font-weight:bold;">📖 打印故事画册 (前6章)</button>
           </div>
         </div>
@@ -2555,6 +2557,12 @@
       window.open(`故事书打印版.html?name=${encodeURIComponent(name)}&avatar=${encodeURIComponent(avatar)}`, '_blank');
     }
 
+    function printWeeklyChecks() {
+      const name = currentUserName;
+      const avatar = currentUserAvatar;
+      window.open(`每周检查表打印版.html?name=${encodeURIComponent(name)}&avatar=${encodeURIComponent(avatar)}`, '_blank');
+    }
+
     // ==================== 纯 HTML5 Canvas 烟花效果 ====================
     function triggerConfetti() {
       const canvas = document.getElementById('confetti-canvas');
@@ -2922,209 +2930,7 @@
       </div>
     </div>
 
-    <!-- Page 3: Weekly Check A -->
-    <div class="print-card-page">
-      <div class="print-header">
-        <div style="text-align: left;">
-          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的成功同心圆每周检查表 <span class="weekly-week-label">A 基础周</span></h1>
-          <div class="print-subtitle">每天聚焦一对"态度→行为"魔法配对 + 每日必检诚信核心 | 日期：____月____日 ~ ____月____日</div>
-        </div>
-        <div style="font-size: 24pt; border: 2.5px solid #4a148c; padding: 1mm 3mm; border-radius: 8px;" id="print-avatar-box-3">👧</div>
-      </div>
 
-      <table class="weekly-table">
-        <thead>
-          <tr>
-            <th>星期</th>
-            <th>今日魔法主题</th>
-            <th>💎 诚信核心 + 今日成长检查项</th>
-            <th>⭐</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="day-cell">周一</td>
-            <td class="theme-cell">🚀 积极主动<br>➔ 📚 努力学习</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
-              <div class="check-item"><span class="check-box"></span>🚀 放学后主动写作业，不等爸妈催促</div>
-              <div class="check-item"><span class="check-box"></span>📚 认真阅读了一篇课外书或做了一道课外题</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周二</td>
-            <td class="theme-cell">💛 同理心<br>➔ 💬 人际交流</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
-              <div class="check-item"><span class="check-box"></span>💛 换位思考体贴了家人或同学的感受</div>
-              <div class="check-item"><span class="check-box"></span>💬 用温和有礼的语气说话，认真倾听别人讲话</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周三</td>
-            <td class="theme-cell">🦁 自信<br>➔ 🎯 发现兴趣</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
-              <div class="check-item"><span class="check-box"></span>🦁 课堂上勇敢举手回答问题或大声朗读</div>
-              <div class="check-item"><span class="check-box"></span>🎯 花时间做自己喜欢的事（画画/手工/阅读等）</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周四</td>
-            <td class="theme-cell">🪞 自省<br>➔ ⚡ 有效执行</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
-              <div class="check-item"><span class="check-box"></span>🪞 照照心灵魔镜，发现并承认了一个小缺点</div>
-              <div class="check-item"><span class="check-box"></span>⚡ 今天的任务当天完成，不磨蹭不拖延</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周五</td>
-            <td class="theme-cell">🛡️ 勇气<br>➔ ⭐ 追寻理想</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
-              <div class="check-item"><span class="check-box"></span>🛡️ 面对一件有点难的事情，没有退缩</div>
-              <div class="check-item"><span class="check-box"></span>⭐ 为梦想做了一件小事（读相关书/练相关技能）</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周六</td>
-            <td class="theme-cell">🌍 胸怀<br>➔ 🤝 合作沟通</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：今天没有撒谎，答应的事说到做到</span>
-              <div class="check-item"><span class="check-box"></span>🌍 包容原谅了一件让自己不开心的小事</div>
-              <div class="check-item"><span class="check-box"></span>🤝 和家人一起做了一件事（家务/游戏/手工）</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr class="sunday-row">
-            <td class="day-cell">周日</td>
-            <td class="theme-cell">⚖️ 智慧总结<br>🌟 全面回顾</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：本周诚实守信，没有欺骗自己和他人</span>
-              <div class="check-item"><span class="check-box"></span>⚖️ 想想本周哪些事需要勇气改变，哪些需要胸怀接受</div>
-              <div class="check-item"><span class="check-box"></span>🌟 本周我最棒的一件事是：_______________________</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="weekly-note-line">
-        📝 守护者本周寄语：_______________________________________________________________
-      </div>
-
-      <div class="print-footer-info">
-        <span>做最好的自己 · 成功同心圆每周检查表 A（基础周）| 闫孜睿成长魔法地图专用</span>
-      </div>
-    </div>
-
-    <!-- Page 4: Weekly Check B -->
-    <div class="print-card-page">
-      <div class="print-header">
-        <div style="text-align: left;">
-          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的成功同心圆每周检查表 <span class="weekly-week-label" style="background:#00695c;">B 进阶周</span></h1>
-          <div class="print-subtitle">每天聚焦一对"态度→行为"魔法配对 + 每日必检诚信核心 | 日期：____月____日 ~ ____月____日</div>
-        </div>
-        <div style="font-size: 24pt; border: 2.5px solid #4a148c; padding: 1mm 3mm; border-radius: 8px;" id="print-avatar-box-4">👧</div>
-      </div>
-
-      <table class="weekly-table">
-        <thead>
-          <tr>
-            <th>星期</th>
-            <th>今日魔法主题</th>
-            <th>💎 诚信核心 + 今日成长检查项</th>
-            <th>⭐</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="day-cell">周一</td>
-            <td class="theme-cell">🚀 积极主动<br>➔ 📚 努力学习</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：对自己诚实，不懂的题主动问老师</span>
-              <div class="check-item"><span class="check-box"></span>🚀 主动帮老师或同学做了一件力所能及的事</div>
-              <div class="check-item"><span class="check-box"></span>📚 预习了明天的新课文或复习了今天的生字</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周二</td>
-            <td class="theme-cell">💛 同理心<br>➔ 💬 人际交流</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：答应同学的事情认真完成</span>
-              <div class="check-item"><span class="check-box"></span>💛 关心了一位看起来不开心或需要帮助的同学</div>
-              <div class="check-item"><span class="check-box"></span>💬 对家人或老师真诚地说了一句感谢的话</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周三</td>
-            <td class="theme-cell">🦁 自信<br>➔ 🎯 发现兴趣</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：做错了题目坦然面对，不偷改答案</span>
-              <div class="check-item"><span class="check-box"></span>🦁 尝试了一件以前不敢做或没做过的新事情</div>
-              <div class="check-item"><span class="check-box"></span>🎯 把喜欢的事做得更认真更专注更深入</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周四</td>
-            <td class="theme-cell">🪞 自省<br>➔ ⚡ 有效执行</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：承认了一个小错误并主动改正</span>
-              <div class="check-item"><span class="check-box"></span>🪞 睡前想想今天有什么地方可以做得更好</div>
-              <div class="check-item"><span class="check-box"></span>⚡ 制定了一个小计划（如写作业步骤）并完整执行</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周五</td>
-            <td class="theme-cell">🛡️ 勇气<br>➔ ⭐ 追寻理想</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：即使没人看见，也做了正确的事</span>
-              <div class="check-item"><span class="check-box"></span>🛡️ 向老师请教了一道不懂的题或一个疑惑</div>
-              <div class="check-item"><span class="check-box"></span>⭐ 和家人分享了自己的一个小梦想或进步</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr>
-            <td class="day-cell">周六</td>
-            <td class="theme-cell">🌍 胸怀<br>➔ 🤝 合作沟通</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：遵守了和父母约定的时间规则</span>
-              <div class="check-item"><span class="check-box"></span>🌍 平静接受了一件不能改变的事（天气/计划变动等）</div>
-              <div class="check-item"><span class="check-box"></span>🤝 和小伙伴或家人分工合作完成了一个任务</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-          <tr class="sunday-row">
-            <td class="day-cell">周日</td>
-            <td class="theme-cell">⚖️ 智慧总结<br>🌟 全面回顾</td>
-            <td class="check-cell">
-              <span class="core-check"><span class="check-box"></span>💎 诚信：回顾这周，我没有亏心事</span>
-              <div class="check-item"><span class="check-box"></span>⚖️ 分清了哪些事能用勇气改变、哪些要用胸怀接受</div>
-              <div class="check-item"><span class="check-box"></span>🌟 下周我想努力做到：___________________________</div>
-            </td>
-            <td class="stamp-cell"><div class="weekly-stamp">盖章</div></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="weekly-note-line">
-        📝 守护者本周寄语：_______________________________________________________________
-      </div>
-
-      <div class="print-footer-info">
-        <span>做最好的自己 · 成功同心圆每周检查表 B（进阶周）| 闫孜睿成长魔法地图专用</span>
-      </div>
-    </div>
   </div>
 </body>
 </html>

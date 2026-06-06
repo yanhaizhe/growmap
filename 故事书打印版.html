@@ -386,6 +386,73 @@
       margin: 1.5mm 0 0 0;
     }
 
+    /* Chapter 3 & 6 Print Optimizations to prevent A4 Page Overflow */
+    .ch3-page .twins-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2.2mm !important;
+    }
+    .ch3-page .twin-pair-box {
+      padding: 1.5mm 2.5mm !important;
+    }
+    .ch3-page h3 {
+      font-size: 10.5pt !important;
+      margin-bottom: 1.2mm !important;
+      padding-bottom: 0.5mm !important;
+    }
+    .ch3-page .twin-col-text > div:nth-child(1) {
+      font-size: 9.8pt !important;
+      margin-bottom: 0.8mm !important;
+    }
+    .ch3-page .twin-col-text > div:nth-child(2) {
+      font-size: 9pt !important;
+      margin-bottom: 0.8mm !important;
+    }
+    .ch3-page .twin-col-text p {
+      font-size: 9pt !important;
+      line-height: 1.35 !important;
+      margin-bottom: 1.2mm !important;
+    }
+    .ch3-page .twin-col-text .case-box {
+      font-size: 8.5pt !important;
+      line-height: 1.35 !important;
+      padding: 1mm 1.5mm !important;
+      margin-bottom: 1.2mm !important;
+    }
+    .ch3-page .twin-col-text .socratic-box {
+      font-size: 8.5pt !important;
+      line-height: 1.35 !important;
+      padding: 1mm 1.5mm !important;
+    }
+
+    .ch6-page .scenarios-print-list {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 3.5mm !important;
+    }
+    .ch6-page .scenarios-print-list .scen-print-card:nth-child(3) {
+      grid-column: span 2 !important;
+    }
+    .ch6-page .scen-print-card {
+      padding: 2mm 2.5mm !important;
+    }
+    .ch6-page .scen-print-title {
+      font-size: 10.5pt !important;
+      padding-bottom: 0.8mm !important;
+      margin-bottom: 1.2mm !important;
+    }
+    .ch6-page .scen-row {
+      font-size: 9.2pt !important;
+      line-height: 1.35 !important;
+      margin-bottom: 0.8mm !important;
+      padding-left: 2mm !important;
+    }
+    .ch6-page .scen-print-card .socratic-box {
+      font-size: 8.8pt !important;
+      padding: 1.2mm 1.8mm !important;
+      margin-top: 1.2mm !important;
+    }
+
     /* Chapter 3: Twins Text Layout */
     .twin-col-text {
       font-size: 9.8pt;
@@ -557,6 +624,7 @@
         border-radius: 0 !important;
         border: 2px solid var(--color-purple) !important;
         page-break-after: always !important;
+        page-break-inside: avoid !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
@@ -776,7 +844,7 @@
     </div>
 
     <!-- ==================== PAGE 4: 第三章 态度魔法 ==================== -->
-    <div class="print-page">
+    <div class="print-page ch3-page">
       <div class="page-header">
         <div class="page-header-title">第三章：态度魔法环 —— 三对神奇的双胞胎</div>
         <div class="page-header-right">
@@ -793,9 +861,9 @@
         
         <p>在态度的中环有六大魔法，它们像三对双胞胎，必须<strong>两两配对、保持平衡</strong>，小树才能长得端正：</p>
         
-        <div style="display: flex; flex-direction: column; gap: 3.5mm;">
+        <div class="twins-container" style="display: flex; flex-direction: column; gap: 3.5mm;">
           <!-- Pair 1 -->
-          <div style="border: 2px solid var(--color-att); border-radius: 8px; padding: 2.5mm 3.5mm;">
+          <div class="twin-pair-box" style="border: 2px solid var(--color-att); border-radius: 8px; padding: 2.5mm 3.5mm;">
             <h3 style="font-size: 11.5pt; color: var(--color-att); margin-bottom: 2mm; font-weight: 800; border-bottom: 1.5px solid var(--color-att); padding-bottom: 0.8mm;">第一对：积极主动 🚀  与  同理心 💛</h3>
             <div class="columns-2" style="margin-bottom: 0; gap: 4mm;">
               <div class="twin-col-text">
@@ -826,7 +894,7 @@
           </div>
 
           <!-- Pair 2 -->
-          <div style="border: 2px solid var(--color-att); border-radius: 8px; padding: 2.5mm 3.5mm;">
+          <div class="twin-pair-box" style="border: 2px solid var(--color-att); border-radius: 8px; padding: 2.5mm 3.5mm;">
             <h3 style="font-size: 11.5pt; color: var(--color-att); margin-bottom: 2mm; font-weight: 800; border-bottom: 1.5px solid var(--color-att); padding-bottom: 0.8mm;">第二对：自信狮子 🦁  与  自省魔镜 🪞</h3>
             <div class="columns-2" style="margin-bottom: 0; gap: 4mm;">
               <div class="twin-col-text">
@@ -857,7 +925,7 @@
           </div>
 
           <!-- Pair 3 -->
-          <div style="border: 2px solid var(--color-att); border-radius: 8px; padding: 2.5mm 3.5mm;">
+          <div class="twin-pair-box" style="border: 2px solid var(--color-att); border-radius: 8px; padding: 2.5mm 3.5mm;">
             <h3 style="font-size: 11.5pt; color: var(--color-att); margin-bottom: 2mm; font-weight: 800; border-bottom: 1.5px solid var(--color-att); padding-bottom: 0.8mm;">第三对：勇气盾牌 🛡️  与  胸怀大海 🌍</h3>
             <div class="columns-2" style="margin-bottom: 0; gap: 4mm;">
               <div class="twin-col-text">
@@ -1068,7 +1136,7 @@
             <p style="font-size: 9.5pt; margin-top: 1mm; line-height: 1.4;">因为我懂得换位思考、关心别人的感受（同理心的态度），所以当她用传声筒说话和倾听时（人际交流的行为），能够听到同伴心里真正的想法，建立温暖的友谊。</p>
             <div class="case-box" style="font-size: 9.2pt; border-left: 2px solid var(--color-purple); padding-left: 1.5mm; margin: 1mm 0;">
               <b>🏫 学校案例：</b>同桌因为数学没考好在伤心，没有说风凉话，而是温和地坐在她身边听她难过，并递上纸巾。<br>
-              <b style="display:inline-block; margin-top:0.8mm;">🏡 生活案例：</b>妈妈下班回家太累了，说话声音有些急。小睿睿体贴妈妈的辛苦，温和地给她倒杯水，而不是和妈妈顶嘴。
+              <b style="display:inline-block; margin-top:0.8mm;">🏡 生活案例：</b>妈妈下班回家太累了，说话声音有些急。<span class="user-name-span">小睿睿</span>体贴妈妈的辛苦，温和地给她倒杯水，而不是和妈妈顶嘴。
             </div>
             <div class="socratic-box purple-socratic" style="font-size: 9pt; margin-top: 1.5mm; line-height: 1.4;">
               🤔 <b>魔法思考：</b>当好朋友伤心时，如果你只说“别哭了，真娇气”或者握着他的手静静听他说话，他觉得哪种更温暖？
@@ -1162,7 +1230,7 @@
     </div>
 
     <!-- ==================== PAGE 7: 第六章 智慧天平 ==================== -->
-    <div class="print-page">
+    <div class="print-page ch6-page">
       <div class="page-header">
         <div class="page-header-title">第六章：终极魔法 —— 智慧的平衡天平</div>
         <div class="page-header-right">
