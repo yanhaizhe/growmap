@@ -1017,178 +1017,182 @@
     }
 
     /* ==============================================
-       打印卡片样式 (A4 尺寸)
+       打印卡片样式 (A4 竖版，清晰展示)
        ============================================== */
     .print-page-container {
       display: none;
     }
 
     @media print {
-      /* 隐藏屏幕上的所有容器 */
       html, body {
         background: #ffffff !important;
         margin: 0 !important;
         padding: 0 !important;
         height: auto !important;
       }
-      body * {
-        visibility: hidden;
-      }
+      body * { visibility: hidden; }
       
-      /* 仅显示打印专用容器 */
-      .print-page-container, .print-page-container * {
-        visibility: visible;
-      }
+      .print-page-container, .print-page-container * { visibility: visible; }
       .print-page-container {
         display: block !important;
         position: absolute;
-        left: 0;
-        top: 0;
+        left: 0; top: 0;
         width: 100%;
       }
       
-      @page {
-        size: A4 landscape;
-        margin: 0;
-      }
+      @page { size: A4 portrait; margin: 0; }
       
       .print-card-page {
-        width: 297mm;
-        height: 210mm;
-        padding: 10mm 15mm;
+        width: 210mm; height: 297mm;
+        padding: 10mm 12mm;
         box-sizing: border-box;
         page-break-after: always;
         page-break-inside: avoid;
-        position: relative;
         background: #ffffff !important;
-        border: 3.5px solid #6a1b9a !important;
-        border-radius: 16px;
+        border: 3px solid #6a1b9a !important;
         overflow: hidden;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
         margin: 0 auto;
       }
       
-      /* 打卡卡专有布局 */
       .print-header {
-        text-align: center;
-        margin-bottom: 5mm;
-        border-bottom: 2.5px dashed #8e44ad;
-        padding-bottom: 3mm;
+        text-align: left;
+        margin-bottom: 4mm;
+        border-bottom: 2px dashed #8e44ad;
+        padding-bottom: 2.5mm;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
       .print-title {
-        font-size: 24pt;
+        font-size: 20pt;
         font-family: var(--font-title);
-        color: #4a148c;
-        margin-bottom: 1mm;
+        color: #6d28d9;
+        margin-bottom: 0.5mm;
+        line-height: 1.2;
       }
       .print-subtitle {
-        font-size: 12pt;
-        color: #111;
-        font-weight: bold;
+        font-size: 10pt;
+        color: #7c3aed;
+        font-weight: 500;
       }
+      .print-avatar-box {
+        font-size: 22pt;
+        border: 2px solid #6d28d9;
+        padding: 1mm 3mm;
+        border-radius: 6px;
+        min-width: 13mm;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      
+      /* 2列卡片网格 */
       .print-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-auto-rows: 30mm;
-        gap: 3mm;
+        grid-template-columns: 1fr 1fr;
+        gap: 3.5mm;
         flex-grow: 1;
       }
       .print-grid-item {
-        border: 2px solid #00796b !important;
-        border-radius: 10px;
-        padding: 2.5mm;
+        border: 1.8px solid #6366f1 !important;
+        border-radius: 8px;
+        padding: 2.5mm 3mm;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        background: #ffffff !important;
+        background: #fafafe !important;
       }
       .print-grid-item.item-core-print {
-        grid-column: span 3;
-        height: 22mm;
-        border: 2.5px solid #c2185b !important;
-        background: #ffffff !important;
+        grid-column: 1 / -1;
+        border: 2.2px solid #e11d48 !important;
+        background: #fff1f2 !important;
       }
       .print-grid-item.item-att-print {
-        border: 2px solid #d84315 !important;
-        background: #ffffff !important;
+        border: 1.8px solid #f97316 !important;
+        background: #fff7ed !important;
       }
       .print-item-header {
         display: flex;
         justify-content: space-between;
+        align-items: baseline;
         font-weight: bold;
-        font-size: 12pt;
-        border-bottom: 1.5px solid #000;
-        padding-bottom: 0.8mm;
-        color: #000000;
+        font-size: 11pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.5mm;
+        color: #1e40af;
+        gap: 2mm;
+      }
+      .print-item-header .card-tag {
+        font-size: 9pt;
+        color: #7c3aed;
+        white-space: nowrap;
+        font-weight: 500;
       }
       .print-item-desc {
         font-size: 10.5pt;
-        color: #111111;
-        line-height: 1.45;
-        margin-top: 1mm;
+        color: #1e293b;
+        line-height: 1.5;
+        margin: 1.5mm 0;
         flex-grow: 1;
       }
       .print-item-footer {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 1.5mm;
+        gap: 2mm;
+        margin-top: 1mm;
       }
       .print-stamp-area {
-        width: 14mm;
-        height: 14mm;
-        border: 2.5px solid #b71c1c;
+        width: 12mm; height: 12mm;
+        min-width: 12mm;
+        border: 2px solid #e11d48;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 9pt;
-        color: #b71c1c;
+        font-size: 7pt;
+        color: #e11d48;
         font-weight: bold;
-        background: #fff;
+        background: #fff1f2;
+        text-align: center;
+        line-height: 1.1;
       }
       .print-parent-note {
         flex-grow: 1;
-        margin-left: 2.5mm;
-        border-bottom: 1.5px solid #111;
-        height: 7mm;
-        font-size: 11pt;
-        color: #000000;
+        border-bottom: 1.2px solid #cbd5e1;
+        height: 5mm;
+        font-size: 8.5pt;
+        color: #64748b;
         padding-left: 1mm;
-        line-height: 7mm;
+        line-height: 5mm;
       }
       
       .print-footer-info {
         text-align: center;
-        font-size: 9.5pt;
-        color: #000000;
-        border-top: 1.5px solid #000000;
-        padding-top: 1.8mm;
-        margin-top: 3.5mm;
-        font-weight: bold;
+        font-size: 9pt;
+        color: #475569;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 1.5mm;
+        margin-top: 3mm;
+        font-weight: 500;
       }
       
-      /* 升级树卡专有布局 */
+      /* 成长树页面 */
       .print-tree-container {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-        height: 100%;
-        gap: 6mm;
+        gap: 4mm;
+        flex-grow: 1;
       }
       .print-tree-svg-container {
-        width: 135mm;
-        height: 135mm;
-        margin: 0;
+        width: 140mm;
+        height: 140mm;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -1198,30 +1202,26 @@
         height: 100%;
       }
       .print-tree-rules {
-        flex-grow: 1;
-        width: 120mm;
-        background: #ffffff !important;
-        border: 2.5px solid #6a1b9a;
-        border-radius: 12px;
-        padding: 4mm;
+        width: 100%;
+        background: #faf8fd;
+        border: 1.8px solid #8e44ad;
+        border-radius: 8px;
+        padding: 3mm 4mm;
         box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
       }
       .print-tree-rules-title {
         font-weight: bold;
-        font-size: 13pt;
+        font-size: 11pt;
         color: #4a148c;
-        margin-bottom: 3mm;
+        margin-bottom: 2mm;
         text-align: center;
         font-family: var(--font-title);
       }
       .print-rules-grid {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 2.5mm;
-        font-size: 11pt;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5mm 4mm;
+        font-size: 9.5pt;
       }
       .print-rule-item {
         display: flex;
@@ -1229,126 +1229,10 @@
         gap: 2mm;
       }
       .print-color-box {
-        width: 12mm;
-        height: 5.5mm;
-        border-radius: 4px;
-        border: 1.5px solid #111;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
- 
-      /* weekly check table styles */
-      .weekly-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-        flex-grow: 1;
-      }
-      .weekly-table th {
-        background: #4a148c;
-        color: #fff;
-        font-size: 11pt;
-        font-weight: 700;
-        padding: 1.8mm 1.5mm;
-        text-align: center;
-        border: 1.8px solid #310a5e;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .weekly-table td {
-        border: 1.5px solid #111 !important;
-        padding: 1.5mm 2mm;
-        font-size: 10.5pt;
-        color: #000000;
-        vertical-align: top;
-        line-height: 1.45;
-      }
-      .weekly-table tr:nth-child(even) td {
-        background: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .weekly-table .day-cell {
-        width: 18mm;
-        text-align: center;
-        font-weight: 700;
-        font-size: 12pt;
-        color: #4a148c;
-        vertical-align: middle;
-      }
-      .weekly-table .theme-cell {
-        width: 36mm;
-        text-align: center;
-        font-weight: 700;
-        font-size: 11pt;
-        vertical-align: middle;
-        line-height: 1.4;
-      }
-      .weekly-table .check-cell {
-        font-size: 10.5pt;
-        line-height: 1.5;
-      }
-      .weekly-table .stamp-cell {
-        width: 18mm;
-        text-align: center;
-        vertical-align: middle;
-      }
-      .weekly-stamp {
-        width: 11mm;
-        height: 11mm;
-        border: 2px solid #b71c1c;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 8.5pt;
-        color: #b71c1c;
-        font-weight: bold;
-      }
-      .check-item { margin-bottom: 0.8mm; }
-      .check-box {
-        display: inline-block;
-        width: 4mm;
-        height: 4mm;
-        border: 1.8px solid #000;
-        border-radius: 2px;
-        margin-right: 1.5mm;
-        vertical-align: middle;
-      }
-      .core-check {
-        background: #ffffff !important;
-        padding: 0.8mm 1.5mm;
+        width: 8mm;
+        height: 4.5mm;
         border-radius: 3px;
-        border: 1.5px dashed #b71c1c !important;
-        border-left: 4px solid #b71c1c !important;
-        margin-bottom: 1.2mm;
-        display: block;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .weekly-week-label {
-        display: inline-block;
-        background: #6a1b9a;
-        color: #fff;
-        font-size: 11.5pt;
-        font-weight: 700;
-        padding: 1mm 4mm;
-        border-radius: 6px;
-        margin-left: 3mm;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .weekly-note-line {
-        margin-top: 2.5mm;
-        border-top: 1.5px solid #111;
-        padding-top: 1.8mm;
-        font-size: 11pt;
-        color: #000000;
-        font-weight: 500;
-      }
-      .sunday-row td {
-        background: #ffffff !important;
-        border-bottom: 2.5px solid #b71c1c !important;
+        border: 1px solid #999;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
@@ -2106,8 +1990,6 @@
             
             <button onclick="resetChecklist()" style="margin-top:20px; padding:8px 16px; border:1px solid #ddd; background:#fff; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#7f8c8d;">重新开始</button>
             <button onclick="window.print()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px dashed #8e44ad; background:#fdfcff; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#8e44ad; font-weight:bold;">🖨️ 打印魔法卡片 (打卡与升级)</button>
-            <button onclick="printWeeklyChecks()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px solid #6a1b9a; background:#f3e5f5; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#6a1b9a; font-weight:bold;">📅 打印每周检查表 (A与B)</button>
-            <button onclick="printStoryBook()" style="margin-top:20px; margin-left:10px; padding:8px 16px; border:1.5px solid #00796b; background:#e0f2f1; border-radius:12px; cursor:pointer; font-size:0.9rem; transition:0.3s; color:#00796b; font-weight:bold;">📖 打印故事画册 (前6章)</button>
           </div>
         </div>
       </div>
@@ -2551,18 +2433,6 @@
       document.getElementById('light-count').innerText = 0;
     }
 
-    function printStoryBook() {
-      const name = currentUserName;
-      const avatar = currentUserAvatar;
-      window.open(`故事书打印版.html?name=${encodeURIComponent(name)}&avatar=${encodeURIComponent(avatar)}`, '_blank');
-    }
-
-    function printWeeklyChecks() {
-      const name = currentUserName;
-      const avatar = currentUserAvatar;
-      window.open(`每周检查表打印版.html?name=${encodeURIComponent(name)}&avatar=${encodeURIComponent(avatar)}`, '_blank');
-    }
-
     // ==================== 纯 HTML5 Canvas 烟花效果 ====================
     function triggerConfetti() {
       const canvas = document.getElementById('confetti-canvas');
@@ -2686,14 +2556,14 @@
        打印专用 A4 卡片容器 (屏幕隐藏，打印显示)
        ============================================== -->
   <div class="print-page-container">
-    <!-- 第一页：打卡印章卡 -->
+    <!-- 第一页：核心价值观 + 态度卡 -->
     <div class="print-card-page">
       <div class="print-header">
         <div style="text-align: left;">
-          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的“成长圈”魔法打卡印章卡</h1>
-          <div class="print-subtitle">每日践行成功同心圆，点亮诚信、态度与行为超能力</div>
+          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的魔法打卡卡 ①</h1>
+          <div class="print-subtitle">核心价值观 + 六大态度魔法 | 每日践行，守护者见证</div>
         </div>
-        <div style="font-size: 24pt; border: 2.5px solid #4a148c; padding: 1mm 3mm; border-radius: 8px;" id="print-avatar-box">👧</div>
+        <div class="print-avatar-box" id="print-avatar-box">👧</div>
       </div>
       
       <div class="print-grid">
@@ -2701,168 +2571,111 @@
         <div class="print-grid-item item-core-print">
           <div class="print-item-header">
             <span>💎 核心价值观：诚信水晶</span>
-            <span>说到做到</span>
+            <span class="card-tag">说到做到</span>
           </div>
-          <div class="print-item-desc">对自己诚实，承认错误或不足并改正；对他人守信，遵守约定不撒谎。</div>
+          <div class="print-item-desc">对自己诚实，承认错误并改正；对他人守信，遵守约定不撒谎。</div>
           <div class="print-item-footer">
-            <div class="print-parent-note">守护者寄语：_______________________________________</div>
-            <div class="print-stamp-area">家长盖章/星</div>
+            <div class="print-parent-note">守护者寄语：</div>
+            <div class="print-stamp-area">盖章</div>
           </div>
         </div>
         
-        <!-- 态度层 6个 -->
         <div class="print-grid-item item-att-print">
-          <div class="print-item-header">
-            <span>🚀 积极主动火箭</span>
-            <span>我先来做</span>
-          </div>
+          <div class="print-item-header"><span>🚀 积极主动火箭</span><span class="card-tag">我先来做</span></div>
           <div class="print-item-desc">主动写作业、整理房间和刷牙，不用催促，积极探索好玩的世界。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
         </div>
         <div class="print-grid-item item-att-print">
-          <div class="print-item-header">
-            <span>💛 同理心小红心</span>
-            <span>体贴他人</span>
-          </div>
-          <div class="print-item-desc">关心家人和朋友的感受，换位思考，甜甜地说声“谢谢”。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
+          <div class="print-item-header"><span>💛 同理心小红心</span><span class="card-tag">体贴他人</span></div>
+          <div class="print-item-desc">关心家人和朋友的感受，换位思考，甜甜地说声"谢谢"。</div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
         </div>
         <div class="print-grid-item item-att-print">
-          <div class="print-item-header">
-            <span>🦁 自信小狮子</span>
-            <span>我相信我行</span>
-          </div>
+          <div class="print-item-header"><span>🦁 自信小狮子</span><span class="card-tag">我相信我行</span></div>
           <div class="print-item-desc">相信努力一定行，挺胸抬头，勇敢举手大声朗读。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
         </div>
         <div class="print-grid-item item-att-print">
-          <div class="print-item-header">
-            <span>🪞 自省小魔镜</span>
-            <span>发现缺点</span>
-          </div>
+          <div class="print-item-header"><span>🪞 自省小魔镜</span><span class="card-tag">发现缺点</span></div>
           <div class="print-item-desc">照着镜子检查自己，坦然承认小错误，马上改正。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
         </div>
         <div class="print-grid-item item-att-print">
-          <div class="print-item-header">
-            <span>🛡️ 勇气大盾牌</span>
-            <span>迎难而上</span>
-          </div>
+          <div class="print-item-header"><span>🛡️ 勇气大盾牌</span><span class="card-tag">迎难而上</span></div>
           <div class="print-item-desc">面对有点难的事情或困难，举起盾牌大步往前冲，不退缩。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
         </div>
         <div class="print-grid-item item-att-print">
-          <div class="print-item-header">
-            <span>🌍 胸怀大海洋</span>
-            <span>大度包容</span>
-          </div>
+          <div class="print-item-header"><span>🌍 胸怀大海洋</span><span class="card-tag">大度包容</span></div>
           <div class="print-item-desc">大度包容，原谅别人的粗心；微笑着接受下雨等没法改变的意外。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
-        </div>
-        
-        <!-- 行为层 6个 -->
-        <div class="print-grid-item">
-          <div class="print-item-header">
-            <span>⭐ 理想北极星</span>
-            <span>追寻理想</span>
-          </div>
-          <div class="print-item-desc">为了梦想向前走，看太空科普书或构思小童话故事。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
-        </div>
-        <div class="print-grid-item">
-          <div class="print-item-header">
-            <span>🎯 发现兴趣</span>
-            <span>激情投入</span>
-          </div>
-          <div class="print-item-desc">开心地拼乐高、画画、手工，专注于最爱做的事情。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
-        </div>
-        <div class="print-grid-item">
-          <div class="print-item-header">
-            <span>📚 努力学习</span>
-            <span>融会贯通</span>
-          </div>
-          <div class="print-item-desc">认真看课外书，掌握新知识并学会举一反三（如现实除法游戏）。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
-        </div>
-        <div class="print-grid-item">
-          <div class="print-item-header">
-            <span>⚡ 有效执行</span>
-            <span>快速飞鞋</span>
-          </div>
-          <div class="print-item-desc">做事麻利不磨蹭，今天任务今天好，成功击败拖延小怪兽。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
-        </div>
-        <div class="print-grid-item">
-          <div class="print-item-header">
-            <span>💬 人际交流</span>
-            <span>传声倾听</span>
-          </div>
-          <div class="print-item-desc">温和礼貌地表达，用两个耳朵认真听别人把话讲完。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
-        </div>
-        <div class="print-grid-item">
-          <div class="print-item-header">
-            <span>🤝 合作沟通</span>
-            <span>齐心划船</span>
-          </div>
-          <div class="print-item-desc">分工合作做画报、帮爸妈做家务，相信队友并互补优势。</div>
-          <div class="print-item-footer">
-            <div class="print-parent-note">评语：________________</div>
-            <div class="print-stamp-area">盖章/星</div>
-          </div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
         </div>
       </div>
       
       <div class="print-footer-info">
-        <span>守望成长 · 用爱浇灌 ｜ 打印日期：2026年 ｜ 闫孜睿成长魔法地图专用卡片</span>
+        <span>守望成长 · 用爱浇灌 ｜ 闫孜睿成长魔法地图专用卡片 ①/③</span>
       </div>
     </div>
-    
-    <!-- 第二页：成长树涂色升级卡 -->
+
+    <!-- 第二页：行为超能力卡 -->
     <div class="print-card-page">
       <div class="print-header">
         <div style="text-align: left;">
-          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的“成长树”魔法升级卡</h1>
-          <div class="print-subtitle">亲手涂色点亮你的价值观、态度与行为，见证小树苗茁壮成长</div>
+          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的魔法打卡卡 ②</h1>
+          <div class="print-subtitle">六大行为超能力 | 付诸行动，让每一天都有进步</div>
         </div>
-        <div style="font-size: 24pt; border: 2.5px solid #4a148c; padding: 1mm 3mm; border-radius: 8px;" id="print-avatar-box-2">👧</div>
+        <div class="print-avatar-box" id="print-avatar-box-2">👧</div>
       </div>
       
-      <div class="print-tree-container">
+      <div class="print-grid">
+        <div class="print-grid-item">
+          <div class="print-item-header"><span>⭐ 理想北极星</span><span class="card-tag">追寻理想</span></div>
+          <div class="print-item-desc">为了梦想向前走，看太空科普书或构思小童话故事。</div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header"><span>🎯 发现兴趣</span><span class="card-tag">激情投入</span></div>
+          <div class="print-item-desc">开心地拼乐高、画画、手工，专注于最爱做的事情。</div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header"><span>📚 努力学习</span><span class="card-tag">融会贯通</span></div>
+          <div class="print-item-desc">认真看课外书，掌握新知识并学会举一反三。</div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header"><span>⚡ 有效执行</span><span class="card-tag">快速飞鞋</span></div>
+          <div class="print-item-desc">做事麻利不磨蹭，今天任务今天好，成功击败拖延小怪兽。</div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header"><span>💬 人际交流</span><span class="card-tag">传声倾听</span></div>
+          <div class="print-item-desc">温和礼貌地表达，用两个耳朵认真听别人把话讲完。</div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
+        </div>
+        <div class="print-grid-item">
+          <div class="print-item-header"><span>🤝 合作沟通</span><span class="card-tag">齐心划船</span></div>
+          <div class="print-item-desc">分工合作做画报、帮爸妈做家务，相信队友并互补优势。</div>
+          <div class="print-item-footer"><div class="print-parent-note">评语：</div><div class="print-stamp-area">盖章</div></div>
+        </div>
+      </div>
+      
+      <div class="print-footer-info">
+        <span>守望成长 · 用爱浇灌 ｜ 闫孜睿成长魔法地图专用卡片 ②/③</span>
+      </div>
+    </div>
+    
+    <!-- 第三页：成长树涂色升级卡 -->
+    <div class="print-card-page">
+      <div class="print-header">
+        <div style="text-align: left;">
+          <h1 class="print-title"><span class="user-name-span">小睿睿</span>的"成长树"魔法升级卡</h1>
+          <div class="print-subtitle">亲手涂色点亮你的价值观、态度与行为，见证小树苗茁壮成长</div>
+        </div>
+        <div class="print-avatar-box" id="print-avatar-box-3">👧</div>
+      </div>
+      
+<div class="print-tree-container">
         <!-- 成长树线稿 SVG，适合儿童涂色 -->
         <div class="print-tree-svg-container">
           <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">

@@ -1,0 +1,10 @@
+name: grow-map
+
+services:
+  grow-map:
+    build: .
+    image: grow-map:latest
+    container_name: grow-map
+    ports:
+      - "8080:80"
+    restart: unless-stopped
