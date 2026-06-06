@@ -5,546 +5,1706 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>小圆的成长魔法圈 · 小人书</title>
 <style>
+/* ==========================================
+   WDS Design System - Children Theme
+   ========================================== */
+:root {
+  --kids-bg-pastel: linear-gradient(180deg, #fffcf4 0%, #fff8e7 100%);
+  --kids-card-bg: rgba(255, 255, 255, 0.9);
+  --kids-text-primary: #4a3c31;
+  --kids-text-muted: #8c7a6b;
+  
+  --kids-magic-core: #ff7675;
+  --kids-magic-attitude: #fab1a0;
+  --kids-magic-behavior: #55efc4;
+  
+  --kids-state-success: #2ecc71;
+  --kids-state-error: #e74c3c;
+  --kids-state-highlight: #ffeaa7;
+  
+  --font-kids: "PingFang SC", "Microsoft YaHei", "KaiTi", sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  
+  --shadow-kids: 0 8px 24px rgba(140, 122, 107, 0.12);
+  --transition-base: 0.3s ease;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: "PingFang SC","Microsoft YaHei","KaiTi",sans-serif; background: #fff8e7; overflow-x: hidden; }
 
-/* 每页 */
-.page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; position: relative; overflow: hidden; }
-.page-cover { background: linear-gradient(180deg,#ffecd2 0%,#fcb69f 50%,#ff9a9e 100%); }
-.page-cover h1 { font-size: 3em; color: #c0392b; text-align: center; text-shadow: 3px 3px 0 rgba(255,255,255,0.5); }
-.page-cover .sub { font-size: 1.4em; color: #e74c3c; margin-top: 10px; }
-.page-cover .author { font-size: 1em; color: #c0392b; margin-top: 30px; opacity: 0.8; }
+body {
+  font-family: var(--font-kids);
+  background: var(--kids-bg-pastel);
+  color: var(--kids-text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+}
 
-/* 页面主题色 */
-.page-intro { background: #fffdf5; }
-.page-core { background: linear-gradient(180deg,#fff0f0,#ffe0e0); }
-.page-att { background: linear-gradient(180deg,#fff8f0,#ffe8d0); }
-.page-beh { background: linear-gradient(180deg,#f0fff0,#d8f8d8); }
-.page-end { background: linear-gradient(180deg,#f0f0ff,#e0e0ff); }
-.page-wisdom { background: linear-gradient(180deg,#fff0f8,#ffe0f0); }
+/* 页面容器：限定最大屏宽以适配平板和手机 */
+.app-container {
+  width: 100%;
+  max-width: 800px;
+  min-height: 100vh;
+  position: relative;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+}
 
-.page-title { font-size: 2.2em; color: #333; margin-bottom: 10px; text-align: center; }
-.page-subtitle { font-size: 1.1em; color: #777; margin-bottom: 30px; text-align: center; }
+/* 翻页过渡 */
+.page {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 20px;
+  animation: fadeIn 0.4s ease-in-out forwards;
+}
 
-/* SVG容器 */
-.svg-box { max-width: 650px; width: 100%; margin: 20px auto; }
+.page.active {
+  display: flex;
+}
 
-/* 文字框 */
-.text-box { max-width: 600px; margin: 20px auto; padding: 24px 28px; background: rgba(255,255,255,0.75); border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-.text-box h3 { font-size: 1.4em; color: #c0392b; margin-bottom: 10px; }
-.text-box p { font-size: 1.1em; color: #444; line-height: 2; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-/* 气泡对话 */
-.bubble { position: relative; background: #fff; border-radius: 24px; padding: 18px 24px; font-size: 1.15em; color: #444; box-shadow: 0 4px 16px rgba(0,0,0,0.08); max-width: 500px; margin: 20px auto; }
-.bubble::after { content: ""; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-top: 16px solid #fff; }
+/* ==========================================
+   01.1 COVER PAGE (封面)
+   ========================================== */
+.cover-page {
+  background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+  color: #c0392b;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
 
-/* 小卡片 */
-.little-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; max-width: 800px; margin: 20px auto; padding: 0 10px; }
-.little-card { background: rgba(255,255,255,0.8); border-radius: 16px; padding: 18px; text-align: center; box-shadow: 0 3px 12px rgba(0,0,0,0.05); transition: transform 0.3s; }
-.little-card:hover { transform: translateY(-5px); }
-.little-card .emoji { font-size: 2.4em; margin-bottom: 8px; }
-.little-card .title { font-size: 1.1em; font-weight: bold; color: #333; margin-bottom: 4px; }
-.little-card .desc { font-size: 0.9em; color: #666; line-height: 1.5; }
+/* 顶部状态栏 */
+.top-status-bar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-/* 箭头导航 */
-.arrow-down { text-align: center; font-size: 2em; color: #ccc; animation: bounce 2s infinite; margin: 20px 0; }
-@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(10px)} }
+.badge-counter-badge {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.9em;
+  font-weight: bold;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
 
-/* 三步 */
-.steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 700px; margin: 20px auto; }
-.step { flex: 0 0 180px; text-align: center; padding: 20px; border-radius: 16px; }
-.step .num { width: 50px; height: 50px; line-height: 50px; border-radius: 50%; font-size: 1.4em; font-weight: bold; margin: 0 auto 10px; color: #fff; }
-.step-core .num { background: #e74c3c; }
-.step-att .num { background: #f39c12; }
-.step-beh .num { background: #27ae60; }
-.step h4 { font-size: 1.1em; color: #333; margin-bottom: 6px; }
-.step p { font-size: 0.9em; color: #666; line-height: 1.6; }
+.parent-portal-link {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.9em;
+  font-weight: bold;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  text-decoration: none;
+  color: #c0392b;
+  transition: var(--transition-base);
+}
 
-.final-msg { text-align: center; font-size: 1.6em; color: #8e44ad; font-weight: bold; max-width: 600px; margin: 30px auto; line-height: 1.8; }
+.parent-portal-link:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
 
-/* 响应式 */
+.cover-diagram {
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+.cover-diagram svg {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.cover-page h1 {
+  font-size: 2.8em;
+  font-weight: bold;
+  text-shadow: 2px 2px 0px rgba(255,255,255,0.6);
+  margin-bottom: 10px;
+}
+
+.cover-page .subtitle {
+  font-size: 1.3em;
+  opacity: 0.9;
+  margin-bottom: 30px;
+}
+
+.cover-page .author-info {
+  font-size: 0.9em;
+  opacity: 0.8;
+  line-height: 1.5;
+  margin-bottom: 40px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff7675, #c0392b);
+  color: #fff;
+  border: none;
+  padding: 16px 48px;
+  font-size: 1.3em;
+  font-weight: bold;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(192, 57, 43, 0.35);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 24px rgba(192, 57, 43, 0.5);
+}
+
+/* ==========================================
+   01.2 STORY PAGE (故事页)
+   ========================================== */
+.story-page {
+  padding-top: 70px;
+}
+
+.story-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.leaf-tip-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5em;
+  background: var(--kids-card-bg);
+  border: 1px solid rgba(0,0,0,0.05);
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-kids);
+  transition: var(--transition-base);
+  z-index: 10;
+}
+
+.leaf-tip-btn:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 1.2em;
+  background: var(--kids-card-bg);
+  border: 1px solid rgba(0,0,0,0.05);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: var(--shadow-kids);
+  transition: var(--transition-base);
+  z-index: 10;
+}
+
+.back-btn:hover {
+  transform: translateX(-4px);
+}
+
+/* 伴读小抽屉 */
+.drawer-parent-tip {
+  position: absolute;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(0,0,0,0.08);
+  box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+  padding: 40px 24px;
+  z-index: 100;
+  transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.drawer-parent-tip.open {
+  right: 0;
+}
+
+.drawer-close {
+  align-self: flex-end;
+  cursor: pointer;
+  font-size: 1.5em;
+  color: var(--kids-text-muted);
+}
+
+.drawer-parent-tip h4 {
+  font-size: 1.2em;
+  color: #c0392b;
+  border-bottom: 2px dashed #fcb69f;
+  padding-bottom: 10px;
+}
+
+.drawer-parent-tip p {
+  font-size: 0.95em;
+  line-height: 1.8;
+  color: var(--kids-text-primary);
+}
+
+/* Carousel 容器 */
+.story-carousel-container {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--kids-card-bg);
+  box-shadow: var(--shadow-kids);
+  margin-bottom: 24px;
+}
+
+.story-carousel {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.story-slide {
+  min-width: 100%;
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.illustration-box {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.illustration-box svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.story-text {
+  font-size: 1.2em;
+  line-height: 1.8;
+  font-weight: 500;
+  color: var(--kids-text-primary);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Carousel 按钮 */
+.carousel-nav {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-nav {
+  background: var(--kids-card-bg);
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  box-shadow: var(--shadow-kids);
+  transition: var(--transition-base);
+}
+
+.btn-nav:hover:not(:disabled) {
+  background: #ffe8d0;
+  transform: scale(1.05);
+}
+
+.btn-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: #ccc;
+  transition: var(--transition-base);
+}
+
+.dot.active {
+  background: #ff7675;
+  width: 24px;
+}
+
+/* 挑战触发按钮 */
+.challenge-trigger-btn {
+  display: none;
+  animation: pulse 2s infinite;
+}
+
+.challenge-trigger-btn.visible {
+  display: inline-block;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 8px 20px rgba(192, 57, 43, 0.35); }
+  50% { transform: scale(1.05); box-shadow: 0 12px 28px rgba(192, 57, 43, 0.55); }
+  100% { transform: scale(1); box-shadow: 0 8px 20px rgba(192, 57, 43, 0.35); }
+}
+
+/* ==========================================
+   01.3 INTERACTIVE QUIZ MODAL (答题弹窗)
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.quiz-modal {
+  width: 90%;
+  max-width: 550px;
+  background: #fffcf4;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  padding: 30px 24px;
+  position: relative;
+  animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.quiz-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: var(--kids-text-muted);
+}
+
+.quiz-modal-title {
+  text-align: center;
+  font-size: 1.4em;
+  color: #e74c3c;
+  margin-bottom: 15px;
+}
+
+.quiz-question {
+  font-size: 1.15em;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  text-align: center;
+  color: var(--kids-text-primary);
+  font-weight: bold;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.quiz-option-card {
+  background: #fff;
+  border: 2px solid rgba(0,0,0,0.06);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1em;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.quiz-option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.quiz-option-card.error {
+  border-color: var(--kids-state-error);
+  background: #fff5f5;
+  animation: shake 0.4s ease;
+}
+
+.quiz-option-card.success {
+  border-color: var(--kids-state-success);
+  background: #f4fff4;
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.25);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.quiz-feedback-box {
+  min-height: 50px;
+  text-align: center;
+  font-size: 1.05em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.quiz-feedback-box.error-text { color: var(--kids-state-error); }
+.quiz-feedback-box.success-text { color: var(--kids-state-success); }
+
+/* Confetti 爆炸效果 */
+.confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ffd200;
+  border-radius: var(--radius-full);
+  animation: confettiFall 2s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translate3d(var(--x-start), -10px, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate3d(var(--x-end), 280px, 0) rotate(360deg); opacity: 0; }
+}
+
+.quiz-cta-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.15em;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  color: white;
+  cursor: pointer;
+  display: none;
+  box-shadow: 0 6px 15px rgba(46, 204, 113, 0.3);
+  transition: var(--transition-base);
+}
+
+.quiz-cta-btn.visible {
+  display: block;
+}
+
+.quiz-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(46, 204, 113, 0.45);
+}
+
+/* ==========================================
+   01.4 CHECKIN PAGE (自省打卡与勋章)
+   ========================================== */
+.checkin-page {
+  padding-top: 50px;
+}
+
+.checkin-stage {
+  flex: 1;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+/* 左侧打卡面板 */
+.checkin-panel {
+  flex: 1.2;
+  background: var(--kids-card-bg);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-kids);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.checkin-panel h2 {
+  font-size: 1.3em;
+  color: var(--kids-text-primary);
+  margin-bottom: 4px;
+}
+
+.checkin-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkin-section-title {
+  font-size: 0.95em;
+  font-weight: bold;
+  color: var(--kids-text-muted);
+}
+
+/* 心情表情 */
+.mood-selector {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.mood-btn {
+  font-size: 2.2em;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  border-radius: var(--radius-full);
+}
+
+.mood-btn:hover {
+  transform: scale(1.2);
+}
+
+.mood-btn.selected {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 10px rgba(254, 202, 87, 0.8));
+}
+
+.mood-btn::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: #ff7675;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.mood-btn.selected::after {
+  opacity: 1;
+}
+
+/* 糖果选择卡片 */
+.achieve-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.achieve-card {
+  background: #fff;
+  border: 1.5px solid rgba(0,0,0,0.06);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  cursor: pointer;
+  font-size: 0.95em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-base);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.achieve-card:hover {
+  transform: translateY(-2px);
+}
+
+.achieve-card.selected {
+  border-color: #ff7675;
+  background: #fff5f2;
+}
+
+/* 自省滑块 */
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.score-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: #ffe3d1;
+  outline: none;
+  cursor: pointer;
+}
+
+.score-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffa502;
+  box-shadow: 0 0 8px rgba(255, 165, 2, 0.6);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.score-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.score-bubble {
+  background: #ff7675;
+  color: white;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-weight: bold;
+  font-size: 1.1em;
+  min-width: 50px;
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(255, 118, 117, 0.3);
+}
+
+/* 存入魔法瓶大打卡按钮 */
+.checkin-submit-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.btn-checkin {
+  flex: 1;
+  background: linear-gradient(135deg, #ffa502, #ff7675);
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: var(--radius-full);
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 118, 117, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-checkin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 118, 117, 0.55);
+}
+
+/* 魔法瓶图形容器 */
+.magic-bottle-graphic {
+  position: relative;
+  width: 60px;
+  height: 90px;
+  border: 3.5px solid var(--kids-text-primary);
+  border-radius: 12px 12px 24px 24px;
+  background: rgba(255,255,255,0.4);
+  overflow: hidden;
+  box-shadow: var(--shadow-kids);
+  flex-shrink: 0;
+}
+
+.magic-bottle-neck {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 10px;
+  border: 3.5px solid var(--kids-text-primary);
+  background: #ffb8b8;
+  border-radius: 4px;
+}
+
+.magic-bottle-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 10%; /* 打卡百分比高度 */
+  background: linear-gradient(180deg, #ffe066 0%, #ff884d 100%);
+  transition: height 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.magic-bottle-bubble {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,0.7);
+  border-radius: var(--radius-full);
+  bottom: 0;
+  animation: floatUp 1.5s infinite ease-out;
+  opacity: 0;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(-70px) scale(1.2); opacity: 0; }
+}
+
+/* 右侧勋章墙 */
+.badge-wall-side {
+  flex: 0.8;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-kids);
+  border: 1px solid rgba(255,255,255,0.5);
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.badge-wall-side h3 {
+  font-size: 1.1em;
+  color: var(--kids-text-primary);
+  text-align: center;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  justify-items: center;
+  align-content: center;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  font-size: 0.85em;
+  color: var(--kids-text-muted);
+}
+
+.badge-icon-box {
+  width: 70px;
+  height: 70px;
+  background: rgba(0,0,0,0.04);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2em;
+  transition: all 0.3s ease;
+  position: relative;
+  filter: grayscale(100%);
+  opacity: 0.45;
+}
+
+.badge-item.unlocked .badge-icon-box {
+  filter: grayscale(0%);
+  opacity: 1;
+  background: radial-gradient(circle, #fff3b0 0%, #ffdf00 100%);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  transform: scale(1.05);
+}
+
+.badge-item.unlocked {
+  color: var(--kids-text-primary);
+  font-weight: bold;
+}
+
+/* 水晶球气泡 */
+.crystal-ball-box {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  position: relative;
+  cursor: pointer;
+  border: 1px dashed rgba(255,118,117,0.3);
+}
+
+.crystal-ball-box::before {
+  content: "🔮 点击水晶球读金句";
+  display: block;
+  font-size: 0.8em;
+  color: #ff7675;
+  margin-bottom: 4px;
+}
+
+.crystal-wisdom-text {
+  font-size: 0.9em;
+  line-height: 1.5;
+  color: var(--kids-text-primary);
+}
+
+.streak-counter {
+  text-align: center;
+  font-size: 0.95em;
+  background: #ffe3d1;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  color: #d35400;
+  font-weight: bold;
+}
+
+/* 全屏解锁弹窗 */
+.unlock-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.unlock-modal-overlay.open {
+  display: flex;
+}
+
+.unlock-card {
+  background: radial-gradient(circle at top, #fff9e6 0%, #ffebcd 100%);
+  border-radius: var(--radius-lg);
+  padding: 40px 30px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+  animation: modalSlideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  position: relative;
+}
+
+.unlock-emblem {
+  font-size: 4.5em;
+  margin-bottom: 16px;
+  animation: popEmblem 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.3) forwards;
+}
+
+@keyframes popEmblem {
+  from { transform: scale(0.3) rotate(-30deg); opacity: 0; }
+  to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.unlock-card h2 {
+  font-size: 1.6em;
+  color: #e67e22;
+  margin-bottom: 8px;
+}
+
+.unlock-card p {
+  font-size: 1em;
+  line-height: 1.6;
+  color: var(--kids-text-primary);
+  margin-bottom: 24px;
+}
+
+/* 响应式适配 */
 @media (max-width: 600px) {
-  .page-cover h1 { font-size: 2em; }
-  .page-title { font-size: 1.6em; }
-  .little-cards { grid-template-columns: repeat(2, 1fr); }
+  .checkin-stage {
+    flex-direction: column;
+  }
+  .badge-wall-side {
+    align-self: stretch;
+  }
+  .app-container {
+    padding: 15px 10px;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- ========== 封面 ========== -->
-<div class="page page-cover">
-  <svg width="200" height="200" viewBox="0 0 200 200">
-    <defs>
-      <radialGradient id="rainbow" cx="50%" cy="50%"><stop offset="0%" stop-color="#e74c3c"/><stop offset="33%" stop-color="#f39c12"/><stop offset="66%" stop-color="#27ae60"/><stop offset="100%" stop-color="#3498db"/></radialGradient>
-    </defs>
-    <circle cx="100" cy="100" r="90" fill="url(#rainbow)" opacity="0.3"/>
-    <circle cx="100" cy="100" r="65" fill="url(#rainbow)" opacity="0.4"/>
-    <circle cx="100" cy="100" r="40" fill="url(#rainbow)" opacity="0.6"/>
-    <circle cx="100" cy="100" r="18" fill="#e74c3c"/>
-    <text x="100" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">做最好</text>
-    <text x="98" y="58" text-anchor="middle" fill="#333" font-size="10">行为</text>
-    <text x="98" y="128" text-anchor="middle" fill="#333" font-size="10">态度</text>
-    <text x="53" y="108" text-anchor="middle" fill="#333" font-size="10">价值观</text>
-  </svg>
+<div class="app-container">
 
-  <h1>小圆的<br>成长魔法圈</h1>
-  <div class="sub">—— 做最好的自己 ——</div>
-  <div class="author">根据李开复博士《做最好的自己》改编<br>适合 6-12 岁小朋友阅读</div>
-  <div class="arrow-down">⬇</div>
+  <!-- ==============================
+       01.1 COVER PAGE (封面页)
+       ============================== -->
+  <div id="page-cover" class="page cover-page active">
+    <div class="top-status-bar">
+      <div class="badge-counter-badge" id="cover-badge-display">✨ 已解锁 0 枚徽章</div>
+      <a class="parent-portal-link" id="cover-btn-parent" href="成长地图.html">🔑 魔法导师入口</a>
+    </div>
+
+    <div class="cover-diagram">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="45" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="20" fill="#e74c3c"/>
+        <text x="100" y="103" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">诚信</text>
+        <text x="100" y="82" text-anchor="middle" fill="#c0392b" font-size="9" font-weight="bold">价值观</text>
+        <text x="100" y="58" text-anchor="middle" fill="#d35400" font-size="9" font-weight="bold">态度</text>
+        <text x="100" y="33" text-anchor="middle" fill="#27ae60" font-size="9" font-weight="bold">行为</text>
+      </svg>
+    </div>
+
+    <h1>小圆的成长魔法圈</h1>
+    <div class="subtitle">—— 做最好的自己 ——</div>
+    <div class="author-info">
+      根据李开复博士《做最好的自己》同心圆框架改编<br>
+      适合 6-12 岁小朋友探索性格的奥秘
+    </div>
+
+    <button class="btn-primary" id="cover-btn-start" onclick="navigateTo('page-story')">开始冒险 ➔</button>
+  </div>
+
+  <!-- ==============================
+       01.2 STORY PAGE (故事页)
+       ============================== -->
+  <div id="page-story" class="page story-page">
+    <button class="back-btn" onclick="navigateTo('page-cover')">➔ 退出</button>
+    <button class="leaf-tip-btn" id="story-btn-tip" onclick="toggleParentDrawer(true)">💡</button>
+
+    <!-- 伴读小提示抽屉 -->
+    <div class="drawer-parent-tip" id="story-parent-drawer">
+      <div class="drawer-close" onclick="toggleParentDrawer(false)">✕</div>
+      <h4>爸爸伴读引导锦囊</h4>
+      <p><strong>亲爱的家长：</strong></p>
+      <p>当您陪孩子读到下雨踢不成球时，可以引导孩子：“雨天是不能改变的，但做不做别的事情是自己可以做主的，这就是‘积极主动’的魔法哦。”</p>
+      <p>让孩子思考：今天有什么不顺心的事情，可以用这只积极跑鞋来做出改变？</p>
+    </div>
+
+    <div class="story-stage">
+      <div class="story-carousel-container">
+        <div class="story-carousel" id="carousel-track">
+          
+          <!-- Slide 1 -->
+          <div class="story-slide">
+            <div class="illustration-box" onclick="triggerPuppyAnimation()">
+              <svg viewBox="0 0 400 200" id="slide1-svg">
+                <!-- 背景下雨云 -->
+                <path d="M 60,60 Q 80,40 100,60 Q 120,40 140,60 Q 160,50 170,70 Q 150,90 60,90 Z" fill="#b2bec3" />
+                <line x1="80" y1="95" x2="70" y2="120" stroke="#74b9ff" stroke-width="2" />
+                <line x1="110" y1="95" x2="100" y2="120" stroke="#74b9ff" stroke-width="2" />
+                <line x1="140" y1="95" x2="130" y2="120" stroke="#74b9ff" stroke-width="2" />
+                
+                <!-- 哭泣小狗 (嘟嘟) -->
+                <circle cx="280" cy="140" r="35" fill="#d35400" />
+                <circle cx="265" cy="130" r="5" fill="#2d3436" id="puppy-eye-l" />
+                <circle cx="295" cy="130" r="5" fill="#2d3436" id="puppy-eye-r" />
+                <!-- 哭泣眼泪 -->
+                <path d="M 265,135 Q 260,150 262,152" stroke="#74b9ff" stroke-width="2" fill="none" id="puppy-tear" />
+                <!-- 狗耳朵 -->
+                <ellipse cx="240" cy="130" rx="10" ry="20" fill="#a04000" />
+                <ellipse cx="320" cy="130" rx="10" ry="20" fill="#a04000" />
+                <!-- 伤心嘴巴 -->
+                <path d="M 270,155 Q 280,148 290,155" stroke="#2d3436" stroke-width="2" fill="none" id="puppy-mouth" />
+                <text x="280" y="195" text-anchor="middle" font-size="13" font-weight="bold" fill="#7f8c8d">点击嘟嘟狗听心声</text>
+              </svg>
+              <!-- 狗说内心戏气泡 -->
+              <div style="position:absolute; top:10px; right:40px; background:white; padding:8px 12px; border-radius:12px; font-size:0.85em; border:1px solid #ddd; display:none;" id="puppy-bubble">
+                “雨天真倒霉！我什么都做不成...”
+              </div>
+            </div>
+            <div class="story-text">
+              小狗嘟嘟无精打采地坐在路边叹气：“雨下得这么大，今天没法出去踢足球了，真倒霉！我什么都不想做了。”
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="story-slide">
+            <div class="illustration-box">
+              <svg viewBox="0 0 400 200">
+                <!-- 小圆递鞋 -->
+                <circle cx="150" cy="130" r="30" fill="#ff9a9e" />
+                <circle cx="140" cy="122" r="4" fill="#333" />
+                <circle cx="160" cy="122" r="4" fill="#333" />
+                <path d="M 140,140 Q 150,150 160,140" stroke="#333" stroke-width="2" fill="none" />
+                <!-- 小黄伞 -->
+                <path d="M 110,80 A 40,40 0 0,1 190,80 Z" fill="#ffeaa7" />
+                <line x1="150" y1="80" x2="150" y2="130" stroke="#d35400" stroke-width="2" />
+                
+                <!-- 积极跑鞋 -->
+                <path d="M 270,140 L 310,140 L 320,155 L 265,155 Z" fill="#ff7675" stroke="#fff" stroke-width="1.5" />
+                <ellipse cx="295" cy="140" rx="8" ry="4" fill="#ffeaa7" />
+                <!-- 呼吸发光 -->
+                <circle cx="295" cy="145" r="40" fill="none" stroke="#ffeaa7" stroke-width="1.5" opacity="0.5" />
+              </svg>
+            </div>
+            <div class="story-text">
+              这时候，小圆走了过来，递给嘟嘟一双发光的“积极跑鞋”和一把雨伞。小圆说：“嘟嘟，虽然雨停不下来，但我们可以去地下室练球，或者在家里看书呀！”
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="story-slide">
+            <div class="illustration-box">
+              <svg viewBox="0 0 400 200">
+                <!-- 快乐嘟嘟狗踢球 -->
+                <circle cx="180" cy="120" r="30" fill="#d35400" />
+                <circle cx="170" cy="112" r="4" fill="#333" />
+                <circle cx="190" cy="112" r="4" fill="#333" />
+                <path d="M 170,128 Q 180,138 190,128" stroke="#333" stroke-width="2" fill="none" />
+                <!-- 穿上跑鞋 -->
+                <rect x="160" y="145" width="16" height="10" rx="3" fill="#ff7675" />
+                <rect x="184" y="145" width="16" height="10" rx="3" fill="#ff7675" />
+                <!-- 足球 -->
+                <circle cx="260" cy="135" r="16" fill="#fff" stroke="#333" stroke-width="2" />
+                <line x1="260" y1="119" x2="260" y2="151" stroke="#333" />
+                <line x1="244" y1="135" x2="276" y2="135" stroke="#333" />
+                <!-- 努力宝石闪光 -->
+                <text x="180" y="70" font-size="28" text-anchor="middle">💎</text>
+              </svg>
+            </div>
+            <div class="story-text">
+              嘟嘟明白了！它穿上跑鞋，在地下室努力练习。原来，只要我们“积极主动”地想办法并“努力学习”去行动，雨天也会成为很棒的成长日！
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="carousel-nav">
+        <button class="btn-nav" id="carousel-prev" onclick="moveCarousel(-1)" disabled>上一页</button>
+        <div class="carousel-dots" id="carousel-dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <button class="btn-nav" id="carousel-next" onclick="moveCarousel(1)">下一页</button>
+      </div>
+
+      <button class="btn-primary challenge-trigger-btn" id="story-btn-challenge" onclick="openQuizModal()">接受宝石挑战 ➔</button>
+    </div>
+  </div>
+
 </div>
 
-<!-- ========== 角色介绍 ========== -->
-<div class="page page-intro">
-  <div class="page-title">认识小圆！</div>
-  <div class="page-subtitle">一个和你一样正在长大的小朋友</div>
+<!-- ==========================================
+     01.3 INTERACTIVE QUIZ MODAL (答题挑战弹窗)
+     ========================================== -->
+<div class="modal-overlay" id="quiz-modal-overlay">
+  <div class="quiz-modal">
+    <div class="quiz-modal-close" onclick="closeQuizModal()">✕</div>
+    <div class="quiz-modal-title">✨ 积极宝石挑战 ✨</div>
+    <div class="quiz-question">
+      嘟嘟狗放学回家，突然停电了没办法看最喜欢的动画片。下面哪一个是“积极主动”的成长魔法卡片？
+    </div>
 
-  <div class="svg-box">
-    <svg viewBox="0 0 600 320">
-      <!-- 小圆 -->
-      <circle cx="150" cy="180" r="45" fill="#ff9a9e"/>
-      <circle cx="135" cy="168" r="6" fill="#333"/>
-      <circle cx="165" cy="168" r="6" fill="#333"/>
-      <ellipse cx="150" cy="188" rx="12" ry="5" fill="#fff" opacity="0.7"/>
-      <text x="150" y="250" text-anchor="middle" fill="#c0392b" font-size="18" font-weight="bold">小圆</text>
-      <text x="150" y="270" text-anchor="middle" fill="#999" font-size="12">8岁 · 小学二年级</text>
+    <div class="quiz-options">
+      <div class="quiz-option-card" id="quiz-opt-a" onclick="selectQuizOption(false, 'quiz-opt-a')">
+        ❌ 坐在沙发上生闷气，不停责怪爸爸没把发电机充好电。
+      </div>
+      <div class="quiz-option-card" id="quiz-opt-b" onclick="selectQuizOption(true, 'quiz-opt-b')">
+        🎨 拿出画笔在月光下画画，或者帮妈妈把桌子擦干净。
+      </div>
+    </div>
 
-      <!-- 魔法圈 -->
-      <circle cx="420" cy="160" r="75" fill="none" stroke="#27ae60" stroke-width="3" opacity="0.4"/>
-      <circle cx="420" cy="160" r="55" fill="none" stroke="#f39c12" stroke-width="3" opacity="0.4"/>
-      <circle cx="420" cy="160" r="35" fill="#e74c3c" opacity="0.3"/>
-      <circle cx="420" cy="160" r="12" fill="#e74c3c"/>
-      <text x="420" y="166" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">魔法圈</text>
-      <text x="420" y="255" text-anchor="middle" fill="#999" font-size="12">成功同心圆</text>
+    <!-- 粒子爆裂特效容器 -->
+    <div class="confetti-container" id="modal-confetti"></div>
 
-      <!-- 箭头 -->
-      <line x1="200" y1="170" x2="340" y2="170" stroke="#999" stroke-width="2" stroke-dasharray="6,4"/>
-      <polygon points="340,165 350,170 340,175" fill="#999"/>
-    </svg>
+    <div class="quiz-feedback-box" id="quiz-feedback"></div>
+
+    <button class="quiz-cta-btn" id="quiz-btn-next" onclick="finishQuiz()">赢回宝石，前往魔法瓶打卡！➔</button>
   </div>
-
-  <div class="text-box">
-    <h3>小圆发现了一个秘密！</h3>
-    <p>有一天，小圆在图书馆里发现了一张古老的"<strong>成长魔法圈</strong>"地图。地图上说，只要能穿过这个魔法圈的每一层，就能变成<strong>最好的自己</strong>！</p>
-    <p>小圆兴奋极了，"我也要试试！"</p>
-  </div>
-  <div class="arrow-down">⬇</div>
 </div>
 
-<!-- ========== 魔法圈全景 ========== -->
-<div class="page page-intro">
-  <div class="page-title">成长魔法圈长这样！</div>
-  <div class="page-subtitle">一共有三层，从里到外越来越厉害</div>
+<!-- ==========================================
+     01.4 CHECKIN PAGE (自省打卡与勋章墙)
+     ========================================== -->
+<div class="app-container">
+  <div id="page-checkin" class="page checkin-page">
+    <button class="back-btn" onclick="navigateTo('page-story')">➔ 返回故事</button>
+    
+    <div style="text-align:center; margin-bottom:15px;">
+      <h1 style="font-size:1.6em;color:#c0392b;">🔮 魔法自省室</h1>
+      <p style="font-size:0.9em;color:var(--kids-text-muted);">把今天的态度与行为化作宝石，存入魔法瓶吧！</p>
+    </div>
 
-  <div class="svg-box">
-    <svg viewBox="0 0 600 500">
-      <!-- 外环 -->
-      <circle cx="300" cy="260" r="210" fill="#c8f7c5" stroke="#27ae60" stroke-width="4"/>
-      <text x="300" y="45" text-anchor="middle" fill="#27ae60" font-size="20" font-weight="bold">第三层 · 行为超能力（怎么做）</text>
+    <div class="checkin-stage">
+      
+      <!-- 左栏打卡输入 -->
+      <div class="checkin-panel">
+        
+        <!-- 心情选择 -->
+        <div class="checkin-section">
+          <div class="checkin-section-title">1. 今天的心情怎么样？</div>
+          <div class="mood-selector">
+            <button class="mood-btn" data-mood="5" onclick="selectMood(5, this)">😆</button>
+            <button class="mood-btn" data-mood="4" onclick="selectMood(4, this)">🙂</button>
+            <button class="mood-btn" data-mood="3" onclick="selectMood(3, this)">😐</button>
+            <button class="mood-btn" data-mood="2" onclick="selectMood(2, this)">🙁</button>
+            <button class="mood-btn" data-mood="1" onclick="selectMood(1, this)">😡</button>
+          </div>
+        </div>
 
-      <circle cx="300" cy="260" r="145" fill="#ffeaa7" stroke="#f39c12" stroke-width="4"/>
-      <text x="300" y="110" text-anchor="middle" fill="#f39c12" font-size="20" font-weight="bold">第二层 · 态度魔法（怎么想）</text>
+        <!-- 态度/行为勾选 -->
+        <div class="checkin-section">
+          <div class="checkin-section-title">2. 今天我做到了哪些成长表现？(多选)</div>
+          <div class="achieve-grid">
+            <div class="achieve-card" onclick="toggleAchieve('🚀 积极主动', this)">
+              <span>🚀 积极主动</span>
+            </div>
+            <div class="achieve-card" onclick="toggleAchieve('📚 努力学习', this)">
+              <span>📚 努力学习</span>
+            </div>
+            <div class="achieve-card" onclick="toggleAchieve('🦁 充满自信', this)">
+              <span>🦁 充满自信</span>
+            </div>
+            <div class="achieve-card" onclick="toggleAchieve('💛 有同理心', this)">
+              <span>💛 有同理心</span>
+            </div>
+          </div>
+        </div>
 
-      <circle cx="300" cy="260" r="75" fill="#fab1a0" stroke="#e74c3c" stroke-width="4"/>
-      <circle cx="300" cy="260" r="30" fill="#e74c3c"/>
-      <text x="300" y="253" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">价值观</text>
-      <text x="300" y="270" text-anchor="middle" fill="#fff" font-size="11">诚信</text>
-      <text x="300" y="185" text-anchor="middle" fill="#e74c3c" font-size="20" font-weight="bold">第一层 · 核心价值观</text>
+        <!-- 自省打分滑块 -->
+        <div class="checkin-section">
+          <div class="checkin-section-title">3. 给自己今天的努力打个分</div>
+          <div class="slider-group">
+            <input type="range" min="0" max="10" value="8" class="score-slider" id="checkin-slider" oninput="updateSliderValue(this.value)">
+            <div class="score-bubble" id="slider-bubble">8分</div>
+          </div>
+        </div>
 
-      <!-- 标签 -->
-      <rect x="30" y="420" rx="12" width="160" height="36" fill="#e74c3c" opacity="0.9"/>
-      <text x="110" y="444" text-anchor="middle" fill="#fff" font-size="14">价值观 = 圆心</text>
-      <rect x="220" y="420" rx="12" width="160" height="36" fill="#f39c12" opacity="0.9"/>
-      <text x="300" y="444" text-anchor="middle" fill="#fff" font-size="14">态度 = 中环</text>
-      <rect x="410" y="420" rx="12" width="160" height="36" fill="#27ae60" opacity="0.9"/>
-      <text x="490" y="444" text-anchor="middle" fill="#fff" font-size="14">行为 = 外环</text>
-    </svg>
+        <!-- 打卡动作按钮与魔法瓶 -->
+        <div class="checkin-submit-container">
+          <button class="btn-checkin" onclick="submitCheckin()">
+            <span>🏺 存入魔法瓶（打卡）</span>
+          </button>
+          <div class="magic-bottle-graphic">
+            <div class="magic-bottle-neck"></div>
+            <div class="magic-bottle-liquid" id="bottle-liquid"></div>
+            <div class="magic-bottle-bubble" style="left:15px; animation-delay:0s;" id="btl-b1"></div>
+            <div class="magic-bottle-bubble" style="left:30px; animation-delay:0.4s;" id="btl-b2"></div>
+            <div class="magic-bottle-bubble" style="left:45px; animation-delay:0.8s;" id="btl-b3"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 右栏勋章墙 -->
+      <div class="badge-wall-side">
+        <h3>🏆 我的魔法勋章墙</h3>
+        
+        <div class="badge-grid">
+          <!-- 勋章 1 -->
+          <div class="badge-item" id="badge-first">
+            <div class="badge-icon-box">🎖️</div>
+            <div>自省之星</div>
+          </div>
+          <!-- 勋章 2 -->
+          <div class="badge-item" id="badge-perfect">
+            <div class="badge-icon-box">🦁</div>
+            <div>努力嘟嘟</div>
+          </div>
+          <!-- 勋章 3 -->
+          <div class="badge-item" id="badge-streak-3">
+            <div class="badge-icon-box">⚡</div>
+            <div>坚持到底</div>
+          </div>
+          <!-- 勋章 4 -->
+          <div class="badge-item" id="badge-streak-7">
+            <div class="badge-icon-box">🔮</div>
+            <div>全能魔导</div>
+          </div>
+        </div>
+
+        <!-- 今日水晶球金句 -->
+        <div class="crystal-ball-box" onclick="rollWisdom()">
+          <div class="crystal-wisdom-text" id="wisdom-box">“每一次自省，都是给心里的花浇水哦~”</div>
+        </div>
+
+        <div class="streak-counter" id="streak-display">连续打卡：0 天</div>
+      </div>
+
+    </div>
   </div>
-
-  <div class="text-box">
-    <p><strong>圆圈最里面</strong>是"价值观"——这是最重要的，就像房子的地基。</p>
-    <p><strong>中间一圈</strong>是"态度"——你怎么想事情。</p>
-    <p><strong>最外面一圈</strong>是"行为"——你怎么做事情。</p>
-    <p>从里到外，一层一层练习，就能变成最好的自己！</p>
-  </div>
-  <div class="arrow-down">⬇</div>
 </div>
 
-<!-- ========== 第一层：价值观 ========== -->
-<div class="page page-core">
-  <div class="page-title">第一关 · 诚信宝石</div>
-  <div class="page-subtitle">魔法圈的最中心，藏着一颗闪闪发光的宝石</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 280">
-      <!-- 宝石 -->
-      <polygon points="300,30 370,90 300,180 230,90" fill="#e74c3c" opacity="0.9"/>
-      <polygon points="300,55 345,90 300,150 255,90" fill="#ff6b6b" opacity="0.7"/>
-      <text x="300" y="106" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">诚信</text>
-
-      <!-- 光晕 -->
-      <circle cx="300" cy="105" r="80" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.3"/>
-      <circle cx="300" cy="105" r="100" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.15"/>
-
-      <!-- 标签 -->
-      <text x="300" y="240" text-anchor="middle" fill="#c0392b" font-size="16">诚实守信 · 说到做到</text>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <h3>什么是诚信？</h3>
-    <p><strong>诚</strong> = 对自己诚实，知道自己做对了还是做错了，不骗自己。</p>
-    <p><strong>信</strong> = 对别人守信，答应的事一定做到。</p>
-    <p>小圆明白了：<strong>诚信就像魔法圈的地基</strong>。如果不诚实、不守信，整个魔法圈就会倒塌！</p>
-  </div>
-
-  <div class="bubble">
-    "我要做一个诚实守信的孩子！答应妈妈写完作业再看电视，就一定要先写完作业！" —— 小圆
-  </div>
-  <div class="arrow-down" style="margin-bottom:5px;">⬇</div>
-  <div style="text-align:center;color:#e74c3c;font-size:1em;margin-bottom:20px;">✏️ 想一想：今天你有没有说到做到？</div>
-</div>
-
-<!-- ========== 第二层：态度六魔法 ========== -->
-<div class="page page-att">
-  <div class="page-title">第二关 · 六大态度魔法</div>
-  <div class="page-subtitle">过了第一关，小圆来到了态度魔法环！这里有六种魔法要学习。</div>
-
-  <div class="little-cards">
-    <div class="little-card">
-      <div class="emoji">🚀</div>
-      <div class="title">积极主动</div>
-      <div class="desc">不要等着别人推你，自己主动去做！作业主动写，房间主动收拾。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">💛</div>
-      <div class="title">同理心</div>
-      <div class="desc">站在别人的角度想一想。朋友哭了，想想他为什么难过。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">🦁</div>
-      <div class="title">自信</div>
-      <div class="desc">相信自己能做到！上台发言不害怕，因为你知道自己准备了。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">🪞</div>
-      <div class="title">自省</div>
-      <div class="desc">每天照照"心里的镜子"，想想今天哪里可以做得更好。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">🛡️</div>
-      <div class="title">勇气</div>
-      <div class="desc">害怕也要向前走！承认错误需要勇气，尝试新事物也需要勇气。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">🌍</div>
-      <div class="title">胸怀</div>
-      <div class="desc">心里能装下很多事。别人不小心碰到你，微笑着说"没关系"。</div>
-    </div>
-  </div>
-
-  <div class="text-box">
-    <h3>态度就是"方向盘"</h3>
-    <p>遇到事情时，你是怎么想的，决定了你会怎么做。这六种态度就像一个<strong>魔法方向盘</strong>，帮你把人生的小车开向正确的方向！</p>
-  </div>
-  <div class="arrow-down" style="margin-bottom:5px;">⬇</div>
-  <div style="text-align:center;color:#f39c12;font-size:1em;margin-bottom:20px;">✏️ 想一想：今天你用到了哪种态度魔法？</div>
-</div>
-
-<!-- ========== 态度详细 ========== -->
-<div class="page page-att">
-  <div class="page-title">态度魔法怎么用？</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 480">
-      <!-- 6个态度围绕中心圆 -->
-      <circle cx="300" cy="240" r="60" fill="none" stroke="#f39c12" stroke-width="3" opacity="0.3"/>
-      <circle cx="300" cy="240" r="25" fill="#f39c12" opacity="0.5"/>
-      <text x="300" y="246" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">态度</text>
-
-      <!-- 六个 -->
-      <circle cx="300" cy="120" r="35" fill="#ffe0b2"/>
-      <text x="300" y="117" text-anchor="middle" font-size="22">🚀</text>
-      <text x="300" y="140" text-anchor="middle" font-size="10" fill="#e67e22">积极主动</text>
-
-      <circle cx="430" cy="180" r="35" fill="#ffe0b2"/>
-      <text x="430" y="177" text-anchor="middle" font-size="22">💛</text>
-      <text x="430" y="200" text-anchor="middle" font-size="10" fill="#e67e22">同理心</text>
-
-      <circle cx="455" cy="300" r="35" fill="#ffe0b2"/>
-      <text x="455" y="297" text-anchor="middle" font-size="22">🦁</text>
-      <text x="455" y="320" text-anchor="middle" font-size="10" fill="#e67e22">自信</text>
-
-      <circle cx="370" cy="390" r="35" fill="#ffe0b2"/>
-      <text x="370" y="387" text-anchor="middle" font-size="22">🪞</text>
-      <text x="370" y="410" text-anchor="middle" font-size="10" fill="#e67e22">自省</text>
-
-      <circle cx="230" cy="390" r="35" fill="#ffe0b2"/>
-      <text x="230" y="387" text-anchor="middle" font-size="22">🛡️</text>
-      <text x="230" y="410" text-anchor="middle" font-size="10" fill="#e67e22">勇气</text>
-
-      <circle cx="145" cy="300" r="35" fill="#ffe0b2"/>
-      <text x="145" y="297" text-anchor="middle" font-size="22">🌍</text>
-      <text x="145" y="320" text-anchor="middle" font-size="10" fill="#e67e22">胸怀</text>
-
-      <!-- 连线 -->
-      <line x1="300" y1="155" x2="300" y2="215" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="400" y1="200" x2="330" y2="225" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="430" y1="300" x2="330" y2="265" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="370" y1="355" x2="320" y2="290" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="230" y1="355" x2="280" y2="290" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-      <line x1="170" y1="300" x2="270" y2="265" stroke="#f39c12" stroke-width="1" opacity="0.3"/>
-
-      <text x="300" y="465" text-anchor="middle" fill="#999" font-size="12">六种态度都连着中心的魔法核心</text>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <p>小圆发现，这六种态度就像一个<strong>六角星</strong>，每个角都很重要，而且它们是连在一起的——有勇气的人更自信，有同理心的人更有胸怀！</p>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 第三层：行为六超能力 ========== -->
-<div class="page page-beh">
-  <div class="page-title">第三关 · 六大行为超能力</div>
-  <div class="page-subtitle">学会了态度魔法，还要学会行为超能力，才能真正变成闪闪发光的小圆！</div>
-
-  <div class="little-cards">
-    <div class="little-card">
-      <div class="emoji">⭐</div>
-      <div class="title">追寻理想</div>
-      <div class="desc">找到你的梦想！想当科学家？宇航员？画家？先有一个目标。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">🎯</div>
-      <div class="title">发现兴趣</div>
-      <div class="desc">做你喜欢的事！画画、踢球、弹琴，找到让你眼睛发光的事。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">⚡</div>
-      <div class="title">有效执行</div>
-      <div class="desc">说到做到，马上去做！今天能做完的事，绝不拖到明天。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">📚</div>
-      <div class="title">努力学习</div>
-      <div class="desc">天天向上！不只为了考试，是为了让自己变得更聪明、更有本领。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">💬</div>
-      <div class="title">人际交流</div>
-      <div class="desc">学会好好说话。认真听别人说，清楚地说出自己的想法。</div>
-    </div>
-    <div class="little-card">
-      <div class="emoji">🤝</div>
-      <div class="title">合作沟通</div>
-      <div class="desc">和大家一起努力！一个人走得快，一群人走得远。</div>
-    </div>
-  </div>
-
-  <div class="text-box">
-    <h3>行为就是"小脚丫"</h3>
-    <p>态度是你怎么想，行为是你怎么做。光有好的想法还不够，还要用行动做出来！这六种行为就像你的<strong>六只魔法小脚丫</strong>，带你一步步走向最好的自己。</p>
-  </div>
-  <div class="arrow-down" style="margin-bottom:5px;">⬇</div>
-  <div style="text-align:center;color:#27ae60;font-size:1em;margin-bottom:20px;">✏️ 想一想：今天你用了哪种行为超能力？</div>
-</div>
-
-<!-- ========== 行为详细 ========== -->
-<div class="page page-beh">
-  <div class="page-title">行为超能力怎么用？</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 480">
-      <!-- 6个行为围绕中心圆 -->
-      <circle cx="300" cy="240" r="60" fill="none" stroke="#27ae60" stroke-width="3" opacity="0.3"/>
-      <circle cx="300" cy="240" r="25" fill="#27ae60" opacity="0.5"/>
-      <text x="300" y="246" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">行为</text>
-
-      <circle cx="300" cy="120" r="35" fill="#c8f7c5"/>
-      <text x="300" y="117" text-anchor="middle" font-size="22">⭐</text>
-      <text x="300" y="140" text-anchor="middle" font-size="10" fill="#1e8449">追寻理想</text>
-
-      <circle cx="430" cy="180" r="35" fill="#c8f7c5"/>
-      <text x="430" y="177" text-anchor="middle" font-size="22">🎯</text>
-      <text x="430" y="200" text-anchor="middle" font-size="10" fill="#1e8449">发现兴趣</text>
-
-      <circle cx="455" cy="300" r="35" fill="#c8f7c5"/>
-      <text x="455" y="297" text-anchor="middle" font-size="22">⚡</text>
-      <text x="455" y="320" text-anchor="middle" font-size="10" fill="#1e8449">有效执行</text>
-
-      <circle cx="370" cy="390" r="35" fill="#c8f7c5"/>
-      <text x="370" y="387" text-anchor="middle" font-size="22">📚</text>
-      <text x="370" y="410" text-anchor="middle" font-size="10" fill="#1e8449">努力学习</text>
-
-      <circle cx="230" cy="390" r="35" fill="#c8f7c5"/>
-      <text x="230" y="387" text-anchor="middle" font-size="22">💬</text>
-      <text x="230" y="410" text-anchor="middle" font-size="10" fill="#1e8449">人际交流</text>
-
-      <circle cx="145" cy="300" r="35" fill="#c8f7c5"/>
-      <text x="145" y="297" text-anchor="middle" font-size="22">🤝</text>
-      <text x="145" y="320" text-anchor="middle" font-size="10" fill="#1e8449">合作沟通</text>
-
-      <!-- 连线：行为间的促进关系 -->
-      <line x1="300" y1="155" x2="300" y2="215" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="400" y1="200" x2="330" y2="225" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="430" y1="300" x2="330" y2="265" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="370" y1="355" x2="320" y2="290" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="230" y1="355" x2="280" y2="290" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-      <line x1="170" y1="300" x2="270" y2="265" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
-
-      <!-- 循环箭头 -->
-      <path d="M340,160 Q400,130 440,170" fill="none" stroke="#27ae60" stroke-width="1.5" opacity="0.5" marker-end="url(#arrowGreen)"/>
-      <defs>
-        <marker id="arrowGreen" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-          <path d="M0,0 L6,3 L0,6 Z" fill="#27ae60"/>
-        </marker>
-      </defs>
-
-      <text x="300" y="465" text-anchor="middle" fill="#999" font-size="12">六种行为互相推动，像一个不停转动的风车</text>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <p>小圆发现，六种行为就像<strong>风车的六个叶片</strong>，连在一起转起来才有力量！找到理想（⭐）帮你发现兴趣（🎯），有了兴趣就愿意努力学习（📚），学好本领才能有效执行（⚡），在行动中和大家一起交流（💬）、合作（🤝）——越转越快，越来越强！</p>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 三层全景 ========== -->
-<div class="page page-intro">
-  <div class="page-title">三层魔法圈 · 全景图</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 580">
-      <!-- 背景装饰 -->
-      <circle cx="300" cy="290" r="260" fill="#f0fff0" stroke="#27ae60" stroke-width="3"/>
-      <circle cx="300" cy="290" r="185" fill="#fff8e8" stroke="#f39c12" stroke-width="3"/>
-      <circle cx="300" cy="290" r="110" fill="#fff0f0" stroke="#e74c3c" stroke-width="3"/>
-      <circle cx="300" cy="290" r="40" fill="#e74c3c"/>
-
-      <!-- 外环行为 -->
-      <text x="300" y="22" text-anchor="middle" fill="#27ae60" font-size="18" font-weight="bold">外环：行为（怎么做）</text>
-      <text x="530" y="290" text-anchor="middle" fill="#2ecc71" font-size="13" transform="rotate(90,530,290)">有 效 执 行</text>
-      <text x="300" y="558" text-anchor="middle" fill="#2ecc71" font-size="13">努 力 学 习</text>
-      <text x="70" y="290" text-anchor="middle" fill="#2ecc71" font-size="13" transform="rotate(-90,70,290)">合 作 沟 通</text>
-
-      <!-- 中环态度 -->
-      <text x="300" y="100" text-anchor="middle" fill="#f39c12" font-size="18" font-weight="bold">中环：态度（怎么想）</text>
-      <text x="440" y="230" text-anchor="middle" fill="#e67e22" font-size="13" transform="rotate(45,440,230)">积极主动</text>
-      <text x="160" y="350" text-anchor="middle" fill="#e67e22" font-size="13" transform="rotate(-45,160,350)">勇气</text>
-
-      <!-- 圆心 -->
-      <text x="300" y="284" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">价值观</text>
-      <text x="300" y="300" text-anchor="middle" fill="#fff" font-size="11">诚信</text>
-      <text x="300" y="178" text-anchor="middle" fill="#e74c3c" font-size="18" font-weight="bold">圆心：价值观（地基）</text>
-    </svg>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 终极智慧 ========== -->
-<div class="page page-wisdom">
-  <div class="page-title">终极魔法 · 选择的智慧</div>
-  <div class="page-subtitle">小圆学会了所有魔法，还差最后一步——怎样用这些魔法选对路呢？</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 250">
-      <!-- 天平 -->
-      <rect x="280" y="30" width="40" height="10" rx="3" fill="#8e44ad"/>
-      <rect x="295" y="40" width="10" height="120" fill="#8e44ad"/>
-
-      <!-- 左盘 -->
-      <path d="M180,170 Q180,210 220,210 L340,210 Q380,210 380,170" fill="none" stroke="#8e44ad" stroke-width="3"/>
-      <text x="280" y="195" text-anchor="middle" fill="#e74c3c" font-size="14" font-weight="bold">勇气</text>
-      <text x="280" y="212" text-anchor="middle" fill="#333" font-size="11">改变可以改变的事</text>
-
-      <!-- 右盘 -->
-      <path d="M220,170 Q220,210 260,210 L560,210 Q600,210 600,170" fill="none" stroke="#8e44ad" stroke-width="3" opacity="0.6"/>
-      <text x="410" y="195" text-anchor="middle" fill="#3498db" font-size="14" font-weight="bold">胸怀</text>
-      <text x="410" y="212" text-anchor="middle" fill="#333" font-size="11">接受不可改变的事</text>
-
-      <!-- 中间智慧 -->
-      <circle cx="300" cy="140" r="30" fill="#8e44ad"/>
-      <text x="300" y="136" text-anchor="middle" fill="#fff" font-size="10">智慧</text>
-      <text x="300" y="150" text-anchor="middle" fill="#fff" font-size="9">分辨两者</text>
-
-      <text x="300" y="245" text-anchor="middle" fill="#8e44ad" font-size="13">用勇气改变 + 用胸怀接受 + 用智慧选择</text>
-    </svg>
-  </div>
-
-  <div class="text-box">
-    <h3>最重要的秘密</h3>
-    <p>还记得第二关学的"勇气"和"胸怀"吗？现在要把它们合在一起用了！</p>
-    <p>小圆学会了最后也是最重要的魔法：</p>
-    <p><strong>用勇气</strong>去改变可以改变的事情（比如努力学习、改正错误）</p>
-    <p><strong>用胸怀</strong>去接受不能改变的事情（比如天气、别人的想法）</p>
-    <p><strong>用智慧</strong>去分辨什么能改变、什么不能改变</p>
-  </div>
-  <div class="arrow-down">⬇</div>
-</div>
-
-<!-- ========== 结束 ========== -->
-<div class="page page-end">
-  <div class="page-title">小圆变成了最好的自己！</div>
-
-  <div class="svg-box">
-    <svg viewBox="0 0 600 350">
-      <!-- 成长后的小圆 -->
-      <circle cx="300" cy="140" r="55" fill="#ff9a9e"/>
-      <!-- 皇冠 -->
-      <polygon points="270,85 280,65 290,80 300,58 310,80 320,65 330,85" fill="#f1c40f"/>
-      <!-- 星星眼 -->
-      <text x="278" y="132" text-anchor="middle" font-size="20">⭐</text>
-      <text x="322" y="132" text-anchor="middle" font-size="20">⭐</text>
-      <!-- 微笑 -->
-      <path d="M275,150 Q300,170 325,150" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
-      <!-- 脸颊 -->
-      <circle cx="265" cy="145" r="8" fill="#ff6b6b" opacity="0.3"/>
-      <circle cx="335" cy="145" r="8" fill="#ff6b6b" opacity="0.3"/>
-
-      <!-- 周围魔法星星 -->
-      <text x="180" y="80" font-size="24">✨</text>
-      <text x="420" y="70" font-size="20">🌟</text>
-      <text x="160" y="200" font-size="18">💫</text>
-      <text x="440" y="200" font-size="22">⭐</text>
-      <text x="220" y="240" font-size="16">✨</text>
-      <text x="380" y="240" font-size="18">🌟</text>
-
-      <text x="300" y="280" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">最好的小圆！</text>
-      <text x="300" y="310" text-anchor="middle" fill="#999" font-size="13">你也可以像小圆一样！</text>
-    </svg>
-  </div>
-
-  <div class="final-msg">
-    每个小朋友<br>心中都有一个<br><span style="font-size:1.4em;color:#e74c3c;">成长魔法圈</span><br><br>从今天开始<br>做一个诚实守信、积极向上、勇敢又自信的<br><span style="font-size:1.4em;color:#f39c12;">最好的自己！</span>
-  </div>
-
-  <!-- 三步复习 -->
-  <div class="steps">
-    <div class="step step-core">
-      <div class="num">1</div>
-      <h4>诚信价值观</h4>
-      <p>做一个诚实守信的孩子，这是最重要的地基。</p>
-    </div>
-    <div class="step step-att">
-      <div class="num">2</div>
-      <h4>六种态度</h4>
-      <p>积极、同理、自信、自省、勇气、胸怀。</p>
-    </div>
-    <div class="step step-beh">
-      <div class="num">3</div>
-      <h4>六种行为</h4>
-      <p>追梦、兴趣、执行、学习、交流、合作。</p>
-    </div>
-  </div>
-
-  <div style="text-align:center;margin-top:30px;color:#999;font-size:0.85em;">
-    <p>根据李开复博士《做最好的自己》成功同心圆改编</p>
-    <p>1个核心价值观 · 6种态度 · 6种行为 = 最好的自己</p>
+<!-- ==========================================
+     NEW BADGE UNLOCKED MODAL (勋章解锁大浮层)
+     ========================================== -->
+<div class="unlock-modal-overlay" id="unlock-modal">
+  <div class="unlock-card">
+    <div class="unlock-emblem" id="unlock-badge-icon">🎖️</div>
+    <h2 id="unlock-badge-title">解锁新勋章！</h2>
+    <p id="unlock-badge-desc">恭喜你解锁了这枚珍贵的成长勋章，你正在变得越来越棒！</p>
+    <button class="btn-primary" onclick="closeUnlockModal()" style="font-size:1.1em; padding:12px 30px;">明天继续冒险</button>
   </div>
 </div>
+
+<script>
+/* ==========================================
+   WDS SPA Page Router (单页路由控制器)
+   ========================================== */
+function navigateTo(pageId) {
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+  });
+  const target = document.getElementById(pageId);
+  if (target) {
+    target.classList.add('active');
+  }
+  
+  // 切换到打卡页时，初始化状态
+  if (pageId === 'page-checkin') {
+    initCheckinPage();
+  }
+  // 返回封面页时，刷新徽章计数
+  if (pageId === 'page-cover') {
+    refreshCoverBadgeCount();
+  }
+}
+
+/* ==========================================
+   01.2 Carousel Story Logic (Carousel 滑动与小狗彩蛋)
+   ========================================== */
+let currentSlide = 0;
+const totalSlides = 3;
+
+function moveCarousel(direction) {
+  currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + direction));
+  const track = document.getElementById('carousel-track');
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  
+  // 更新导航点
+  const dots = document.getElementById('carousel-dots').children;
+  for (let i = 0; i < dots.length; i++) {
+    dots[i].classList.toggle('active', i === currentSlide);
+  }
+  
+  // 启用/禁用导航按钮
+  document.getElementById('carousel-prev').disabled = (currentSlide === 0);
+  document.getElementById('carousel-next').disabled = (currentSlide === totalSlides - 1);
+  
+  // 最后一页浮现挑战入口
+  const challengeBtn = document.getElementById('story-btn-challenge');
+  challengeBtn.classList.toggle('visible', currentSlide === totalSlides - 1);
+}
+
+// 嘟嘟狗点击心声彩蛋
+function triggerPuppyAnimation() {
+  const eyeL = document.getElementById('puppy-eye-l');
+  const eyeR = document.getElementById('puppy-eye-r');
+  const tear = document.getElementById('puppy-tear');
+  const mouth = document.getElementById('puppy-mouth');
+  const bubble = document.getElementById('puppy-bubble');
+  
+  // 改变表情
+  eyeL.setAttribute('r', '8');
+  eyeR.setAttribute('r', '8');
+  tear.style.display = 'none'; // 眼泪干了
+  mouth.setAttribute('d', 'M 270,148 Q 280,158 290,148'); // 翘嘴微笑
+  
+  // 吐泡泡文字
+  bubble.style.display = 'block';
+  bubble.innerText = '“汪！不找借口啦，只要努力总有办法！”';
+  
+  // 解锁打底的答题小徽章记录
+  localStorage.setItem('growmap_quiz_puppy_clicked', 'true');
+  
+  // 3秒后复原
+  setTimeout(() => {
+    eyeL.setAttribute('r', '5');
+    eyeR.setAttribute('r', '5');
+    tear.style.display = 'block';
+    mouth.setAttribute('d', 'M 270,155 Q 280,148 290,155');
+    bubble.style.display = 'none';
+  }, 3000);
+}
+
+// 伴读抽屉控制器
+function toggleParentDrawer(isOpen) {
+  const drawer = document.getElementById('story-parent-drawer');
+  drawer.classList.toggle('open', isOpen);
+}
+
+/* ==========================================
+   01.3 Quiz Logic (答题弹窗与 confetti)
+   ========================================== */
+let isQuizDone = false;
+
+function openQuizModal() {
+  const overlay = document.getElementById('quiz-modal-overlay');
+  overlay.classList.add('open');
+  // 重置状态
+  document.getElementById('quiz-opt-a').className = 'quiz-option-card';
+  document.getElementById('quiz-opt-b').className = 'quiz-option-card';
+  document.getElementById('quiz-feedback').innerText = '';
+  document.getElementById('quiz-feedback').className = 'quiz-feedback-box';
+  document.getElementById('quiz-btn-next').classList.remove('visible');
+  isQuizDone = false;
+}
+
+function closeQuizModal() {
+  const overlay = document.getElementById('quiz-modal-overlay');
+  overlay.classList.remove('open');
+}
+
+function selectQuizOption(isCorrect, elementId) {
+  if (isQuizDone) return;
+  
+  const selected = document.getElementById(elementId);
+  const feedback = document.getElementById('quiz-feedback');
+  
+  if (isCorrect) {
+    isQuizDone = true;
+    selected.classList.add('success');
+    feedback.innerText = '🎉 太棒了！这就是“积极主动”！小圆为你赢回了一颗【积极宝石】！';
+    feedback.className = 'quiz-feedback-box success-text';
+    
+    // 撒花庆祝
+    triggerConfetti();
+    
+    // 显示打卡进入按钮
+    document.getElementById('quiz-btn-next').classList.add('visible');
+    
+    // 写入完美答题标记
+    localStorage.setItem('growmap_quiz_perfect_pass', 'true');
+  } else {
+    selected.classList.add('error');
+    feedback.innerText = '😢 哎呀，坐在沙发上生闷气是“找借口”哦。再想一想，有什么事情是我们自己能做主的？';
+    feedback.className = 'quiz-feedback-box error-text';
+    
+    // 抖动完毕自动恢复，可以重试
+    setTimeout(() => {
+      selected.classList.remove('error');
+    }, 400);
+  }
+}
+
+// 离线 Confetti 庆祝礼花动画
+function triggerConfetti() {
+  const container = document.getElementById('modal-confetti');
+  container.innerHTML = '';
+  const colors = ['#ffeaa7', '#ff7675', '#55efc4', '#74b9ff', '#a29bfe'];
+  
+  for (let i = 0; i < 30; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    
+    const xStart = Math.random() * 200 + 150;
+    const xEnd = xStart + (Math.random() * 150 - 75);
+    const delay = Math.random() * 0.3;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    
+    piece.style.setProperty('--x-start', `${xStart}px`);
+    piece.style.setProperty('--x-end', `${xEnd}px`);
+    piece.style.left = `0px`;
+    piece.style.background = color;
+    piece.style.animationDelay = `${delay}s`;
+    
+    container.appendChild(piece);
+  }
+}
+
+function finishQuiz() {
+  closeQuizModal();
+  navigateTo('page-checkin');
+}
+
+/* ==========================================
+   01.4 Self-reflection & Check-in (打卡、徽章墙、金句)
+   ========================================== */
+let selectedMoodValue = 0;
+let selectedAchieves = [];
+
+// 初始化打卡页
+function initCheckinPage() {
+  selectedMoodValue = 0;
+  selectedAchieves = [];
+  
+  // 重置 UI
+  document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+  document.querySelectorAll('.achieve-card').forEach(card => card.classList.remove('selected'));
+  document.getElementById('checkin-slider').value = 8;
+  updateSliderValue(8);
+  
+  // 恢复魔法瓶高度
+  updateBottleLiquid();
+  
+  // 渲染勋章墙
+  renderBadgeWall();
+}
+
+function selectMood(value, btn) {
+  selectedMoodValue = value;
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function toggleAchieve(label, card) {
+  const index = selectedAchieves.indexOf(label);
+  if (index > -1) {
+    selectedAchieves.splice(index, 1);
+    card.classList.remove('selected');
+  } else {
+    if (selectedAchieves.length >= 3) {
+      alert("今天选3个表现就已经很棒啦！");
+      return;
+    }
+    selectedAchieves.push(label);
+    card.classList.add('selected');
+  }
+}
+
+function updateSliderValue(val) {
+  document.getElementById('slider-bubble').innerText = val + "分";
+}
+
+// 刷新瓶内液体高度
+function updateBottleLiquid() {
+  const history = JSON.parse(localStorage.getItem('growmap_checkin_history') || '[]');
+  const count = history.length;
+  const targetHeight = Math.min(100, Math.max(10, count * 15)); // 每次打卡灌入15%高度，最低10%
+  document.getElementById('bottle-liquid').style.height = targetHeight + "%";
+}
+
+// 数据打卡提交
+function submitCheckin() {
+  if (selectedMoodValue === 0) {
+    alert("请小睿先选一选今天的心情卡片哦 😆");
+    return;
+  }
+  
+  // 1. 获取数据
+  const score = parseInt(document.getElementById('checkin-slider').value);
+  const todayStr = new Date().toISOString().split('T')[0];
+  
+  // 2. 读取并修改 LocalStorage 历史记录
+  let history = JSON.parse(localStorage.getItem('growmap_checkin_history') || '[]');
+  
+  // 防止一天内重复打卡
+  const alreadyChecked = history.some(item => item.date === todayStr);
+  if (alreadyChecked) {
+    alert("今天已经存过成长宝石啦，明天再来冒险吧！");
+    navigateTo('page-cover');
+    return;
+  }
+  
+  history.push({
+    date: todayStr,
+    mood: selectedMoodValue,
+    achieves: selectedAchieves,
+    score: score
+  });
+  localStorage.setItem('growmap_checkin_history', JSON.stringify(history));
+  
+  // 3. 计算连续打卡天数 (Streak)
+  let streak = parseInt(localStorage.getItem('growmap_streak_count') || '0');
+  const lastCheckinStr = localStorage.getItem('growmap_last_checkin_date');
+  
+  if (lastCheckinStr) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    
+    if (lastCheckinStr === yesterdayStr) {
+      streak += 1; // 连续打卡递增
+    } else if (lastCheckinStr === todayStr) {
+      // 今天二次打卡不累加
+    } else {
+      streak = 1; // 间断后重置为1
+    }
+  } else {
+    streak = 1; // 首次打卡为1
+  }
+  localStorage.setItem('growmap_streak_count', streak.toString());
+  localStorage.setItem('growmap_last_checkin_date', todayStr);
+  
+  // 4. 触发气泡上升特效
+  triggerBottleBubbles();
+  
+  // 5. 延迟进行勋章判定与弹窗
+  setTimeout(() => {
+    checkBadgesUnlock(history, streak);
+  }, 1000);
+}
+
+function triggerBottleBubbles() {
+  const b1 = document.getElementById('btl-b1');
+  const b2 = document.getElementById('btl-b2');
+  const b3 = document.getElementById('btl-b3');
+  
+  // 强制重置动画
+  [b1, b2, b3].forEach(b => {
+    b.style.animation = 'none';
+    b.offsetHeight; /* 触发回流 */
+    b.style.animation = 'floatUp 1.5s ease-out';
+  });
+  
+  // 灌满瓶子
+  updateBottleLiquid();
+}
+
+// 勋章判定
+function checkBadgesUnlock(history, streak) {
+  let unlocked = JSON.parse(localStorage.getItem('growmap_unlocked_badges') || '[]');
+  let newlyUnlocked = [];
+  
+  // 勋章 1: 首次打卡
+  if (history.length >= 1 && !unlocked.includes('badge-first')) {
+    unlocked.push('badge-first');
+    newlyUnlocked.push({ id: 'badge-first', title: '自省之星', icon: '🎖️', desc: '太棒了！你完成了第一次每日成长自省打卡！' });
+  }
+  
+  // 勋章 2: 答对趣味题 (LocalStorage标记)
+  const isPerfectPass = localStorage.getItem('growmap_quiz_perfect_pass') === 'true';
+  if (isPerfectPass && !unlocked.includes('badge-perfect')) {
+    unlocked.push('badge-perfect');
+    newlyUnlocked.push({ id: 'badge-perfect', title: '努力嘟嘟', icon: '🦁', desc: '你答对了嘟嘟狗的积极宝石挑战，掌握了积极跑鞋的力量！' });
+  }
+  
+  // 勋章 3: 连续打卡 3 天
+  if (streak >= 3 && !unlocked.includes('badge-streak-3')) {
+    unlocked.push('badge-streak-3');
+    newlyUnlocked.push({ id: 'badge-streak-3', title: '坚持到底', icon: '⚡', desc: '真有毅力！你已经连续 3 天记录自己的成长了！' });
+  }
+
+  // 勋章 4: 连续打卡 7 天
+  if (streak >= 7 && !unlocked.includes('badge-streak-7')) {
+    unlocked.push('badge-streak-7');
+    newlyUnlocked.push({ id: 'badge-streak-7', title: '全能魔导', icon: '🔮', desc: '天啊！你连续 7 天完成了自省打卡，是当之无愧的性格小魔导！' });
+  }
+  
+  localStorage.setItem('growmap_unlocked_badges', JSON.stringify(unlocked));
+  
+  // 如果有新解锁的徽章，递归弹窗展示
+  if (newlyUnlocked.length > 0) {
+    showUnlockEmblem(newlyUnlocked, 0);
+  } else {
+    // 无新徽章则直接返回封面
+    alert("成长宝石存入成功！");
+    navigateTo('page-cover');
+  }
+}
+
+// 级联弹窗解锁徽章
+function showUnlockEmblem(badgeList, index) {
+  if (index >= badgeList.length) {
+    navigateTo('page-cover');
+    return;
+  }
+  
+  const modal = document.getElementById('unlock-modal');
+  const icon = document.getElementById('unlock-badge-icon');
+  const title = document.getElementById('unlock-badge-title');
+  const desc = document.getElementById('unlock-badge-desc');
+  
+  const item = badgeList[index];
+  icon.innerText = item.icon;
+  title.innerText = `解锁新勋章：${item.title}！`;
+  desc.innerText = item.desc;
+  
+  modal.classList.add('open');
+  
+  // 挂载下一步回调
+  modal.querySelector('button').onclick = function() {
+    modal.classList.remove('open');
+    showUnlockEmblem(badgeList, index + 1);
+  };
+}
+
+function closeUnlockModal() {
+  document.getElementById('unlock-modal').classList.remove('open');
+}
+
+// 渲染勋章墙
+function renderBadgeWall() {
+  const unlocked = JSON.parse(localStorage.getItem('growmap_unlocked_badges') || '[]');
+  const streak = parseInt(localStorage.getItem('growmap_streak_count') || '0');
+  
+  // 更新高亮
+  document.getElementById('badge-first').classList.toggle('unlocked', unlocked.includes('badge-first'));
+  document.getElementById('badge-perfect').classList.toggle('unlocked', unlocked.includes('badge-perfect'));
+  document.getElementById('badge-streak-3').classList.toggle('unlocked', unlocked.includes('badge-streak-3'));
+  document.getElementById('badge-streak-7').classList.toggle('unlocked', unlocked.includes('badge-streak-7'));
+  
+  document.getElementById('streak-display').innerText = `连续打卡：${streak} 天`;
+}
+
+// 刷新封面页显示
+function refreshCoverBadgeCount() {
+  const unlocked = JSON.parse(localStorage.getItem('growmap_unlocked_badges') || '[]');
+  document.getElementById('cover-badge-display').innerText = `✨ 已解锁 ${unlocked.length} 枚徽章`;
+}
+
+// 滚动水晶球名人金句
+const quotes = [
+  "“每一次自省，都是给心里的花浇水哦~”",
+  "“积极主动的小脚丫，能带我们去任何想去的地方！”",
+  "“诚信是城堡的地基，诚实的孩子能拥有最好的友谊！”",
+  "“遇到困难别气馁，穿上努力跑鞋，我们就能踢出好球！”",
+  "“今天做得不够好？没关系，明天是新的一天，继续加油！”"
+];
+
+function rollWisdom() {
+  const index = Math.floor(Math.random() * quotes.length);
+  document.getElementById('wisdom-box').innerText = quotes[index];
+}
+
+// 首次加载刷新封面
+refreshCoverBadgeCount();
+</script>
 
 </body>
 </html>
